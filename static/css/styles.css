@@ -1,0 +1,324 @@
+.degradado-negro {
+    background: rgba(0,0,0,1);
+    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0,0,0,1)), color-stop(57%, rgba(0,0,0,1)), color-stop(72%, rgba(0,0,0,0.85)), color-stop(89%, rgba(0,0,0,0.5)), color-stop(100%, rgba(0,0,0,0)));
+    background: -webkit-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 57%, rgba(0,0,0,0.85) 72%, rgba(0,0,0,0.5) 89%, rgba(0,0,0,0) 100%);
+    background: -o-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 57%, rgba(0,0,0,0.85) 72%, rgba(0,0,0,0.5) 89%, rgba(0,0,0,0) 100%);
+    background: -ms-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 57%, rgba(0,0,0,0.85) 72%, rgba(0,0,0,0.5) 89%, rgba(0,0,0,0) 100%);
+    background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 57%, rgba(0,0,0,0.85) 72%, rgba(0,0,0,0.5) 89%, rgba(0,0,0,0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=0 );
+}
+
+.degradado-rojo {
+    background: rgba(255,0,0,1);
+    background: -moz-linear-gradient(top, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 20%, rgba(181,4,4,1) 45%, rgba(255,0,0,1) 80%, rgba(255,0,0,1) 100%);
+    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,0,0,1)), color-stop(20%, rgba(255,0,0,1)), color-stop(45%, rgba(181,4,4,1)), color-stop(80%, rgba(255,0,0,1)), color-stop(100%, rgba(255,0,0,1)));
+    background: -webkit-linear-gradient(top, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 20%, rgba(181,4,4,1) 45%, rgba(255,0,0,1) 80%, rgba(255,0,0,1) 100%);
+    background: -o-linear-gradient(top, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 20%, rgba(181,4,4,1) 45%, rgba(255,0,0,1) 80%, rgba(255,0,0,1) 100%);
+    background: -ms-linear-gradient(top, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 20%, rgba(181,4,4,1) 45%, rgba(255,0,0,1) 80%, rgba(255,0,0,1) 100%);
+    background: linear-gradient(to bottom, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 20%, rgba(181,4,4,1) 45%, rgba(255,0,0,1) 80%, rgba(255,0,0,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff0000', endColorstr='#ff0000', GradientType=0 );
+}
+
+.degradado-azul {
+    background: rgba(0,0,0,1);
+    background: -moz-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(32,100,178,1) 5%, rgba(32,100,178,1) 20%, rgba(0,0,0,1) 45%, rgba(32,100,178,1) 80%, rgba(32,100,178,1) 95%, rgba(0,0,0,1) 100%);
+    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(0,0,0,1)), color-stop(5%, rgba(32,100,178,1)), color-stop(20%, rgba(32,100,178,1)), color-stop(45%, rgba(0,0,0,1)), color-stop(80%, rgba(32,100,178,1)), color-stop(95%, rgba(32,100,178,1)), color-stop(100%, rgba(0,0,0,1)));
+    background: -webkit-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(32,100,178,1) 5%, rgba(32,100,178,1) 20%, rgba(0,0,0,1) 45%, rgba(32,100,178,1) 80%, rgba(32,100,178,1) 95%, rgba(0,0,0,1) 100%);
+    background: -o-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(32,100,178,1) 5%, rgba(32,100,178,1) 20%, rgba(0,0,0,1) 45%, rgba(32,100,178,1) 80%, rgba(32,100,178,1) 95%, rgba(0,0,0,1) 100%);
+    background: -ms-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(32,100,178,1) 5%, rgba(32,100,178,1) 20%, rgba(0,0,0,1) 45%, rgba(32,100,178,1) 80%, rgba(32,100,178,1) 95%, rgba(0,0,0,1) 100%);
+    background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(32,100,178,1) 5%, rgba(32,100,178,1) 20%, rgba(0,0,0,1) 45%, rgba(32,100,178,1) 80%, rgba(32,100,178,1) 95%, rgba(0,0,0,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#000000', GradientType=0 );
+}
+
+.blue-background {
+    background: rgba( 10, 10, 42, 0.75 );
+    border: solid 3px rgba(10, 10, 42, 1 );
+    border-radius: 10px;
+    padding: 25px 10px;
+}
+
+.black-background {
+    background: rgba( 0,0,0, 0.75 );
+    border: solid 3px rgba(0, 0, 0, 1 );
+    border-radius: 10px;
+    padding: 25px 10px;
+}
+
+div.screen-spacer {
+    width: 100%;
+    height: 500px;
+}
+
+.services-list.bkg-gray {
+    background: #000000;
+}
+
+div.spacer100px550px {
+    height: 100px;
+}
+
+@media screen and (max-width: 770px ) {
+    div.spacer100px550px {
+        height: 550px;    
+    }
+}
+
+div.spacer50px {
+    height: 50px;
+}
+
+div.spacer25px {
+    height: 25px;
+}
+
+div.spacer15px {
+    height: 15px;
+}
+
+div.spacer10px {
+    height: 10px;
+}
+
+div.left-right-spacer10px {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+body {
+    background-color: #000;
+    background-size: cover; 
+    background-repeat: no-repeat;
+    color: #bdc6d3;
+}
+
+body.body-spacer {
+    padding-top: 75px;
+    color: #bdc6d3;
+}
+
+header.login-header {
+    height: 150px;
+}
+
+header.login-header div.icon {
+    padding-top: 10px; 
+}
+
+header.login-header img.logo {
+    height: 75px;
+}
+
+div.why-us-list {
+    background: rgba( 0, 0, 0, 0.75 );
+    border: solid 3px rgba( 0, 0, 0, 1 );
+    border-radius: 10px;
+    color: #d1d1d1;
+    padding: 10px;
+    bottom: 0px;
+}
+
+@media screen and (max-width: 770px ) {
+    div.why-us-list {
+        margin-bottom: 50px;
+    }
+}
+
+div.why-us-list ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+div.why-us-list li {
+    margin-bottom: 10px;
+}
+
+form.form-signin {
+    margin-top: 5px;
+}
+
+div.services-list {
+    padding: 25px 0;
+    margin: 0 0 0;
+    color: #ffffff;
+}
+
+div.services-list article {
+    /*border: 3px solid rgba(181,4,4,1);
+    background: rgba( 255, 0, 0, 1 );*/
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    height: 250px;
+    overflow: hidden;
+}
+
+div.services-list article.opt-menu {
+    height: 150px;
+}
+
+div.services-list h5 {
+    font-size: 0.80rem;
+    font-weight: normal;
+    height: 30px;
+    overflow: hidden;
+    padding: 5px;
+    border-radius: 5px;
+    background: #393d42 !important;
+}
+
+div.services-list article.opt-menu h5 {
+    font-size: 1.25rem;
+    height: auto;
+}
+
+div.services-list h5:before {
+    content: '\f25b\00a0';
+    font-family: "Font Awesome 5 Free";
+    font-weight: lighter;
+}
+
+div.services-list article div.description {
+    background: rgba( 0, 0, 0, 0.75 );
+    font-size: 0.85rem;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid rgba( 0, 0, 0, 0.85 );
+    font-weight: lighter;
+    transition-duration: 1.0s;
+    opacity: 0.0;
+    filter: alpha(opacity=0);
+}
+
+div.services-list article div.description:hover {
+    opacity: 1.0;
+    filter: alpha(opacity=100);
+}
+
+iframe.mapa {
+    border-radius: 10px;
+}
+
+.slogan {
+    margin: 0;
+    color: #ffffff;
+    padding: 15px 10px;
+}
+
+.footer {
+    color: #ffffff;
+    background-color: #000000;
+    padding: 15px 10px;
+}
+
+div.services-list article.service{
+    background-size: cover; 
+    background-repeat: no-repeat;
+}
+
+a.data {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    white-space: normal;
+}
+
+.btn-outline-info.data{
+    border-color: rgba(0, 0, 0, 1);
+
+}
+
+a.contact-data {
+    width: 30%;
+}
+
+a.social-data {
+    width: 45%;
+}
+
+button.btn-login:hover, button.btn-login:active, button.btn-login:focus, button.btn-login:focus-within {
+    color: white !important;
+}
+
+/* Header */
+
+header {
+    /*border-bottom: 3px silver solid;*/
+    color: white;
+    background-color: #343a40;
+}
+
+#mainNavbar li.nav-item {
+    position: relative;
+}
+
+/* Footer */
+
+footer {
+    border-top: 3px silver solid;
+    color: white;
+    background-color: #343a40;
+    font-size: 10pt;
+    text-align: center;
+    padding: 10px 20px;
+}
+
+/* Forms */
+
+.form-group label {
+    text-align: left;
+    width: 100%;
+}
+
+/* Impresion */
+
+@media only print {
+
+    #main-toolbar {
+        display: none;
+    }
+
+    #data-tbl tr a.btn {
+        display: none;
+    }
+
+}
+
+.modal-dialog {
+    color: #000000;
+}
+
+img.splash-ref {
+    height: 30px;
+}
+
+img.main_menu_icon {
+    height: 50px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+img.splash_icon {
+    height: 50px;
+    display: none;
+}
+
+#video-splash {
+    position: fixed;
+    z-index: -1;
+}
+
+@media all and (orientation:portrait) {
+    #video-splash {
+        width: 100%;
+        top: 50%;
+        transform: translateY(-80%)
+    }
+}
+  @media all and (orientation:landscape) {
+    #video-splash {
+        height: 80%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}

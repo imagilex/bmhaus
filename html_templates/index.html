@@ -1,0 +1,250 @@
+{% extends "global/html_struct.html" %}
+
+{% load static %}
+{% load util_filters %}
+
+{% block extraaftermain %}
+<video 
+    id="video-splash" autoplay="autoplay" muted="muted" 
+    src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg' | get_setting }}" 
+    poster="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_poster' | get_setting }}" 
+    playsinline="playsinline">
+</video>
+
+<ul id="cbp-bislideshow" class="cbp-bislideshow">
+    {% for bg in bg_imgs %}
+        <li><img src="{% static bg %}" /></li>
+    {% endfor %}
+</ul>
+
+<div class="spacer10px"></div>
+
+<div class="left-right-spacer10px">
+
+    <img src="{{ MEDIA_URL }}{{ '01 General.splash_icon' | get_setting }}" class="float-left splash_icon" />
+
+    <div class="float-right">
+        <button type="button" class="btn btn-outline-light degradado-negro btn-login" onclick="show_form_signin()" title="Entrar">
+            <i class="far fa-user"></i>
+        </button>
+    </div>
+    <div class="clearfix"></div>
+    <div class="float-right">
+        <form class="form-signin black-background" style="display: none" method="post" autocomplete="off">
+            {% csrf_token %}
+
+            <h5>Acceso</h5>
+
+            <div id="div_id_usr" class="form-group">
+                <label for="usr" class="col-form-label requiredField">
+                    Usuario<span class="asteriskField">*</span>
+                </label>
+                <div class="">
+                    <input type="text" id="usr" name="usr" class="form-control textinput textInput form-control" autocomplete="off" placeholder="Usuario" maxlength="50" required id="id_usr" />
+                </div>
+            </div>
+            <div id="div_id_pwd" class="form-group">
+                <label for="pwd" class="col-form-label requiredField">
+                    Contraseña<span class="asteriskField">*</span>
+                </label>
+                <div class="">
+                    <input type="password" id="pwd" name="pwd" class="form-control textinput textInput form-control" autocomplete="off" placeholder="Contraseña" maxlength="250" required id="id_pwd" />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-dark btn-block">
+                Entrar
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="container">
+
+    <div class="screen-spacer"></div>
+
+    <div class="row">
+
+        <div class="col-md-6 offset-md-3 position-relative">
+
+            <!--<div class="why-us-list text-center">
+                <p class="lead">BM Haus</p>
+            </div>-->
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- <div class="spacer50px"></div> -->
+
+<div class="services-list bkg-gray">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-4 col-lg-3">
+                <article class="service" style="background-image: url( '{% static bg_serv.0 %}' );">
+                    <h5 class="degradado-rojo">Estética Automotriz</h5>
+                    <div class="description">La limpieza a detalle consiste además de quitar la mugre y basura acumuladas por el paso del tiempo en ciertos rincones del auto tales como debajo de los rieles de los asientos, cajuela, llanta de refacción y herramienta, etc, en limpiar a fondo bordes interiores y exteriores, hules, chapas, bisagras y gran cantidad de recovecos y orillas donde no alcanzamos normalmente, además de puertas alfombras etc; todos estos componentes no solo requieren de limpieza por simple estética, también requieren de mantenimiento para alargar su vida, conservar su imagen y buen funcionamiento, por ej. el lubricar las partes plásticas evita su agrietamiento manteniéndolas flexibles, el polvo es sumamente nocivo para la piel, actúa como una lija sobre la superficie decolorando y deteriorando su imagen, además esta requiere de ser humectada cada cierto tiempo para que no se entiese y fracture, lubricar puertas y carriles de asientos también ayuda a su buen funcionamiento con el fin de no forzar los mecanismos manteniéndolos en buen estado y logrando brindarnos la comodidad de funcionamiento para la que fueron diseñados.</div>
+                </article>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <article class="service" style="background-image: url( '{% static bg_serv.1 %}' );">
+                    <h5 class="degradado-rojo">Mantenimiento Preventivo</h5>
+                    <div class="description">El servicio de mantemiento preventivo incluye, entre otras cosas: 1) Instalación de bujías a especificaciones (convencionales, platino o iridio); 2) Lavado y programación del cuerpo de aceleración con liquido especial para proteger y mantener una marcha mínima estable. 3) Lavado de inyectores a presión para remover suciedad y residuos de carbón en todo el sistema de inyección. 4) Limpieza o remplazo de válvula PCV; 5) Instalación de filtros de gasolina y aire para restablecer la potencia y suavidad del motor.</div>
+                </article>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <article class="service" style="background-image: url( '{% static bg_serv.2 %}' );">
+                    <h5 class="degradado-rojo">Sistema de Enfriamiento</h5>
+                    <div class="description">Con nuestro equipo de inyección de presión, lavado, y diagnóstico electrónico, podemos analizar cada milímetro de los sistemas de enfriamiento, y dar la limpieza, mantenimiento y re-programación necesarios. Ya que de los sistemas de enfriamiento depende enteramente el buen trabajo de nuestro auto, cuando lo arrancamos por primera vez en la mañana, ayuda a alcanzar más rápido la temperatura ideal de trabajo por medio del termostato, dispositivo que funciona mecánicamente por medio de un resorte bimetálico.</div>
+                </article>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <article class="service" style="background-image: url( '{% static bg_serv.3 %}' );">
+                    <h5 class="degradado-rojo">Sistema de Aire Acondicionado</h5>
+                    <div class="description">Nosotros tenemos todo el equipo necesario y profesionales que terminaran con sus problemas de enfriamiento y/o calefacción, así como los malos olores originados por sistemas contaminados o filtros sucios, ellos resolverán cualquier problema que exista con este sistema, cargas de gas, cambio de bulbos o mangueras, compresores, vaporizadores, etc.</div>
+                </article>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <article class="service" style="background-image: url( '{% static bg_serv.4 %}' );">
+                    <h5 class="degradado-rojo">Hojalatería y Pintura</h5>
+                    <div class="description">ESTEAuto cuenta con excelentes equipos y procesos de estaño que son de última generación, los cuales nos permiten alcanzar acabados originales, mismos procedimientos que incluso están autorizados y se utilizan por marcas premium como Mercedes Benz.</div>
+                </article>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <article class="service" style="background-image: url( '{% static bg_serv.5 %}' );">
+                    <h5 class="degradado-rojo">Alineación y Balanceo</h5>
+                    <div class="description">El servicio de alineación y balanceo incluye, entre otras cosas: 1) Inspección completa de los sistemas de dirección y suspensión asegurando así completa seguridad. 2) Inspección y calibración de neumáticos. 3) Proceso de alineación de 2 y 4 ruedas realizado por computadora a especificaciones del fabricante. 4) Rin convencional o deportivo. 5) Balanceo dinámico o estático con plomos ecológicos.</div>
+                </article>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <article class="service" style="background-image: url( '{% static bg_serv.6 %}' );">
+                    <h5 class="degradado-rojo">Verificaciones</h5>
+                    <div class="description">Nosotros contamos con el Servicio de Verificaciones Automotrices, éste incluye revisión de emisiones y pre-verificación, traslado al verificentro con personal capacitado, el cual conoce a fondo los procesos de verificación, contamos con un seguro de traslado para dar mayor tranquilidad a nuestros clientes.</div>
+                </article>
+            </div>
+            <div class="col-md-4 col-lg-3">
+                <article class="service" style="background-image: url( '{% static bg_serv.7 %}' );">
+                    <h5 class="degradado-rojo">Suspención y Amortiguadores</h5>
+                    <div class="description">A nosotros nos gusta contar con el equipo más moderno, porque sabemos que esta inversión se traduce en diagnósticos precisos, reparaciones correctas y finalmente en confianza y preferencia de nuestros clientes.</div>
+                </article>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="container">
+
+    <div class="spacer50px"></div>
+
+    <div class="black-background">
+
+        <div class="row">
+
+            <div class="col-md-8">
+
+                <iframe class="mapa" width="100%" height="300" src="https://maps.google.com/maps?width=100%&height=600&hl=es&q=Av.%20Divisi%C3%B3n%20del%20Norte%203259%2C%20La%20Candelaria%2C%2004380%2C%20Ciudad%20de%20M%C3%A9xico+()&ie=UTF8&t=&z=16&iwloc=B&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                
+            </div>
+            
+            <div class="col-md-4">
+                    
+                <i class="fas fa-map-marked-alt fa-2x"></i>
+
+                <div class="spacer25px"></div>
+
+                <h6>BM haus</h6>
+
+                <p>Av. División del Norte 3259-A<br />
+                La Candelaria, Coyoacán<br />
+                04380, CDMX</p>
+
+                <p>Lunes a Viernes de 09:00 a 18:00<br />
+                Sábado de 09:00 a 14:00</p>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-4 col-md-2">
+                <a title="Teléfono: 999 999 9999" class="btn btn-outline-light btn-block data" href="tel:9999999999">
+                    <!--<i class="fas fa-phone"></i>-->
+                    <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_telefono' | get_setting }}" class="splash-ref" />
+                    <!--<small class="d-none d-md-block">999 999 9999</small>-->
+                </a>
+            </div>
+            <div class="col-4 col-md-2">
+                <a title="WhatsApp: 999 999 9999" class="btn btn-outline-light btn-block data" href="https://api.whatsapp.com/send?phone=529999999999">
+                    <!--<i class="fab fa-whatsapp"></i>-->
+                    <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_whatsapp' | get_setting }}" class="splash-ref" />
+                    <!--<small class="d-none d-md-block">999 999 9999</small>-->
+                </a>
+            </div>
+            <div class="col-4 col-md-2">
+                <a title="Correo Electrónico: ventas@bmhaus.mx" class="btn btn-outline-light btn-block data" href="mailto:ventas@bmhaus.mx">
+                    <!--<i class="far fa-envelope"></i>-->
+                    <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_email' | get_setting }}" class="splash-ref" />
+                    <!--<small class="d-none d-md-block">
+                        <span class="d-inline-block">ventas@</span>
+                        <span class="d-inline-block">bmhaus.mx</span>
+                    </small>-->
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a title="Facebook" class="btn btn-outline-light btn-block data" href="https://www.facebook.com/">
+                    <!--<i class="fab fa-facebook-f"></i>-->
+                    <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_fb' | get_setting }}" class="splash-ref" />
+                    <!--<small class="d-none d-md-block">/facebook</small>-->
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a title="Instagram" class="btn btn-outline-light btn-block data" href="https://www.instagram.com/">
+                    <!--<i class="fab fa-instagram"></i>-->
+                    <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_ig' | get_setting }}" class="splash-ref" />
+                    <!--<small class="d-none d-md-block">@instagram</small>-->
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="spacer50px"></div>
+
+</div>
+
+<script src="{% static 'api/js/jquery.imagesloaded.min.js' %}"></script>
+<script src="{% static 'api/js/cbpBGSlideshow.min.js' %}"></script>
+<script>
+    $(function() {
+        $( "div.screen-spacer").height( $( "#video-splash" ).offset().top + $( "#video-splash" ).height() );
+        $( "#video-splash" )[ 0 ].onended = function() {
+            window.setTimeout( 
+                function() { 
+                    cbpBGSlideshow.init();
+                    $( "#video-splash" ).toggle( 
+                        1000, 
+                        function() { 
+                            $( "#video-splash" ).remove(); 
+                        } 
+                    );
+                    $( "img.splash_icon" ).toggle(1000);
+                }, 
+                2000 );
+        }
+    });
+    let show_form_signin =  ( duration = 1000 ) => {
+        $( "form.form-signin" ).toggle( duration, () => { $( "#usr" ).select() } )
+    }
+</script>
+
+{% endblock %}

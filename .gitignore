@@ -102,3 +102,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+bmhaus/main_settings.py
+db/
+files/media/usuarios/
+files/media/vehiculos/

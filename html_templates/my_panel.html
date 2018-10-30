@@ -1,0 +1,54 @@
+{% extends "global/html_struct.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="spacer50px"></div>
+<div class="spacer50px"></div>
+
+<h1>Bienvenido {{usuario}}</h1>
+
+<div class="services-list bkg-gray">
+
+    <div class="container">
+
+        <div class="row">
+
+            {% for mp in menu_main.perms %}
+
+                {% if 0 == mp.items_qty %}
+
+                    <div class="col-md-4 col-lg-3" {% if mp.permiso.vista %}onclick="location.href=BASE_URL + '{% url mp.permiso.vista %}'"{% endif %}>
+                        <article class="opt-menu service" style="background-image: url( '{% static mp.permiso.codename %}.png' );">
+                            <h5 class="degradado-rojo">
+                                {{ mp.permiso.mostrar_como }}
+                            </h5>
+                        </article>
+                    </div>
+
+                {% else %}
+
+                    {% for it in mp.items %}
+
+                        <div class="col-md-4 col-lg-3" {% if it.vista %}onclick="location.href=BASE_URL + '{% url it.vista %}'"{% endif %}>
+                            <article class="opt-menu service" style="background-image: url( '{% static it.codename %}.png' );">
+                                <h5 class="degradado-rojo">
+                                    {{ it.mostrar_como }}
+                                </h5>
+                            </article>
+                        </div>
+
+                    {% endfor %}
+                
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

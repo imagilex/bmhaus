@@ -469,8 +469,8 @@ class Concepto(models.Model):
     Descripcion = models.CharField(max_length=1000)
     ValorUnitario = models.DecimalField(max_digits=13, decimal_places=6)
     Importe = models.DecimalField(max_digits=13, decimal_places=6)
-    Descuento = models.DecimalField
-    (max_digits=13, decimal_places=6,
+    Descuento = models.DecimalField(
+        max_digits=13, decimal_places=6,
         null=True, blank=True)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,

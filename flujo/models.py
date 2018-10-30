@@ -67,7 +67,7 @@ class Accion(models.Model):
         Estado, on_delete=models.PROTECT,
         related_name="acciones_ejecutar")
     estado_final = models.ForeignKey(
-        , on_delete=models.PROTECT,
+        Estado, on_delete=models.PROTECT,
         related_name="acciones_ejecutadas")
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,

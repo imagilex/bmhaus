@@ -116,8 +116,8 @@ class DoctoOrdenReparacion(models.Model):
     vehiculo = models.ForeignKey(
         Vehiculo, on_delete=models.PROTECT,
         related_name="ordenesreparacion")
-    fotografia_kilometros = models.ImageField
-    (null=True, blank=True, upload_to=doctoordenreparacion_upload_to)
+    fotografia_kilometros = models.ImageField(
+        null=True, blank=True, upload_to=doctoordenreparacion_upload_to)
     fotografia_tanque_de_gasolina = models.ImageField(
         null=True, blank=True, upload_to=doctoordenreparacion_upload_to)
     fotografia_superior = models.ImageField(

@@ -9,16 +9,18 @@ from initsys.models import Usr
 from routines.mkitsafe import valida_acceso
 from routines.utils import move_uploaded_file
 
+
 @valida_acceso(['vehiculo.vehiculos_vehiculo'])
 def index(request, pkcte):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+
 
 @valida_acceso(['vehiculo.agregar_vehiculos_vehiculo'])
 def new(request, pkcte):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     cte = Cliente.objects.get(pk=pkcte)
     if 'POST' == request.method:
-        frm = FrmVehiculo( data=request.POST or None)
+        frm = FrmVehiculo(data=request.POST or None)
         if frm.is_valid():
             obj = frm.save(commit=False)
             obj.propietario = cte
@@ -31,7 +33,7 @@ def new(request, pkcte):
             return HttpResponseRedirect(reverse(
                 'vehiculo_see', kwargs={'pk': obj.pk}
             ))
-    frm = FrmVehiculo( data=request.POST or None)
+    frm = FrmVehiculo(data=request.POST or None)
     return render(request, 'global/form.html', {
         'menu_main': usuario.main_menu_struct(),
         'titulo': 'Vehiculos',
@@ -39,7 +41,9 @@ def new(request, pkcte):
         'frm': frm
     })
 
-@valida_acceso(['vehiculo.vehiculos_vehiculo'])
+
+@valida_acceso([
+    'vehiculo.vehiculos_vehiculo', 'vehiculo.mi_vehiculo_vehiculo'])
 def see(request, pk):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     if not Vehiculo.objects.filter(pk=pk).exists():
@@ -61,7 +65,8 @@ def see(request, pk):
             'view': 'vehiculo_update',
             'label': '<i class="far fa-edit"></i> Actualizar',
             'pk': pk})
-    if usuario.has_perm_or_has_perm_child('vehiculo.eliminar_vehiculos_vehiculo'):
+    if usuario.has_perm_or_has_perm_child(
+            'vehiculo.eliminar_vehiculos_vehiculo'):
         toolbar.append({
             'type': 'link_pk',
             'view': 'vehiculo_update',
@@ -77,6 +82,7 @@ def see(request, pk):
         'toolbar': toolbar,
         })
 
+
 @valida_acceso(['vehiculo.actualizar_vehiculos_vehiculo'])
 def update(request, pk):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
@@ -85,7 +91,7 @@ def update(request, pk):
             'item_no_encontrado'))
     obj = Vehiculo.objects.get(pk=pk)
     if 'POST' == request.method:
-        frm = FrmVehiculo(instance=obj,data=request.POST)
+        frm = FrmVehiculo(instance=obj, data=request.POST)
         if frm.is_valid():
             obj = frm.save(commit=False)
             obj.updated_by = usuario
@@ -115,11 +121,26 @@ def delete(request, pk):
         obj = Vehiculo.objects.get(pk=pk)
         ctepk = obj.propietario.pk
         obj.delete()
-        return HttpResponseRedirect(reverse('cliente_see', kwargs={'pk':ctepk}))
+        return HttpResponseRedirect(reverse(
+            'cliente_see', kwargs={'pk': ctepk}))
     except ProtectedError:
         return HttpResponseRedirect(reverse(
             'item_con_relaciones'))
 
-@valida_acceso()
+
+@valida_acceso(['vehiculo.mis_autos_vehiculo'])
 def my_vehicles(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    if not Cliente.objects.filter(idusuario=usuario.pk).exists():
+        return HttpResponseRedirect(reverse(
+            'item_no_encontrado'))
+    cte = Cliente.objects.get(idusuario=usuario.pk)
+    return render(request, 'app/vehiculo/mis_vehiculos.html', {
+        'menu_main': usuario.main_menu_struct(),
+        'titulo': 'Mis Vehículos',
+        'vehiculos': [{
+            'pk': v.pk,
+            'name': "{}".format(v),
+            'fotografia': "{}".format(v.fotografia).replace('\\', '/')
+            } for v in list(cte.vehiculos.all())],
+    })

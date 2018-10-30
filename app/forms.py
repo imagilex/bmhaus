@@ -56,6 +56,7 @@ class FrmCliente(forms.ModelForm):
             'extension': forms.TextInput(attrs={'type': 'number'}),
         }
 
+
 class FrmClienteUsr(forms.ModelForm):
 
     class Meta:
@@ -75,6 +76,7 @@ class FrmClienteUsr(forms.ModelForm):
         help_texts = {
             'is_active': '',
         }
+
 
 class FrmClienteContacto(forms.ModelForm):
 
@@ -96,6 +98,7 @@ class FrmClienteContacto(forms.ModelForm):
             'telefono_oficina': forms.TextInput(attrs={'type': 'tel'}),
             'extension': forms.TextInput(attrs={'type': 'number'}),
         }
+
 
 class FrmClienteFacturacion(forms.ModelForm):
 
@@ -126,6 +129,7 @@ class FrmClienteFacturacion(forms.ModelForm):
             'impuesto': 'Impuesto',
             'tipofactor': 'Tipo de Factor',
         }
+
 
 class FrmVehiculo(forms.ModelForm):
 

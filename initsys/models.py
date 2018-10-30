@@ -123,15 +123,14 @@ class Permiso(Permission):
             return None
         return permiso[0]
 
-
     @staticmethod
     def create(
-            name, 
-            app_label, 
+            name,
+            app_label,
             model,
             posicion,
-            mostrar_como=None, 
-            vista=None, 
+            mostrar_como=None,
+            vista=None,
             es_operacion=False,
             permiso_padre=None,
             groups=[]):
@@ -155,7 +154,6 @@ class Permiso(Permission):
                 gpo.permissions.add(perm)
                 gpo.save()
         return perm
-
 
     @staticmethod
     def get_from_package_codename(model_codename):
@@ -398,30 +396,50 @@ class Setting(models.Model):
             return obj[0].valor
         return ""
 
+
 class Direccion(models.Model):
     iddireccion = models.AutoField(primary_key=True)
     calle = models.CharField(max_length=100)
     numero_exterior = models.CharField(max_length=10)
-    numero_interior = models.CharField(max_length=10, null=True, blank=True)
+    numero_interior = models.CharField(
+        max_length=10,
+        null=True, blank=True)
     codigo_postal = models.CharField(max_length=5)
     colonia = models.CharField(max_length=100)
     municipio = models.CharField(max_length=100)
     estado = models.CharField(max_length=100)
     created_by = models.ForeignKey(
-        Usr, on_delete=models.SET_NULL, null=True, blank=True, related_name="+")
+        Usr, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="+")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_by = models.ForeignKey(
-        Usr, on_delete=models.SET_NULL, null=True, blank=True, related_name="+")
+        Usr, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="+")
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         if self.numero_interior:
-            return "{} {} (Int. {}), {}, {}, {}, C.P. {}".format(self.calle, self.numero_exterior, self.numero_interior, self.colonia, self.municipio, self.estado, self.codigo_postal)
+            return "{} {} (Int. {}), {}, {}, {}, C.P. {}".format(
+                self.calle, self.numero_exterior, self.numero_interior,
+                self.colonia, self.municipio, self.estado,
+                self.codigo_postal)
         else:
-            return "{} {}, {}, {}, {}, C.P. {}".format(self.calle, self.numero_exterior, self.colonia, self.municipio, self.estado, self.codigo_postal)
+            return "{} {}, {}, {}, {}, C.P. {}".format(
+                self.calle, self.numero_exterior, self.colonia,
+                self.municipio, self.estado, self.codigo_postal)
+
     def __unicode__(self):
         return self.__str__()
+
     def asDireccion(self):
         if self.numero_interior:
-            return "{} {} (Int. {}),<br />{}, {},<br />{},<br />C.P. {}".format(self.calle, self.numero_exterior, self.numero_interior, self.colonia, self.municipio, self.estado, self.codigo_postal)
+            return (
+                "{} {} (Int. {}),<br />{}, {},<br />{},<br />"
+                "C.P. {}").format(
+                    self.calle, self.numero_exterior, self.numero_interior,
+                    self.colonia, self.municipio, self.estado,
+                    self.codigo_postal)
         else:
-            return "{} {},<br />{}, {},<br />{},<br />C.P. {}".format(self.calle, self.numero_exterior, self.colonia, self.municipio, self.estado, self.codigo_postal)
+            return "{} {},<br />{}, {},<br />{},<br />C.P. {}".format(
+                self.calle, self.numero_exterior, self.colonia,
+                self.municipio, self.estado, self.codigo_postal)

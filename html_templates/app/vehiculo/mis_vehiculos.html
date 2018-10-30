@@ -1,0 +1,27 @@
+{% extends "global/html_struct.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="services-list bkg-gray">
+
+    <div class="row">
+
+        {% for vehiculo in vehiculos %}
+
+            <div class="col-md-4 col-lg-3" onclick="location.href=BASE_URL + '{% url 'vehiculo_see' pk=vehiculo.pk %}'">
+                <article class="opt-menu service" style="background-image: url( '{{ MEDIA_URL }}{{ vehiculo.fotografia }}' );">
+                    <h5 class="degradado-rojo">
+                        {{ vehiculo.name }}
+                    </h5>
+                </article>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

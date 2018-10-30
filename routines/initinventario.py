@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group
 from initsys.models import Permiso
 from .utils import clean_name
 
+
 def init_inventario_db():
     # Perfiles
     gpo_sadmin = Group.objects.get(name="Super-Administrador")

@@ -113,7 +113,8 @@ def init_db():
     Permiso.objects.create(
         nombre='Actualizar Permisos',
         name='Actualizar Permisos',
-        codename="{}_{}".format(clean_name("Actualizar Permisos"), ct_perm),
+        codename="{}_{}".format(
+            clean_name("Actualizar Permisos"), ct_perm),
         mostrar_como='Actualizar Permisos',
         vista=None,
         es_operacion=True,
@@ -158,7 +159,8 @@ def init_db():
     Permiso.objects.create(
         nombre="Agregar Settings",
         name="Agregar Settings",
-        codename="{}_{}".format(clean_name("Agregar Settings"), ct_setting),
+        codename="{}_{}".format(
+            clean_name("Agregar Settings"), ct_setting),
         mostrar_como="Agregar Settings",
         vista=None,
         es_operacion=True,
@@ -169,7 +171,8 @@ def init_db():
     Permiso.objects.create(
         nombre="Actualizar Settings",
         name="Actualizar Settings",
-        codename="{}_{}".format(clean_name("Actualizar Settings"), ct_setting),
+        codename="{}_{}".format(
+            clean_name("Actualizar Settings"), ct_setting),
         mostrar_como="Actualizar Settings",
         vista=None,
         es_operacion=True,
@@ -180,7 +183,8 @@ def init_db():
     Permiso.objects.create(
         nombre="Eliminar Settings",
         name="Eliminar Settings",
-        codename="{}_{}".format(clean_name("Eliminar Settings"), ct_setting),
+        codename="{}_{}".format(
+            clean_name("Eliminar Settings"), ct_setting),
         mostrar_como="Eliminar Settings",
         vista=None,
         es_operacion=True,
@@ -343,7 +347,9 @@ def init_db():
         seccion="01 General",
         nombre="footer_text",
         nombre_para_mostrar="Pie de Página",
-        valor='BM Haus by Estilo y Tecnología Automotriz © 2018 | Todos los Derechos Reservados | <a href="#" onclick="App.showPrivacyPolicy()" style="color: #ffffff">Política de Privacidad</a>',
+        valor='BM Haus by Estilo y Tecnología Automotriz © 2018 | Todos l'
+        'os Derechos Reservados | <a href="#" onclick="App.showPrivacyPoli'
+        'cy()" style="color: #ffffff">Política de Privacidad</a>',
         tipo="STRING",
         es_multiple=False,
         created_by=usr_sadmin

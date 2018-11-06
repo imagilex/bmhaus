@@ -4,11 +4,14 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group
 from django.db.models import ProtectedError
 
+import json
+
 from .models import Cliente
 from .forms import (
     FrmCliente, FrmClienteUsr, FrmClienteContacto, FrmClienteFacturacion)
 from initsys.models import Usr, usr_upload_to
 from initsys.forms import FrmDireccion
+from flujo.models import InstanciaFlujo
 from routines.mkitsafe import valida_acceso
 from routines.utils import move_uploaded_file
 
@@ -233,3 +236,36 @@ def profile(request):
 @valida_acceso()
 def services(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    if not Cliente.objects.filter(idusuario=usuario.pk).exists():
+        return HttpResponseRedirect(reverse(
+            'item_no_encontrado'))
+    cte = Cliente.objects.get(idusuario=usuario.pk)
+    ids = []
+    for v in list(cte.vehiculos.all()):
+        ids.append('{"idobjeto":' + str(v.pk) + '}')
+    instancias_servicios = list(InstanciaFlujo.objects.filter(
+        tipo_instancia="Vehiculo",
+        flujo__name='temporal_operaciones', extra_data__in=ids).order_by(
+            'terminado', '-created_at'))
+    data = []
+    for iserv in instancias_servicios:
+        extra_data = json.loads(iserv.extra_data)
+        pagado = False
+        for h in iserv.historia.all():
+            if "pagar" == h.accion.name:
+                pagado = True
+                break
+        data.append({
+            'vehiculo': cte.vehiculos.get(pk=extra_data['idobjeto']),
+            'instancia': iserv,
+            'pagado': pagado,
+        })
+    toolbar = []
+    return render(
+        request,
+        'app/servicios/index_cte.html', {
+            'menu_main': usuario.main_menu_struct(),
+            'titulo': 'Servicios',
+            'data': data,
+            'toolbar': toolbar
+            })

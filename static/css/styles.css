@@ -188,6 +188,7 @@ div.services-list article div.description {
     transition-duration: 1.0s;
     opacity: 0.0;
     filter: alpha(opacity=0);
+    height: 85%;
 }
 
 div.services-list article div.description:hover {
@@ -321,4 +322,46 @@ img.splash_icon {
         left: 50%;
         transform: translateX(-50%);
     }
+}
+
+a {
+    color: inherit;
+}
+
+#historia-servicio {
+    color: #74744e;
+}
+#historia-servicio .card {
+    margin-bottom: 5px;
+}
+
+.clausulas-contrato {
+    font-size: 10pt;
+    text-align: justify;
+    page-break-before: always;
+}
+
+.inventario-contrato .form-group {
+    margin: 0px;
+}
+
+img.contrato-firma {
+    max-width: 300px;
+    background-color: #ffffff;
+    max-height: 100px;
+}
+
+img.contrato-img01 {
+    max-width: 100%;
+    max-height: 250px;
+    margin-bottom: 10px;
+}
+
+img.contrato-img02 {
+    max-width: 100%;
+    max-height: 175px
+}
+
+.card.tarjeta-servicio {
+    color: #74744e;
 }

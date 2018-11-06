@@ -1,6 +1,7 @@
 {% extends "global/html_struct.html" %}
 
 {% load static %}
+{% load util_filters %}
 
 {% block content %}
 
@@ -8,6 +9,87 @@
 <div class="spacer50px"></div>
 
 <h1>Bienvenido {{usuario}}</h1>
+
+{% if data %}
+<h3>Tu servicio:</h3>
+
+<div class="row">
+    <div class="col-sm-6">
+        {% if data.vehiculo.fotografia %}
+        <img class="float-left" src="{{ MEDIA_URL }}{{ data.vehiculo.fotografia }}" height="40" />
+        {% endif %}
+        <p>{{ data.vehiculo }}</p>
+    </div>
+    <div class="col-sm-6">
+        <p>
+            Inicio del Servicio: {{ data.instanciaflujo.created_at | date:"d/m/Y H:i" }}<br />
+            Última Actualización: {{ data.instanciaflujo.updated_at | date:"d/m/Y H:i" }}<br />
+            Estado Actual: {{ data.instanciaflujo.estado_actual }}
+        </p>
+    </div>
+</div>
+
+<div id="historia-servicio">
+        {% for h in data.instanciaflujo.historia.all %}
+            <div class="card">
+                <div class="card-header" id="header-{{ h.pk }}">
+                    <h5 class="mb-0">
+                        <button data-target="#body-{{ h.pk }}" aria-controls="body-{{ h.pk }}" aria-expanded="{% if data.instanciaflujo.estado_actual == h.accion.estado_final %}true{% else %}false{% endif %}" class="btn btn-link {% if data.instanciaflujo.estado_actual == h.accion.estado_final %}{% else %}collapsed{% endif %}" data-toggle="collapse">
+                            {{ h.accion.estado_final }}
+                        </button>
+                    </h5>
+                </div>
+                <div id="body-{{ h.pk }}" class="collapse {% if data.instanciaflujo.estado_actual == h.accion.estado_final %}show{% endif %}" aria-labelledby="header-{{ h.pk }}" data-parent="#historia-servicio">
+                    <div class="card-body">
+                        Fecha: {{ h.updated_at | date:"d/m/Y H:i" }}
+                        {% for d in h.historia_detalle.all %}
+                            {% if "DoctoOrdenReparacion" == d.tipo_documento_generado %}
+                                <br />
+                                {% if ver_doctoordenreparacion %}
+                                    <a href="{% url 'doctoordenreparacion_see' pk=d.iddocumento_generado %}" target="_blank">
+                                        Ver Orden de Reparación
+                                    </a>
+                                {% endif %}
+                            {% elif "AvanceEnFlujo" == d.tipo_documento_generado %}
+                                <div class="row">
+                                    {% if ver_avancereparacion %}
+                                    <div class="col-sm-6">
+                                        <div class="btn-group float-right" role="group">
+                                            {% if actualizar_avancereparacion %}
+                                                <a href="{% url 'servicio_avanceenflujo_update' pk=d.iddocumento_generado %}" class="btn btn-outline-secondary">
+                                                    <i class="far fa-edit"></i>
+                                                </a>
+                                            {% endif %}
+                                            {% if eliminar_avancereparacion %}
+                                                <a href="{% url 'servicio_avanceenflujo_delete' pk=d.iddocumento_generado %}" class="btn btn-outline-secondary">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                        {{ data.avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'nota' | as_paragraph | safe }}
+                                    </div>
+                                    <div class="col-sm-6">
+    
+                                        <img src="{{ MEDIA_URL }}{{ data.avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia' }}" style="max-width: 100%;" />
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <br />
+                                Documento Generado: {{ d }}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <script type="text/javascript">
+        $( '#historia-servicio img[src="/media/"]' ).remove();
+    </script>
+
+{% endif %}
 
 <div class="services-list bkg-gray">
 

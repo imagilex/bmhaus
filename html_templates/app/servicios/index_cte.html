@@ -1,0 +1,28 @@
+{% extends "global/html_struct.html" %}
+{% load humanize %}
+{% load i18n %}
+
+{% block content %}
+<!-- app/servicios/index_cte.html/content -->
+<div class="card-columns">
+    {% for reg in data %}
+        <div class="card tarjeta-servicio">
+            <img class="card-img-top" src="{{ MEDIA_URL }}{{ reg.vehiculo.fotografia }}">
+            <div class="card-body">
+                    {% if perms.app.servicios_vehiculo or perms.initsys.mis_servicios_permiso %}
+                    <a href="{% url 'servicio_see' pk=reg.instancia.pk %}" class="btn btn-outline-secondary float-right" title="Ver"><i class="far fa-eye"></i></a>
+                {% endif %}
+                <h5 class="card-title">{{ reg.vehiculo }}</h5>
+                <p class="card-text">
+                    Fecha del Servicio: {{ reg.instancia.created_at | date:"d/m/Y H:i" }}<br />
+                    Terminado: {% if reg.instancia.terminado %}Sí{% else %}No{% endif %}<br />
+                    Cancelado: {% if reg.instancia.estado_actual.es_cancelacion %}Sí{% else %}No{% endif %}<br />
+                    Estado Actual: {{ reg.instancia.estado_actual }}<br />
+                    ¿Tiene Pagos? {% if reg.pagado %}Sí{% else %}No{% endif %}<br />
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<!-- app/servicios/index.html/content end -->
+{% endblock %}

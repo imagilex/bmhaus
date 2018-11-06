@@ -68,7 +68,7 @@
             <th>Modelo</th>
             <th>VIN</th>
             <th>Placa</th>
-            <th class="text-right" colspan="3">
+            <th class="text-right" colspan="5">
                 {% if perms.app.agregar_vehiculos_vehiculo %}
                 <a href="{% url 'vehiculo_new' pkcte=cte.pk %}" class="btn btn-outline-secondary" title="Nuevo Vehículo">
                     <i class="far fa-edit"></i>
@@ -87,8 +87,24 @@
             <td>{{ reg.modelo }}</td>
             <td>{{ reg.vin }}</td>
             <td>{{ reg.numero_de_placa }}</td>
+            <td>
+                {% if perms.app.agregar_servicios_vehiculo %}
+                <a href="{% url 'servicio_new_taller' pkvehiculo=reg.pk %}" class="btn btn-outline-secondary" title="Recibir en Taller">
+                    <i class="fas fa-play"></i>
+                    Recibir en Taller
+                </a>
+                {% endif %}
+            </td>
+            <td>
+                {% if perms.app.agregar_servicios_vehiculo %}
+                <a href="{% url 'servicio_new_particular' pkvehiculo=reg.pk %}" class="btn btn-outline-secondary" title="Recibir en Domicilio">
+                    <i class="fas fa-play"></i>
+                    Recibir en Domicilio
+                </a>
+                {% endif %}
+            </td>
             <td class="text-center">
-                {% if perms.initsys.usuarios_user %}
+                {% if perms.initsys.vehiculos_vehiculo %}
                 <a href="{% url 'vehiculo_see' pk=reg.pk %}" class="btn btn-outline-secondary" title="Ver"><i class="far fa-eye"></i></a>
                 {% endif %}
             </td>

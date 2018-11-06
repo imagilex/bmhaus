@@ -48,3 +48,7 @@ def get_setting(sectionvalue):
     """
     section, value = sectionvalue.split(".")
     return Setting.get_value(section, value)
+
+@register.filter
+def keyvalue(dict, key):    
+    return dict[key]

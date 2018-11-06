@@ -1,0 +1,37 @@
+{% extends "global/html_struct.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="{% url 'servicio_executeaccion' %}">
+    {% csrf_token %}
+    <input type="hidden" name="action" id="action" value="move_to" />
+    <input type="hidden" name="accion" id="accion" value="{{ accion.pk }}" />
+    <input type="hidden" name="instanciaflujo" id="instanciaflujo" value="{{ instanciaflujo.pk }}" />
+    <input type="hidden" name="vehiculo" id="vehiculo" value="{{ vehiculo.pk }}" />
+    <div class="row">
+        <div class="col-sm-6">
+            <h5>Cliente</h5>
+            <p>{{ cliente }}</p>
+            <h5>Vehículo</h5>
+            <p>{{ vehiculo }}</p>
+            <h5>Servicio</h5>
+            <p>
+                Inicio del Servicio: {{ instanciaflujo.created_at | date:"d/m/Y H:i" }}<br />
+                Última Actualización: {{ instanciaflujo.updated_at | date:"d/m/Y H:i" }}
+            </p>
+            <p>
+                Estado Actual: {{ accion.estado_inicial }}<br />
+                Accion: {{ accion }}<br />
+                Estado Siguiente: {{ accion.estado_final }}<br />
+            </p>
+        </div>
+        <div class="col-sm-6">
+            <h5>Información</h5>
+            {{ frm | crispy }}
+            <button type="submit" class="btn btn-outline-primary" id="btn-save" >Guardar</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

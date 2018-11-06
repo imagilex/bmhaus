@@ -51,16 +51,22 @@
     <body {% if bg_start %}{% else %}class="body-spacer"{% endif %} >
 
         {% if menu_main %}
+            <!-- html_struct/menu_main.html -->
             {% include "global/menu_main.html" %}
+            <!-- html_struct/menu_main.html end -->
         {% endif %}
 
+        <!-- html_struct/extraaftermain -->
         {% block extraaftermain %}
         {% endblock%}
+        <!-- html_struct/extraaftermain end -->
 
         <div class="container">
 
             {% if toolbar %}
+                <!-- html_struct/toolbal.html -->
                 {% include "global/toolbar.html" %}
+                <!-- html_struct/toolbal.html end -->
             {% endif %}
 
             {% if titulo %}
@@ -76,14 +82,20 @@
 				</h1>
             {% endif %}
             
+            <!-- html_struct/extrabefore -->
             {% block extrabefore %}
-			{% endblock%}
+            {% endblock%}
+            <!-- html_struct/extrabefore end -->
 
+            <!-- html_struct/content -->
 			{% block content %}
-			{% endblock %}
+            {% endblock %}
+            <!-- html_struct/content end -->
 
+            <!-- html_struct/extraafter -->
 			{% block extraafter %}
-			{% endblock%}
+            {% endblock%}
+            <!-- html_struct/extraafter end -->
 
         </div>
 
@@ -126,7 +138,9 @@
         <script type="text/x-handlebars-template" id="privacy-policy-template">{{ '01 General.privacy_policy' | get_setting | as_paragraph | safe }}</script>
 
         {% if True == footer %}
+            <!-- html_struct/footer.html -->
             {% include "global/footer.html" %}
+            <!-- html_struct/footer.html end -->
 		{% endif %}
 		
         <script type="text/javascript">

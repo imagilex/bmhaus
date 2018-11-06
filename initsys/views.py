@@ -7,9 +7,12 @@ from django.conf import settings
 
 from random import shuffle
 import os
+import json
 
 from .forms import AccUsr
 from .models import Usr
+from app.models import Cliente, AvanceEnFlujo
+from flujo.models import InstanciaFlujo
 from routines.mkitsafe import valida_acceso
 
 # Create your views here.
@@ -80,10 +83,45 @@ def item_with_relations(request):
 @valida_acceso()
 def panel(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    data = []
+    if Cliente.objects.filter(idusuario=usuario.pk).exists():
+        cte = Cliente.objects.get(idusuario=usuario.pk)
+        ids = []
+        for v in list(cte.vehiculos.all()):
+            ids.append('{"idobjeto":' + str(v.pk) + '}')
+        instancias_servicios = InstanciaFlujo.objects.filter(
+            tipo_instancia="Vehiculo",
+            flujo__name='temporal_operaciones', extra_data__in=ids, terminado=False).order_by(
+                'terminado', '-created_at')
+        if instancias_servicios.exists():
+            iserv = instancias_servicios[0]
+            extra_data = json.loads(iserv.extra_data)
+            pagado = False
+            for h in iserv.historia.all():
+                if "pagar" == h.accion.name:
+                    pagado = True
+                    break
+            avanceenflujo = {}
+            for h in iserv.historia.all():
+                for d in h.historia_detalle.all():
+                    if "AvanceEnFlujo" == d.tipo_documento_generado:
+                        aef = AvanceEnFlujo.objects.get(pk=d.iddocumento_generado)
+                        avanceenflujo[d.iddocumento_generado] = {'pk': aef.pk, 'nota': aef.nota, 'fotografia': "{}".format(aef.fotografia).replace('\\', '/')}
+            data = {
+                'vehiculo': cte.vehiculos.get(pk=extra_data['idobjeto']),
+                'instanciaflujo': iserv,
+                'pagado': pagado,
+                'avanceenflujo': avanceenflujo,
+            }
+    ver_doctoordenreparacion = usuario.has_perm_or_has_perm_child('doctoordenreparacion.doctoordenreparacion_docto orden reparacion') or usuario.has_perm_or_has_perm_child('doctoordenreparacion.ver_orden_de_reparacion_docto orden reparacion')
+    ver_avancereparacion = usuario.has_perm_or_has_perm_child('avanceenflujo.avanceenflujo_avance en flujo') or usuario.has_perm_or_has_perm_child('avanceenflujo.ver_avance_en_flujo_avance en flujo')
     return render(
         request,
         'my_panel.html', {
             'menu_main': usuario.main_menu_struct(),
             # 'footer': True,
-            'usuario': usuario.first_name
+            'usuario': usuario.first_name,
+            'data': data,
+            'ver_doctoordenreparacion': ver_doctoordenreparacion,
+            'ver_avancereparacion': ver_avancereparacion,
         })

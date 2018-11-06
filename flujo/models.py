@@ -7,6 +7,7 @@ from initsys.models import Usr
 
 class Flujo(models.Model):
     idflujo = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=250, default="")
     nombre = models.CharField(max_length=250)
     descripcion = models.TextField(null=True, blank=True)
     created_by = models.ForeignKey(
@@ -33,6 +34,7 @@ class Estado(models.Model):
     flujo = models.ForeignKey(
         Flujo, on_delete=models.PROTECT,
         related_name="estados")
+    name = models.CharField(max_length=250, default="")
     nombre = models.CharField(max_length=250)
     no_estado = models.PositiveSmallIntegerField(default=0)
     es_inicial = models.BooleanField(default=False)
@@ -62,6 +64,7 @@ class Accion(models.Model):
     flujo = models.ForeignKey(
         Flujo, on_delete=models.PROTECT,
         related_name="acciones")
+    name = models.CharField(max_length=250, default="")
     nombre = models.CharField(max_length=250)
     estado_inicial = models.ForeignKey(
         Estado, on_delete=models.PROTECT,
@@ -98,6 +101,7 @@ class InstanciaFlujo(models.Model):
         Estado, on_delete=models.PROTECT,
         related_name="instancias_en_estado")
     terminado = models.BooleanField(default=False)
+    extra_data = models.TextField(blank=True)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,
         related_name="+")
@@ -121,10 +125,11 @@ class InstanciaHistoria(models.Model):
     idinstanciahistoria = models.AutoField(primary_key=True)
     instanciaflujo = models.ForeignKey(
         InstanciaFlujo,
-        on_delete=models.PROTECT, related_name="historia")
+        on_delete=models.CASCADE, related_name="historia")
     accion = models.ForeignKey(
         Accion, on_delete=models.PROTECT,
         related_name="instancias_aplicadoras")
+    extra_data = models.TextField(blank=True)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,
         related_name="+")
@@ -135,7 +140,7 @@ class InstanciaHistoria(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['instanciaflujo', 'accion', 'idinstanciahistoria']
+        ordering = ['instanciaflujo', 'created_at', 'accion', 'idinstanciahistoria']
 
     def __str__(self):
         return "{}".format(self.accion)
@@ -148,9 +153,10 @@ class InstanciaHistoriaDetalle(models.Model):
     idinstanciahistoriadetalle = models.AutoField(primary_key=True)
     instanciahistoria = models.ForeignKey(
         InstanciaHistoria,
-        on_delete=models.PROTECT, related_name="historia_detalle")
+        on_delete=models.CASCADE, related_name="historia_detalle")
     iddocumento_generado = models.CharField(max_length=250)
     tipo_documento_generado = models.CharField(max_length=250)
+    extra_data = models.TextField(blank=True)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,
         related_name="+")

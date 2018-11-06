@@ -428,3 +428,36 @@ def upd_app_db():
     Permiso.create(
         "Mi vehiculo", 'app', 'vehiculo', 1, groups=[gpo_cte],
         es_operacion=True, permiso_padre=perm_mis_veh)
+
+
+def upd_app_db_20181104():
+    gpos = list(Group.objects.filter(name__icontains='Administrador'))
+    Permiso.create('Master Vehiculos', 'app', 'vehiculo', 5, mostrar_como='Vehiculos', vista='vehiculo_index', groups=gpos)
+    pserv = Permiso.create('Servicios', 'app', 'vehiculo', 6, vista='servicio_index', groups=gpos)
+    Permiso.create('Agregar Servicios', 'app', 'vehiculo', 1, es_operacion=True, permiso_padre=pserv, groups=gpos)
+    Permiso.create('Actualizar Servicios', 'app', 'vehiculo', 2, es_operacion=True, permiso_padre=pserv, groups=gpos)
+    Permiso.create('Eliminar Servicios', 'app', 'vehiculo', 3, es_operacion=True, permiso_padre=pserv, groups=gpos)
+
+    for obj in Flujo.objects.all():
+        obj.name = clean_name(obj.nombre)
+        obj.save()
+    for obj in Estado.objects.all():
+        obj.name = clean_name(obj.nombre)
+        obj.save()
+    for obj in Accion.objects.all():
+        obj.name = clean_name(obj.nombre)
+        obj.save()
+
+    pserv = Permiso.objects.get(codename='servicios_vehiculo')
+    pdocto_orden_rep = Permiso.create('doctoordenreparacion', 'app', 'doctoordenreparacion', 4, mostrar_como='Orden de Reparacion', es_operacion=True, permiso_padre=pserv, groups=gpos)
+    Permiso.create('Actualizar Orden de Reparacion', 'app', 'doctoordenreparacion', 2, es_operacion=True, permiso_padre=pdocto_orden_rep, groups=gpos)
+    Permiso.create('Eliminar Orden de Reparacion', 'app', 'doctoordenreparacion', 3, es_operacion=True, permiso_padre=pdocto_orden_rep, groups=gpos)
+    pavance = Permiso.create('avanceenflujo', 'app', 'avanceenflujo', 5, mostrar_como='Avance en Flujo', es_operacion=True, permiso_padre=pserv, groups=gpos)
+    Permiso.create('Actualizar Avance en Flujo', 'app', 'avanceenflujo', 2, es_operacion=True, permiso_padre=pavance, groups=gpos)
+    Permiso.create('Eliminar Avance en Flujo', 'app', 'avanceenflujo', 3, es_operacion=True, permiso_padre=pavance, groups=gpos)
+
+    gpo_cte = list(Group.objects.filter(name__icontains='Cliente'))
+    pmisserv = Permiso.objects.get(codename='mis_servicios_permiso')
+    Permiso.create('Ver Orden de Reparacion', 'app', 'doctoordenreparacion', 1, es_operacion=True, permiso_padre=pmisserv, groups=gpo_cte)
+    Permiso.create('Ver Avance en Flujo', 'app', 'avanceenflujo', 2, es_operacion=True, permiso_padre=pmisserv, groups=gpo_cte)
+

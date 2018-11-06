@@ -1,0 +1,65 @@
+{% extends "global/html_struct.html" %}
+
+{% block content %}
+
+<table class="table table-striped table-sm table-responsive-md">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Cliente</th>
+            <th>Marca</th>
+            <th>Serie</th>
+            <th>Modelo</th>
+            <th>VIN</th>
+            <th>Placa</th>
+            <th class="text-right" colspan="5">
+            </th>
+        </tr>
+    </thead>
+    <tbody id="data-tbl">
+        {% for reg in vehiculos %}
+        <tr>
+            <td>{% if reg.fotografia %}<img class="" src="{{ MEDIA_URL }}{{ reg.fotografia }}" height="40" />{% endif %}</td>
+            <td>{{ reg.propietario }}</td>
+            <td>{{ reg.marca }}</td>
+            <td>{{ reg.serie }}</td>
+            <td>{{ reg.modelo }}</td>
+            <td>{{ reg.vin }}</td>
+            <td>{{ reg.numero_de_placa }}</td>
+            <td>
+                {% if perms.app.agregar_servicios_vehiculo %}
+                <a href="{% url 'servicio_new_taller' pkvehiculo=reg.pk %}" class="btn btn-outline-secondary" title="Recibir en Taller">
+                    <i class="fas fa-play"></i>
+                    Recibir en Taller
+                </a>
+                {% endif %}
+            </td>
+            <td>
+                {% if perms.app.agregar_servicios_vehiculo %}
+                <a href="{% url 'servicio_new_particular' pkvehiculo=reg.pk %}" class="btn btn-outline-secondary" title="Recibir en Domicilio">
+                    <i class="fas fa-play"></i>
+                    Recibir en Domicilio
+                </a>
+                {% endif %}
+            </td>
+            <td class="text-center">
+                {% if perms.app.vehiculos_vehiculo %}
+                <a href="{% url 'vehiculo_see' pk=reg.pk %}" class="btn btn-outline-secondary" title="Ver"><i class="far fa-eye"></i></a>
+                {% endif %}
+            </td>
+            <td class="text-center">
+                {% if perms.app.actualizar_vehiculos_vehiculo %}
+                <a href="{% url 'vehiculo_update' pk=reg.pk %}" class="btn btn-outline-secondary" title="Actualizar"><i class="far fa-edit"></i></a>
+                {% endif %}
+            </td>
+            <td class="text-center">
+                {% if perms.app.eliminar_vehiculos_vehiculo %}
+                <a href="{% url 'vehiculo_delete' pk=reg.pk %}" class="btn btn-outline-secondary" title="Eliminar"><i class="far fa-trash-alt"></i></a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

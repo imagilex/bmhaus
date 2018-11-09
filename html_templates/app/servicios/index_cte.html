@@ -9,7 +9,7 @@
         <div class="card tarjeta-servicio">
             <img class="card-img-top" src="{{ MEDIA_URL }}{{ reg.vehiculo.fotografia }}">
             <div class="card-body">
-                    {% if perms.app.servicios_vehiculo or perms.initsys.mis_servicios_permiso %}
+                {% if perms.app.servicios_vehiculo or perms.initsys.mis_servicios_permiso %}
                     <a href="{% url 'servicio_see' pk=reg.instancia.pk %}" class="btn btn-outline-secondary float-right" title="Ver"><i class="far fa-eye"></i></a>
                 {% endif %}
                 <h5 class="card-title">{{ reg.vehiculo }}</h5>

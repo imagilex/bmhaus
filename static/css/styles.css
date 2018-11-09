@@ -158,9 +158,8 @@ div.services-list article.opt-menu {
 }
 
 div.services-list h5 {
-    font-size: 0.80rem;
+    font-size: 1.2rem;
     font-weight: normal;
-    height: 30px;
     overflow: hidden;
     padding: 5px;
     border-radius: 5px;
@@ -173,27 +172,20 @@ div.services-list article.opt-menu h5 {
 }
 
 div.services-list h5:before {
-    content: '\f25b\00a0';
+    /*content: '\f25b\00a0';*/
+    content: '';
     font-family: "Font Awesome 5 Free";
     font-weight: lighter;
 }
 
 div.services-list article div.description {
-    background: rgba( 0, 0, 0, 0.75 );
-    font-size: 0.85rem;
+    background: rgba( 0, 0, 0, 0.20 );
+    font-size: 1.0rem;
     padding: 5px;
     border-radius: 5px;
-    border: 1px solid rgba( 0, 0, 0, 0.85 );
+    border: none;
     font-weight: lighter;
-    transition-duration: 1.0s;
-    opacity: 0.0;
-    filter: alpha(opacity=0);
     height: 85%;
-}
-
-div.services-list article div.description:hover {
-    opacity: 1.0;
-    filter: alpha(opacity=100);
 }
 
 iframe.mapa {

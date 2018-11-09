@@ -4,8 +4,9 @@ from datetime import datetime
 
 from .models import Cliente, Vehiculo, DoctoOrdenReparacion, AvanceEnFlujo
 
+
 def theTime():
-    t =  datetime.now()
+    t = datetime.now()
     return "{:02d}:{:02d}".format(t.hour, t.minute)
 
 
@@ -227,11 +228,11 @@ class FrmDoctoOrdenReparacion(forms.ModelForm):
         }
         help_texts = {
             'costo_de_revision': "En caso de que el presupuesto no sea"
-                "aceptado, el consumidor pagará exclusivamente el costo por"
-                "la revisión y diagnóstico y el prestador del servicio se"
-                "obliga a devolver el vehículo en las condiciones en las que"
-                "le fue entregado, exceptuando las consecuencias inevitables"
-                "del diagnóstico.",
+            "aceptado, el consumidor pagará exclusivamente el costo por"
+            "la revisión y diagnóstico y el prestador del servicio se"
+            "obliga a devolver el vehículo en las condiciones en las que"
+            "le fue entregado, exceptuando las consecuencias inevitables"
+            "del diagnóstico.",
         }
 
 
@@ -247,15 +248,16 @@ class FrmDoctoOrdenReparacionGenerales01(forms.ModelForm):
         ]
         widgets = {
             'fecha_de_recepcion': forms.TextInput(attrs={'type': 'date'}),
-            'hora_de_recepcion': forms.TextInput(attrs={'type': 'time', 'value':theTime}),
+            'hora_de_recepcion': forms.TextInput(
+                attrs={'type': 'time', 'value': theTime}),
         }
         help_texts = {
             'costo_de_revision': "En caso de que el presupuesto no sea"
-                "aceptado, el consumidor pagará exclusivamente el costo por"
-                "la revisión y diagnóstico y el prestador del servicio se"
-                "obliga a devolver el vehículo en las condiciones en las que"
-                "le fue entregado, exceptuando las consecuencias inevitables"
-                "del diagnóstico.",
+            "aceptado, el consumidor pagará exclusivamente el costo por"
+            "la revisión y diagnóstico y el prestador del servicio se"
+            "obliga a devolver el vehículo en las condiciones en las que"
+            "le fue entregado, exceptuando las consecuencias inevitables"
+            "del diagnóstico.",
         }
 
 

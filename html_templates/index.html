@@ -4,10 +4,15 @@
 {% load util_filters %}
 
 {% block extraaftermain %}
+<!--<video 
+    id="video-splash" autoplay="autoplay" muted="muted" 
+    src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg' | get_setting }}"
+    poster="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_poster' | get_setting }}" 
+    playsinline="playsinline">
+</video>-->
 <video 
     id="video-splash" autoplay="autoplay" muted="muted" 
-    src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg' | get_setting }}" 
-    poster="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_poster' | get_setting }}" 
+    src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg' | get_setting }}"
     playsinline="playsinline">
 </video>
 
@@ -88,7 +93,7 @@
         <div class="row">
             <div class="col-md-4">
                 <article class="service" style="background-image: url( '{% static 'background/services/mantenimiento_preventivo.png' %}' );">
-                    <h5 class="degradado-rojo text-center">Mantenimiento preventivo</h5>
+                    <h5 class="degradado-rojo text-center">Mantenimiento Preventivo</h5>
                     <div class="description">
                         Para que tu auto se encuentre en perfectas condiciones, asegúrate de realizar todos sus servicios a tiempo. El nuestro incluye cambio de aceite, bujías y filtros de gasolina, aceite y aire.
                     </div>
@@ -176,21 +181,21 @@
         <div class="row">
 
             <div class="col-4 col-md-2">
-                <a title="Teléfono: 999 999 9999" class="btn btn-outline-light btn-block data" href="tel:9999999999">
+                <a title="Teléfono:55 2095 9573" class="btn btn-outline-light btn-block data" href="tel:5520959573" target="_blank">
                     <!--<i class="fas fa-phone"></i>-->
                     <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_telefono' | get_setting }}" class="splash-ref" />
-                    <!--<small class="d-none d-md-block">999 999 9999</small>-->
+                    <!--<small class="d-none d-md-block">55 2095 9573</small>-->
                 </a>
             </div>
             <div class="col-4 col-md-2">
-                <a title="WhatsApp: 999 999 9999" class="btn btn-outline-light btn-block data" href="https://api.whatsapp.com/send?phone=529999999999">
+                <a title="WhatsApp: 55 2095 9573" class="btn btn-outline-light btn-block data" href="https://api.whatsapp.com/send?phone=525520959573" target="_blank">
                     <!--<i class="fab fa-whatsapp"></i>-->
                     <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_whatsapp' | get_setting }}" class="splash-ref" />
-                    <!--<small class="d-none d-md-block">999 999 9999</small>-->
+                    <!--<small class="d-none d-md-block">55 2095 9573</small>-->
                 </a>
             </div>
             <div class="col-4 col-md-2">
-                <a title="Correo Electrónico: ventas@bmhaus.mx" class="btn btn-outline-light btn-block data" href="mailto:ventas@bmhaus.mx">
+                <a title="Correo Electrónico: ventas@bmhaus.mx" class="btn btn-outline-light btn-block data" href="mailto:ventas@bmhaus.mx" target="_blank">
                     <!--<i class="far fa-envelope"></i>-->
                     <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_email' | get_setting }}" class="splash-ref" />
                     <!--<small class="d-none d-md-block">
@@ -200,14 +205,14 @@
                 </a>
             </div>
             <div class="col-6 col-md-3">
-                <a title="Facebook" class="btn btn-outline-light btn-block data" href="https://www.facebook.com/">
+                <a title="Facebook" class="btn btn-outline-light btn-block data" href="https://www.facebook.com/" target="_blank">
                     <!--<i class="fab fa-facebook-f"></i>-->
                     <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_fb' | get_setting }}" class="splash-ref" />
                     <!--<small class="d-none d-md-block">/facebook</small>-->
                 </a>
             </div>
             <div class="col-6 col-md-3">
-                <a title="Instagram" class="btn btn-outline-light btn-block data" href="https://www.instagram.com/">
+                <a title="Instagram" class="btn btn-outline-light btn-block data" href="https://www.instagram.com/" target="_blank">
                     <!--<i class="fab fa-instagram"></i>-->
                     <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_ig' | get_setting }}" class="splash-ref" />
                     <!--<small class="d-none d-md-block">@instagram</small>-->

@@ -202,6 +202,7 @@ class DoctoOrdenReparacion(models.Model):
     def __unicode__(self):
         return self.__str__()
 
+
 class AvanceEnFlujo(models.Model):
     idavanceenflujo = models.AutoField(primary_key=True)
     nota = models.TextField(null=True, blank=True)
@@ -218,7 +219,7 @@ class AvanceEnFlujo(models.Model):
 
     class Meta:
         ordering = []
-    
+
     def __str__(self):
         return "{}".format(self.nota)
 

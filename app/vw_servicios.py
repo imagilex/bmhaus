@@ -21,12 +21,16 @@ from .forms import (
     FrmDoctoOrdenReparacionComponentesMecanicos,
     FrmDoctoOrdenReparacionFirmas,
     FrmAvanceEnFlujo)
-from flujo.models import Flujo, Estado, Accion, InstanciaFlujo, InstanciaHistoriaDetalle
+from flujo.models import (
+    Flujo, Estado, Accion, InstanciaFlujo, InstanciaHistoriaDetalle)
 from routines.mkitsafe import valida_acceso
 from routines.utils import move_uploaded_file
 from initsys.models import Usr
 
-@valida_acceso(['vehiculo.agregar_servicios_vehiculo', 'vehiculo.actualizar_servicios_vehiculo'])
+
+@valida_acceso([
+    'vehiculo.agregar_servicios_vehiculo',
+    'vehiculo.actualizar_servicios_vehiculo'])
 def new_from_taller(request, pkvehiculo):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     toolbar = []
@@ -36,11 +40,11 @@ def new_from_taller(request, pkvehiculo):
     accion = estado_inicial.acciones_ejecutar.filter(
         name='recibir_vehiculo_en_taller')[0]
     instanciaflujo = InstanciaFlujo.objects.create(
-        flujo=flujo, 
+        flujo=flujo,
         tipo_instancia='Vehiculo',
-        estado_actual=estado_inicial, 
+        estado_actual=estado_inicial,
         extra_data='{"idobjeto":' + str(vehiculo.pk) + '}',
-        created_by=usuario, 
+        created_by=usuario,
         updated_by=usuario)
     return render(
         request,
@@ -48,7 +52,8 @@ def new_from_taller(request, pkvehiculo):
         {
             'menu_main': usuario.main_menu_struct(),
             'titulo': accion.nombre,
-            'titulo_descripcion': "{}/{}".format(vehiculo.propietario, vehiculo),
+            'titulo_descripcion': "{}/{}".format(
+                vehiculo.propietario, vehiculo),
             'toolbar': toolbar,
             'accion': accion,
             'instanciaflujo': instanciaflujo,
@@ -70,7 +75,10 @@ def new_from_taller(request, pkvehiculo):
         }
     )
 
-@valida_acceso(['vehiculo.agregar_servicios_vehiculo', 'vehiculo.actualizar_servicios_vehiculo'])
+
+@valida_acceso([
+    'vehiculo.agregar_servicios_vehiculo',
+    'vehiculo.actualizar_servicios_vehiculo'])
 def new_from_dir_particular(request, pkvehiculo):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     toolbar = []
@@ -80,11 +88,11 @@ def new_from_dir_particular(request, pkvehiculo):
     accion = estado_inicial.acciones_ejecutar.filter(
         name='recibir_vehiculo_en_domicilio')[0]
     instanciaflujo = InstanciaFlujo.objects.create(
-        flujo=flujo, 
+        flujo=flujo,
         tipo_instancia='Vehiculo',
-        estado_actual=estado_inicial, 
+        estado_actual=estado_inicial,
         extra_data='{"idobjeto":' + str(vehiculo.pk) + '}',
-        created_by=usuario, 
+        created_by=usuario,
         updated_by=usuario)
     return render(
         request,
@@ -92,7 +100,8 @@ def new_from_dir_particular(request, pkvehiculo):
         {
             'menu_main': usuario.main_menu_struct(),
             'titulo': accion.nombre,
-            'titulo_descripcion': "{}/{}".format(vehiculo.propietario, vehiculo),
+            'titulo_descripcion': "{}/{}".format(
+                vehiculo.propietario, vehiculo),
             'toolbar': toolbar,
             'accion': accion,
             'instanciaflujo': instanciaflujo,
@@ -114,7 +123,10 @@ def new_from_dir_particular(request, pkvehiculo):
         }
     )
 
-@valida_acceso(['vehiculo.agregar_servicios_vehiculo', 'vehiculo.actualizar_servicios_vehiculo'])
+
+@valida_acceso([
+    'vehiculo.agregar_servicios_vehiculo',
+    'vehiculo.actualizar_servicios_vehiculo'])
 def executeaccion(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     toolbar = []
@@ -124,57 +136,71 @@ def executeaccion(request):
     if "POST" == request.method:
         if "move_to" == request.POST.get("action"):
             accion = Accion.objects.get(pk=request.POST.get("accion"))
-            instanciaflujo = InstanciaFlujo.objects.get(pk=request.POST.get("instanciaflujo"))
-            vehiculo = Vehiculo.objects.get(pk=request.POST.get("vehiculo"))
+            instanciaflujo = InstanciaFlujo.objects.get(
+                pk=request.POST.get("instanciaflujo"))
+            vehiculo = Vehiculo.objects.get(
+                pk=request.POST.get("vehiculo"))
             if instanciaflujo.estado_actual.es_inicial is True:
                 frm = FrmDoctoOrdenReparacion(data=request.POST)
-                frmGral1 = FrmDoctoOrdenReparacionGenerales01(data=request.POST)
-                frmGral2 = FrmDoctoOrdenReparacionGenerales02(data=request.POST)
-                frmExt = FrmDoctoOrdenReparacionExteriores(data=request.POST)
-                frmInt = FrmDoctoOrdenReparacionInteriores(data=request.POST)
-                frmAcc = FrmDoctoOrdenReparacionAccesorios(data=request.POST)
-                frmCMex = FrmDoctoOrdenReparacionComponentesMecanicos(data=request.POST)
-                frmSign = FrmDoctoOrdenReparacionFirmas(data=request.POST)
+                frmGral1 = FrmDoctoOrdenReparacionGenerales01(
+                    data=request.POST)
+                frmGral2 = FrmDoctoOrdenReparacionGenerales02(
+                    data=request.POST)
+                frmExt = FrmDoctoOrdenReparacionExteriores(
+                    data=request.POST)
+                frmInt = FrmDoctoOrdenReparacionInteriores(
+                    data=request.POST)
+                frmAcc = FrmDoctoOrdenReparacionAccesorios(
+                    data=request.POST)
+                frmCMex = FrmDoctoOrdenReparacionComponentesMecanicos(
+                    data=request.POST)
+                frmSign = FrmDoctoOrdenReparacionFirmas(
+                    data=request.POST)
                 if frm.is_valid():
-                    obj=frm.save(commit=False)
+                    obj = frm.save(commit=False)
                     obj.vehiculo = vehiculo
                     obj.created_by = usuario
                     obj.updated_by = usuario
                     if request.FILES.get('fotografia_kilometros'):
                         obj.fotografia_kilometros = move_uploaded_file(
-                            request.FILES.get('fotografia_kilometros'), 
+                            request.FILES.get('fotografia_kilometros'),
                             doctoordenreparacion_upload_to)
                     if request.FILES.get('fotografia_tanque_de_gasolina'):
                         obj.fotografia_tanque_de_gasolina = move_uploaded_file(
-                            request.FILES.get('fotografia_tanque_de_gasolina'), 
+                            request.FILES.get(
+                                'fotografia_tanque_de_gasolina'),
                             doctoordenreparacion_upload_to)
                     if request.FILES.get('fotografia_superior'):
                         obj.fotografia_superior = move_uploaded_file(
-                            request.FILES.get('fotografia_superior'), 
+                            request.FILES.get('fotografia_superior'),
                             doctoordenreparacion_upload_to)
                     if request.FILES.get('fotografia_frente'):
                         obj.fotografia_frente = move_uploaded_file(
-                            request.FILES.get('fotografia_frente'), 
+                            request.FILES.get('fotografia_frente'),
                             doctoordenreparacion_upload_to)
                     if request.FILES.get('fotografia_trasera'):
                         obj.fotografia_trasera = move_uploaded_file(
-                            request.FILES.get('fotografia_trasera'), 
+                            request.FILES.get('fotografia_trasera'),
                             doctoordenreparacion_upload_to)
                     if request.FILES.get('fotografia_lateral_izquierdo'):
                         obj.fotografia_lateral_izquierdo = move_uploaded_file(
-                            request.FILES.get('fotografia_lateral_izquierdo'), 
+                            request.FILES.get(
+                                'fotografia_lateral_izquierdo'),
                             doctoordenreparacion_upload_to)
                     if request.FILES.get('fotografia_lateral_derecho'):
                         obj.fotografia_lateral_derecho = move_uploaded_file(
-                            request.FILES.get('fotografia_lateral_derecho'), 
+                            request.FILES.get(
+                                'fotografia_lateral_derecho'),
                             doctoordenreparacion_upload_to)
-                    if request.FILES.get('firma_del_prestador_del_servicio'):
+                    if request.FILES.get(
+                            'firma_del_prestador_del_servicio'):
                         obj.firma_del_prestador_del_servicio = move_uploaded_file(
-                            request.FILES.get('firma_del_prestador_del_servicio'), 
+                            request.FILES.get(
+                                'firma_del_prestador_del_servicio'),
                             doctoordenreparacion_upload_to)
                     if request.FILES.get('firma_del_consumidor'):
                         obj.firma_del_consumidor = move_uploaded_file(
-                            request.FILES.get('firma_del_consumidor'), 
+                            request.FILES.get('firma_del_consumidor'),
                             doctoordenreparacion_upload_to)
                     obj.save()
                     historia = instanciaflujo.historia.create(
@@ -184,7 +210,8 @@ def executeaccion(request):
                         updated_by=usuario
                     )
                     instanciaflujo.estado_actual = accion.estado_final
-                    if accion.estado_final.es_final is True or accion.estado_final.es_cancelacion is True:
+                    if (accion.estado_final.es_final is True
+                            or accion.estado_final.es_cancelacion is True):
                         instanciaflujo.terminado = True
                     historia.historia_detalle.create(
                         iddocumento_generado=obj.pk,
@@ -196,13 +223,14 @@ def executeaccion(request):
                     instanciaflujo.save()
                     rendering = False
                     render_to = 'doctoordenreparacion_see',
-                    render_params = {'pk':obj.pk}
+                    render_params = {'pk': obj.pk}
                 else:
                     render_to = 'app/servicios/new.html'
                     render_params = {
                         'menu_main': usuario.main_menu_struct(),
                         'titulo': accion.nombre,
-                        'titulo_descripcion': "{}/{}".format(vehiculo.propietario, vehiculo),
+                        'titulo_descripcion': "{}/{}".format(
+                            vehiculo.propietario, vehiculo),
                         'toolbar': toolbar,
                         'accion': accion,
                         'instanciaflujo': instanciaflujo,
@@ -230,7 +258,7 @@ def executeaccion(request):
                     obj.updated_by = usuario
                     if request.FILES.get('fotografia'):
                         obj.fotografia = move_uploaded_file(
-                            request.FILES.get('fotografia'), 
+                            request.FILES.get('fotografia'),
                             avanceenflujo_upload_to)
                     obj.save()
                     historia = instanciaflujo.historia.create(
@@ -240,7 +268,8 @@ def executeaccion(request):
                         updated_by=usuario
                     )
                     instanciaflujo.estado_actual = accion.estado_final
-                    if accion.estado_final.es_final is True or accion.estado_final.es_cancelacion is True:
+                    if (accion.estado_final.es_final is True
+                            or accion.estado_final.es_cancelacion is True):
                         instanciaflujo.terminado = True
                     historia.historia_detalle.create(
                         iddocumento_generado=obj.pk,
@@ -254,8 +283,10 @@ def executeaccion(request):
                     render_to = 'servicio_index',
                     render_params = {}
     if rendering is True:
-        return render(request,render_to,render_params)
-    return HttpResponseRedirect(reverse(render_to[0],kwargs=render_params))
+        return render(request, render_to, render_params)
+    return HttpResponseRedirect(reverse(
+        render_to[0], kwargs=render_params))
+
 
 @valida_acceso(['vehiculo.servicios_vehiculo'])
 def index(request):
@@ -288,7 +319,8 @@ def index(request):
             })
 
 
-@valida_acceso(['vehiculo.servicios_vehiculo', 'permiso.mis_servicios_permiso'])
+@valida_acceso([
+    'vehiculo.servicios_vehiculo', 'permiso.mis_servicios_permiso'])
 def see(request, pk):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     toolbar = []
@@ -301,11 +333,19 @@ def see(request, pk):
         for d in h.historia_detalle.all():
             if "AvanceEnFlujo" == d.tipo_documento_generado:
                 aef = AvanceEnFlujo.objects.get(pk=d.iddocumento_generado)
-                avanceenflujo[d.iddocumento_generado] = {'pk': aef.pk, 'nota': aef.nota, 'fotografia': "{}".format(aef.fotografia).replace('\\', '/')}
-    ver_doctoordenreparacion = usuario.has_perm_or_has_perm_child('doctoordenreparacion.doctoordenreparacion_docto orden reparacion') or usuario.has_perm_or_has_perm_child('doctoordenreparacion.ver_orden_de_reparacion_docto orden reparacion')
-    ver_avancereparacion = usuario.has_perm_or_has_perm_child('avanceenflujo.avanceenflujo_avance en flujo') or usuario.has_perm_or_has_perm_child('avanceenflujo.ver_avance_en_flujo_avance en flujo')
-    actualizar_avancereparacion = usuario.has_perm_or_has_perm_child('avanceenflujo.actualizar_avance_en_flujo_avance en flujo')
-    eliminar_avancereparacion = usuario.has_perm_or_has_perm_child('avanceenflujo.eliminar_avance_en_flujo_avance en flujo')
+                avanceenflujo[d.iddocumento_generado] = {
+                    'pk': aef.pk,
+                    'nota': aef.nota,
+                    'fotografia': "{}".format(aef.fotografia).replace(
+                        '\\', '/')}
+    ver_doctoordenreparacion = usuario.has_perm_or_has_perm_child(
+        'doctoordenreparacion.doctoordenreparacion_docto orden reparacion') or usuario.has_perm_or_has_perm_child('doctoordenreparacion.ver_orden_de_reparacion_docto orden reparacion')
+    ver_avancereparacion = usuario.has_perm_or_has_perm_child(
+        'avanceenflujo.avanceenflujo_avance en flujo') or usuario.has_perm_or_has_perm_child('avanceenflujo.ver_avance_en_flujo_avance en flujo')
+    actualizar_avancereparacion = usuario.has_perm_or_has_perm_child(
+        'avanceenflujo.actualizar_avance_en_flujo_avance en flujo')
+    eliminar_avancereparacion = usuario.has_perm_or_has_perm_child(
+        'avanceenflujo.eliminar_avance_en_flujo_avance en flujo')
     return render(
         request,
         'app/servicios/see.html',{
@@ -323,6 +363,7 @@ def see(request, pk):
             'eliminar_avancereparacion': eliminar_avancereparacion,
         })
 
+
 @valida_acceso(['vehiculo.eliminar_servicios_vehiculo'])
 def delete(request, pk):
     try:
@@ -338,7 +379,10 @@ def delete(request, pk):
         return HttpResponseRedirect(reverse(
             'item_con_relaciones'))
 
-@valida_acceso(['vehiculo.agregar_servicios_vehiculo', 'vehiculo.actualizar_servicios_vehiculo'])
+
+@valida_acceso([
+    'vehiculo.agregar_servicios_vehiculo',
+    'vehiculo.actualizar_servicios_vehiculo'])
 def aplicar_accion(request, pkinstanciaflujo, pkaccion):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     instanciaflujo = InstanciaFlujo.objects.get(pk=pkinstanciaflujo)
@@ -363,7 +407,9 @@ def aplicar_accion(request, pkinstanciaflujo, pkaccion):
         }
     )
 
-@valida_acceso(['avanceenflujo.actualizar_avance_en_flujo_avance en flujo'])
+
+@valida_acceso([
+    'avanceenflujo.actualizar_avance_en_flujo_avance en flujo'])
 def update_avanceenflujo(request, pk):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     obj = AvanceEnFlujo.objects.get(pk=pk)
@@ -374,10 +420,14 @@ def update_avanceenflujo(request, pk):
             obj.updated_by = usuario
             if request.FILES.get('fotografia'):
                 obj.fotografia = move_uploaded_file(
-                    request.FILES.get('fotografia'), avanceenflujo_upload_to)
+                    request.FILES.get('fotografia'),
+                    avanceenflujo_upload_to)
             obj.save()
-            instanciaflujo = InstanciaHistoriaDetalle.objects.get(tipo_documento_generado='AvanceEnFlujo',iddocumento_generado=pk).instanciahistoria.instanciaflujo
-            return HttpResponseRedirect(reverse('servicio_see',kwargs={'pk': instanciaflujo.pk}))
+            instanciaflujo = InstanciaHistoriaDetalle.objects.get(
+                tipo_documento_generado='AvanceEnFlujo',
+                iddocumento_generado=pk).instanciahistoria.instanciaflujo
+            return HttpResponseRedirect(reverse(
+                'servicio_see',kwargs={'pk': instanciaflujo.pk}))
     return render(request, 'global/form.html', {
         'menu_main': usuario.main_menu_struct(),
         'titulo': 'Nota de Avance en Flujo',
@@ -385,6 +435,23 @@ def update_avanceenflujo(request, pk):
         'frm': frm,
     })
 
+
 @valida_acceso(['avanceenflujo.eliminar_avance_en_flujo_avance en flujo'])
 def delete_avanceenflujo(request, pk):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    if not AvanceEnFlujo.objects.filter(pk=pk).exists():
+        return HttpResponseRedirect(reverse(
+            'item_no_encontrado'))
+    try:
+        obj = AvanceEnFlujo.objects.get(pk=pk)
+        if InstanciaHistoriaDetalle.objects.filter(
+                iddocumento_generado=pk,
+                tipo_documento_generado="AvanceEnFlujo").exists():
+            InstanciaHistoriaDetalle.objects.get(
+                iddocumento_generado=pk,
+                tipo_documento_generado="AvanceEnFlujo").delete()
+        obj.delete()
+    except ProtectedError:
+        return HttpResponseRedirect(reverse(
+            'item_con_relaciones'))
+    return HttpResponseRedirect(reverse('servicio_index'))

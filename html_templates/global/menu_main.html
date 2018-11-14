@@ -42,7 +42,8 @@
 -->
 
 <a href="{% url 'panel' %}">
-    <img src="{{ MEDIA_URL }}{{ '01 General.main_menu_icon' | get_setting }}" class="float-left main_menu_icon" />
+    <img src="{{ MEDIA_URL }}{{ '01 General.main_menu_icon' | get_setting }}" class="float-left main_menu_icon no-print" />
+    <img src="{{ MEDIA_URL }}{{ '01 General.logo_impresion' | get_setting }}" class="float-left main_menu_icon print" />
 </a>
 
 <!-- menu_main (Close) -->

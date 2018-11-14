@@ -10,6 +10,18 @@ Date.prototype.asMx = function() {
     res += ( this.getMonth() < 9 ? "0" : "" ) + ( this.getMonth() + 1 ) + "/" + this.getFullYear();
     return res;
 }
+Date.prototype.theTime = function() {
+    let res = "";
+    if ( this.getHours() < 10 ) {
+        res += "0";
+    }
+    res += this.getHours() + ":";
+    if ( this.getMinutes() < 10 ) {
+        res += "0";
+    }
+    res += this.getMinutes();
+    return res;
+}
 
 class clsApp {
     checkInputIn( idcontainer ) {

@@ -14,6 +14,7 @@ from .models import Usr
 from app.models import Cliente, AvanceEnFlujo
 from flujo.models import InstanciaFlujo
 from routines.mkitsafe import valida_acceso
+from routines.utils import is_mobile
 
 # Create your views here.
 
@@ -51,7 +52,8 @@ def index(request):
         'bg_imgs': bg_imgs,
         'bg_serv': bgdir_imgs,
         'bg_serv_no': len(bgdir_imgs),
-        'footer': True})
+        'footer': True,
+        'is_mobile': is_mobile(request)})
 
 
 def logout(request):
@@ -91,7 +93,9 @@ def panel(request):
             ids.append('{"idobjeto":' + str(v.pk) + '}')
         instancias_servicios = InstanciaFlujo.objects.filter(
             tipo_instancia="Vehiculo",
-            flujo__name='temporal_operaciones', extra_data__in=ids, terminado=False).order_by(
+            flujo__name='temporal_operaciones',
+            extra_data__in=ids,
+            terminado=False).order_by(
                 'terminado', '-created_at')
         if instancias_servicios.exists():
             iserv = instancias_servicios[0]
@@ -105,16 +109,28 @@ def panel(request):
             for h in iserv.historia.all():
                 for d in h.historia_detalle.all():
                     if "AvanceEnFlujo" == d.tipo_documento_generado:
-                        aef = AvanceEnFlujo.objects.get(pk=d.iddocumento_generado)
-                        avanceenflujo[d.iddocumento_generado] = {'pk': aef.pk, 'nota': aef.nota, 'fotografia': "{}".format(aef.fotografia).replace('\\', '/')}
+                        aef = AvanceEnFlujo.objects.get(
+                            pk=d.iddocumento_generado)
+                        avanceenflujo[d.iddocumento_generado] = {
+                            'pk': aef.pk,
+                            'nota': aef.nota,
+                            'fotografia': "{}".format(
+                                aef.fotografia).replace('\\', '/')}
             data = {
                 'vehiculo': cte.vehiculos.get(pk=extra_data['idobjeto']),
                 'instanciaflujo': iserv,
                 'pagado': pagado,
                 'avanceenflujo': avanceenflujo,
             }
-    ver_doctoordenreparacion = usuario.has_perm_or_has_perm_child('doctoordenreparacion.doctoordenreparacion_docto orden reparacion') or usuario.has_perm_or_has_perm_child('doctoordenreparacion.ver_orden_de_reparacion_docto orden reparacion')
-    ver_avancereparacion = usuario.has_perm_or_has_perm_child('avanceenflujo.avanceenflujo_avance en flujo') or usuario.has_perm_or_has_perm_child('avanceenflujo.ver_avance_en_flujo_avance en flujo')
+    ver_doctoordenreparacion = usuario.has_perm_or_has_perm_child(
+        'doctoordenreparacion.'
+        'doctoordenreparacion_docto orden reparacion') \
+        or usuario.has_perm_or_has_perm_child('doctoordenreparacion.'
+        'ver_orden_de_reparacion_docto orden reparacion')
+    ver_avancereparacion = usuario.has_perm_or_has_perm_child(
+        'avanceenflujo.avanceenflujo_avance en flujo') \
+        or usuario.has_perm_or_has_perm_child(
+            'avanceenflujo.ver_avance_en_flujo_avance en flujo')
     return render(
         request,
         'my_panel.html', {

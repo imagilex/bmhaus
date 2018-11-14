@@ -13,7 +13,8 @@ from routines.utils import move_uploaded_file
 @valida_acceso(['vehiculo.vehiculos_vehiculo'])
 def index(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
-    vehiculos = list(Vehiculo.objects.all().order_by('propietario', 'marca', 'serie', 'modelo', 'numero_de_placa'))
+    vehiculos = list(Vehiculo.objects.all().order_by(
+        'propietario', 'marca', 'serie', 'modelo', 'numero_de_placa'))
     toolbar = []
     return render(
         request,

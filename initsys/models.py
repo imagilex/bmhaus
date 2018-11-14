@@ -3,6 +3,8 @@ from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import Group
 
+from datetime import date
+
 from routines.utils import print_error, clean_name
 
 # Create your models here.
@@ -443,3 +445,58 @@ class Direccion(models.Model):
             return "{} {},<br />{}, {},<br />{},<br />C.P. {}".format(
                 self.calle, self.numero_exterior, self.colonia,
                 self.municipio, self.estado, self.codigo_postal)
+
+
+class Nota(models.Model):
+    usuario = models.ForeignKey(
+        Usr, on_delete=models.CASCADE, related_name="notas")
+    nota = models.TextField()
+    created_by = models.ForeignKey(
+        Usr, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="+")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.ForeignKey(
+        Usr, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="+")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return "{}".format(self.nota)
+
+    def __unicode__(self):
+        return self.__str__()
+
+
+class Alerta(models.Model):
+    usuario = models.ForeignKey(
+        Usr, on_delete=models.CASCADE, related_name="alertas")
+    nota = models.TextField()
+    fecha_alerta = models.DateField()
+    alertado = models.BooleanField(default=False)
+    fecha_alertado = models.DateField(null=True, blank=True)
+    mostrar_alerta = models.BooleanField(default=True)
+    fecha_no_mostrar = models.DateField(null=True, blank=True)
+    created_by = models.ForeignKey(
+        Usr, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="+")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.ForeignKey(
+        Usr, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="+")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = [
+            '-fecha_alerta',
+            '-created_at',
+            'alertado',
+            'mostrar_alerta']
+
+    def __str__(self):
+        return "{}: {}".format(self.fecha_alerta, self.nota)
+
+    def __unicode__(self):
+        return self.__str__()

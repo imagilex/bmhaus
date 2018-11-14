@@ -29,6 +29,22 @@
     </div>
 </div>
 
+<div class="progress">
+    <div role="progressbar" aria-valuenow="{{ data.instanciaflujo.estado_actual.porcentaje }}" aria-valuemin="0" aria-valuemax="100" 
+        {% if data.instanciaflujo.estado_actual.es_final %}
+            class="progress-bar progress-bar-striped bg-success" 
+        {% elif data.instanciaflujo.estado_actual.es_cancelacion %}
+            class="progress-bar progress-bar-striped bg-danger" 
+        {% else %}
+            class="progress-bar progress-bar-striped bg-info" 
+        {% endif %}
+        style="width: {{ data.instanciaflujo.estado_actual.porcentaje }}%" >
+        {{ data.instanciaflujo.estado_actual.porcentaje | floatformat:0 }}%
+    </div>
+</div>
+
+<p></p>
+
 <div id="historia-servicio">
         {% for h in data.instanciaflujo.historia.all %}
             <div class="card">

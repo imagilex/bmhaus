@@ -45,9 +45,25 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2">Estado: {{ reg.instancia.estado_actual }}</td>
+                <td colspan="2">
+                    Estado: {{ reg.instancia.estado_actual }}
+                    <div class="progress">
+                        <div role="progressbar" aria-valuenow="{{ reg.instancia.estado_actual.porcentaje }}" aria-valuemin="0" aria-valuemax="100" 
+                            {% if reg.instancia.estado_actual.es_final %}
+                                class="progress-bar progress-bar-striped bg-success" 
+                            {% elif reg.instancia.estado_actual.es_cancelacion %}
+                                class="progress-bar progress-bar-striped bg-danger" 
+                            {% else %}
+                                class="progress-bar progress-bar-striped bg-info" 
+                            {% endif %}
+                            style="width: {{ reg.instancia.estado_actual.porcentaje }}%" >
+                            {{ reg.instancia.estado_actual.porcentaje | floatformat:0 }}%
+                        </div>
+                    </div>
+                </td>
                 {% if perms.app.actualizar_servicios_vehiculo %}
                     <td colspan="4">
+                        {% if reg.instancia.estado_actual.acciones_ejecutar.all.count %}
                         <select id="instancia-{{ reg.instancia.pk }}" class="form-control">
                             {% for acc in reg.instancia.estado_actual.acciones_ejecutar.all %}
                                 <option value="{% url 'servicio_aplicar_accion' pkinstanciaflujo=reg.instancia.pk pkaccion=acc.pk %}">
@@ -55,11 +71,14 @@
                                 </option>
                             {% endfor %}
                         </select>
+                        {% endif %}
                     </td>
                     <td>
+                        {% if reg.instancia.estado_actual.acciones_ejecutar.all.count %}
                         <button onclick="location.href=$('#instancia-{{ reg.instancia.pk }}').val()" type="button" class="btn btn-outline-secondary" title="Ejecutar Accion">
                             <i class="fas fa-play"></i>
                         </button>
+                        {% endif %}
                     </td>
                 {% else %}
                     <td></td><td></td>

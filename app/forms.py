@@ -145,17 +145,16 @@ class FrmVehiculo(forms.ModelForm):
         fields = [
             'marca',
             'serie',
-            'modelo',
             'año',
-            'clase',
             'tipo',
             'color',
             'vin',
             'numero_de_placa',
-            'fotografia'
+            'fotografia',
         ]
-        label = {
-            'modelo': 'Versión'
+        labels = {
+            'modelo': 'Versión',
+            'vin': 'Número de Serie / VIN'
         }
 
 

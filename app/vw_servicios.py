@@ -183,21 +183,24 @@ def executeaccion(request):
                             request.FILES.get('fotografia_trasera'),
                             doctoordenreparacion_upload_to)
                     if request.FILES.get('fotografia_lateral_izquierdo'):
-                        obj.fotografia_lateral_izquierdo = move_uploaded_file(
-                            request.FILES.get(
-                                'fotografia_lateral_izquierdo'),
-                            doctoordenreparacion_upload_to)
+                        obj.fotografia_lateral_izquierdo = \
+                            move_uploaded_file(
+                                request.FILES.get(
+                                    'fotografia_lateral_izquierdo'),
+                                doctoordenreparacion_upload_to)
                     if request.FILES.get('fotografia_lateral_derecho'):
-                        obj.fotografia_lateral_derecho = move_uploaded_file(
-                            request.FILES.get(
-                                'fotografia_lateral_derecho'),
-                            doctoordenreparacion_upload_to)
+                        obj.fotografia_lateral_derecho = \
+                            move_uploaded_file(
+                                request.FILES.get(
+                                    'fotografia_lateral_derecho'),
+                                doctoordenreparacion_upload_to)
                     if request.FILES.get(
                             'firma_del_prestador_del_servicio'):
-                        obj.firma_del_prestador_del_servicio = move_uploaded_file(
-                            request.FILES.get(
-                                'firma_del_prestador_del_servicio'),
-                            doctoordenreparacion_upload_to)
+                        obj.firma_del_prestador_del_servicio = \
+                            move_uploaded_file(
+                                request.FILES.get(
+                                    'firma_del_prestador_del_servicio'),
+                                doctoordenreparacion_upload_to)
                     if request.FILES.get('firma_del_consumidor'):
                         obj.firma_del_consumidor = move_uploaded_file(
                             request.FILES.get('firma_del_consumidor'),
@@ -339,16 +342,21 @@ def see(request, pk):
                     'fotografia': "{}".format(aef.fotografia).replace(
                         '\\', '/')}
     ver_doctoordenreparacion = usuario.has_perm_or_has_perm_child(
-        'doctoordenreparacion.doctoordenreparacion_docto orden reparacion') or usuario.has_perm_or_has_perm_child('doctoordenreparacion.ver_orden_de_reparacion_docto orden reparacion')
+        'doctoordenreparacion.'
+        'doctoordenreparacion_docto orden reparacion') or \
+        usuario.has_perm_or_has_perm_child('doctoordenreparacion.'
+        'ver_orden_de_reparacion_docto orden reparacion')
     ver_avancereparacion = usuario.has_perm_or_has_perm_child(
-        'avanceenflujo.avanceenflujo_avance en flujo') or usuario.has_perm_or_has_perm_child('avanceenflujo.ver_avance_en_flujo_avance en flujo')
+        'avanceenflujo.avanceenflujo_avance en flujo') or \
+        usuario.has_perm_or_has_perm_child('avanceenflujo.'
+        'ver_avance_en_flujo_avance en flujo')
     actualizar_avancereparacion = usuario.has_perm_or_has_perm_child(
         'avanceenflujo.actualizar_avance_en_flujo_avance en flujo')
     eliminar_avancereparacion = usuario.has_perm_or_has_perm_child(
         'avanceenflujo.eliminar_avance_en_flujo_avance en flujo')
     return render(
         request,
-        'app/servicios/see.html',{
+        'app/servicios/see.html', {
             'menu_main': usuario.main_menu_struct(),
             'titulo': 'Servicio',
             'titulo_descripcion': 'Detalle',
@@ -413,7 +421,7 @@ def aplicar_accion(request, pkinstanciaflujo, pkaccion):
 def update_avanceenflujo(request, pk):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     obj = AvanceEnFlujo.objects.get(pk=pk)
-    frm = FrmAvanceEnFlujo(instance=obj,data=request.POST or None)
+    frm = FrmAvanceEnFlujo(instance=obj, data=request.POST or None)
     if "POST" == request.method:
         if frm.is_valid():
             obj = frm.save(commit=False)
@@ -427,7 +435,7 @@ def update_avanceenflujo(request, pk):
                 tipo_documento_generado='AvanceEnFlujo',
                 iddocumento_generado=pk).instanciahistoria.instanciaflujo
             return HttpResponseRedirect(reverse(
-                'servicio_see',kwargs={'pk': instanciaflujo.pk}))
+                'servicio_see', kwargs={'pk': instanciaflujo.pk}))
     return render(request, 'global/form.html', {
         'menu_main': usuario.main_menu_struct(),
         'titulo': 'Nota de Avance en Flujo',

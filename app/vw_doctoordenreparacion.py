@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.db.models import ProtectedError
 
 from routines.mkitsafe import valida_acceso
-from routines.utils import move_uploaded_file
+from routines.utils import move_uploaded_file, get_setting_fn, as_paragraph_fn
 from .models import DoctoOrdenReparacion, doctoordenreparacion_upload_to
 from flujo.models import InstanciaHistoriaDetalle
 from .forms import (
@@ -17,7 +17,7 @@ from .forms import (
     FrmDoctoOrdenReparacionComponentesMecanicos,
     FrmDoctoOrdenReparacionFirmas
 )
-from initsys.models import Usr
+from initsys.models import Usr, Setting
 
 
 @valida_acceso()
@@ -36,20 +36,22 @@ def see(request, pk):
     direccion = ""
     if ('Recibir' in instanciahistoria.accion.nombre
             and 'Taller' in instanciahistoria.accion.nombre):
-        direccion = "Av. División del Norte 3259-A"
-        "<br />La Candelaria, Coyoacán<br />04380, CDMX"
+        direccion = as_paragraph_fn(get_setting_fn(
+            "03 Legal.direccion_taller", Setting))
     else:
         direccion_oficina = vehiculo.propietario.direccion_oficina
         direccion = direccion_oficina.asDireccion
     if usuario.has_perm_or_has_perm_child(
-            'doctoordenreparacion.actualizar_orden_de_reparacion_docto orden reparacion'):
+            'doctoordenreparacion.'
+            'actualizar_orden_de_reparacion_docto orden reparacion'):
         toolbar.append({
             'type': 'link_pk',
             'view': 'doctoordenreparacion_update',
             'label': '<i class="far fa-edit"></i> Actualizar',
             'pk': pk})
     if usuario.has_perm_or_has_perm_child(
-            'doctoordenreparacion.eliminar_orden_de_reparacion_docto orden reparacion'):
+            'doctoordenreparacion.'
+            'eliminar_orden_de_reparacion_docto orden reparacion'):
         toolbar.append({
             'type': 'link_pk',
             'view': 'doctoordenreparacion_delete',
@@ -89,7 +91,8 @@ def see(request, pk):
 
 
 @valida_acceso([
-    'doctoordenreparacion.actualizar_orden_de_reparacion_docto orden reparacion'])
+    'doctoordenreparacion.'
+    'actualizar_orden_de_reparacion_docto orden reparacion'])
 def update(request, pk):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     if not DoctoOrdenReparacion.objects.filter(pk=pk).exists():
@@ -169,7 +172,8 @@ def update(request, pk):
 
 
 @valida_acceso([
-    'doctoordenreparacion.eliminar_orden_de_reparacion_docto orden reparacion'])
+    'doctoordenreparacion.'
+    'eliminar_orden_de_reparacion_docto orden reparacion'])
 def delete(request, pk):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     if not DoctoOrdenReparacion.objects.filter(pk=pk).exists():

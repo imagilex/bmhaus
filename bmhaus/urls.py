@@ -242,7 +242,6 @@ urlpatterns = [
         'servicios/avance/eliminar/<pk>/',
         vw_servicios.delete_avanceenflujo,
         name="servicio_avanceenflujo_delete"),
-    
 
     # DoctoOrdenReparacion
     path(

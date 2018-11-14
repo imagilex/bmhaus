@@ -48,4 +48,22 @@
     </div>
 </form>
 
+<script type="text/javascript">
+    let current_time = new Date()
+    let fecha_recepcion = $( 'input[name="fecha_de_recepcion"]' );
+    let hora_recepcion = $( 'input[name="hora_de_recepcion"]' );
+    fecha_recepcion.attr( 'value', current_time.asMySQL() );
+    hora_recepcion.attr( 'value', current_time.theTime() );
+    let fecha_recepcion2 = $( fecha_recepcion[0].outerHTML.replace( /fecha_de_recepcion/g, 'fecha_de_recepcion_cpy' ) );
+    let hora_recepcion2 = $( hora_recepcion[0].outerHTML.replace( /hora_de_recepcion/g, 'hora_de_recepcion_cpy' ) );
+    fecha_recepcion2.attr( 'readonly', true );
+    fecha_recepcion2.attr( 'disabled', true );
+    hora_recepcion2.attr( 'readonly', true );
+    hora_recepcion2.attr( 'disabled', true );
+    fecha_recepcion.parent().append( fecha_recepcion2 );
+    hora_recepcion.parent().append( hora_recepcion2 );
+    fecha_recepcion.attr( 'type', 'hidden' );
+    hora_recepcion.attr( 'type', 'hidden' );
+</script>
+
 {% endblock %}

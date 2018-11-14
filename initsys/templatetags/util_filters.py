@@ -3,6 +3,7 @@ from django.template.defaultfilters import stringfilter
 from random import randint
 
 from initsys.models import Setting
+from routines.utils import get_setting_fn, as_paragraph_fn
 
 register = template.Library()
 
@@ -19,11 +20,7 @@ def summary(text):
 @register.filter
 @stringfilter
 def as_paragraph(text):
-    pars = []
-    for p in text.split('\n'):
-        if "" != p.strip():
-            pars.append('<p>{}</p>'.format(p.strip()))
-    return "".join(pars)
+    return as_paragraph_fn(text)
 
 
 @register.filter
@@ -46,9 +43,9 @@ def get_setting(sectionvalue):
 
     return string
     """
-    section, value = sectionvalue.split(".")
-    return Setting.get_value(section, value)
+    return get_setting_fn(sectionvalue, Setting)
+
 
 @register.filter
-def keyvalue(dict, key):    
+def keyvalue(dict, key):
     return dict[key]

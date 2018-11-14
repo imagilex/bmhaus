@@ -8,6 +8,19 @@
     {% for reg in data %}
         <div class="card tarjeta-servicio">
             <img class="card-img-top" src="{{ MEDIA_URL }}{{ reg.vehiculo.fotografia }}">
+            <div class="progress">
+                <div role="progressbar" aria-valuenow="{{ reg.instancia.estado_actual.porcentaje }}" aria-valuemin="0" aria-valuemax="100" 
+                    {% if reg.instancia.estado_actual.es_final %}
+                        class="progress-bar progress-bar-striped bg-success" 
+                    {% elif reg.instancia.estado_actual.es_cancelacion %}
+                        class="progress-bar progress-bar-striped bg-danger" 
+                    {% else %}
+                        class="progress-bar progress-bar-striped bg-info" 
+                    {% endif %}
+                    style="width: {{ reg.instancia.estado_actual.porcentaje }}%" >
+                    {{ reg.instancia.estado_actual.porcentaje | floatformat:0 }}%
+                </div>
+            </div>
             <div class="card-body">
                 {% if perms.app.servicios_vehiculo or perms.initsys.mis_servicios_permiso %}
                     <a href="{% url 'servicio_see' pk=reg.instancia.pk %}" class="btn btn-outline-secondary float-right" title="Ver"><i class="far fa-eye"></i></a>

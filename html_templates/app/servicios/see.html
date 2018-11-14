@@ -29,6 +29,22 @@
 
 <h5>Detalles del servicio:</h5>
 
+<div class="progress">
+    <div role="progressbar" aria-valuenow="{{ instanciaflujo.estado_actual.porcentaje }}" aria-valuemin="0" aria-valuemax="100" 
+        {% if instanciaflujo.estado_actual.es_final %}
+            class="progress-bar progress-bar-striped bg-success" 
+        {% elif instanciaflujo.estado_actual.es_cancelacion %}
+            class="progress-bar progress-bar-striped bg-danger" 
+        {% else %}
+            class="progress-bar progress-bar-striped bg-info" 
+        {% endif %}
+        style="width: {{ instanciaflujo.estado_actual.porcentaje }}%" >
+        {{ instanciaflujo.estado_actual.porcentaje | floatformat:0 }}%
+    </div>
+</div>
+
+<p></p>
+
 <div id="historia-servicio">
     {% for h in instanciaflujo.historia.all %}
         <div class="card">

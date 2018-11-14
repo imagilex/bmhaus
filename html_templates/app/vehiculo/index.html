@@ -20,12 +20,12 @@
         {% for reg in vehiculos %}
         <tr>
             <td>{% if reg.fotografia %}<img class="" src="{{ MEDIA_URL }}{{ reg.fotografia }}" height="40" />{% endif %}</td>
-            <td>{{ reg.propietario }}</td>
-            <td>{{ reg.marca }}</td>
-            <td>{{ reg.serie }}</td>
-            <td>{{ reg.modelo }}</td>
-            <td>{{ reg.vin }}</td>
-            <td>{{ reg.numero_de_placa }}</td>
+            <td>{% if reg.propietario %}{{ reg.propietario }}{% endif %}</td>
+            <td>{% if reg.marca %}{{ reg.marca }}{% endif %}</td>
+            <td>{% if reg.serie %}{{ reg.serie }}{% endif %}</td>
+            <td>{% if reg.modelo %}{{ reg.modelo }}{% endif %}</td>
+            <td>{% if reg.vin %}{{ reg.vin }}{% endif %}</td>
+            <td>{% if reg.numero_de_placa %}{{ reg.numero_de_placa }}{% endif %}</td>
             <td>
                 {% if perms.app.agregar_servicios_vehiculo %}
                 <a href="{% url 'servicio_new_taller' pkvehiculo=reg.pk %}" class="btn btn-outline-secondary" title="Recibir en Taller">

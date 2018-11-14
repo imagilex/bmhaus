@@ -40,6 +40,8 @@ class Estado(models.Model):
     es_inicial = models.BooleanField(default=False)
     es_final = models.BooleanField(default=False)
     es_cancelacion = models.BooleanField(default=False)
+    porcentaje = models.DecimalField(
+        max_digits=5, decimal_places=2, default=0.0)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,
         related_name="+")
@@ -140,7 +142,11 @@ class InstanciaHistoria(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['instanciaflujo', 'created_at', 'accion', 'idinstanciahistoria']
+        ordering = [
+            'instanciaflujo',
+            'created_at',
+            'accion',
+            'idinstanciahistoria']
 
     def __str__(self):
         return "{}".format(self.accion)

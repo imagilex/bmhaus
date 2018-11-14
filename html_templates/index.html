@@ -4,17 +4,20 @@
 {% load util_filters %}
 
 {% block extraaftermain %}
-<!--<video 
-    id="video-splash" autoplay="autoplay" muted="muted" 
-    src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg' | get_setting }}"
-    poster="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_poster' | get_setting }}" 
-    playsinline="playsinline">
-</video>-->
-<video 
-    id="video-splash" autoplay="autoplay" muted="muted" 
-    src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg' | get_setting }}"
-    playsinline="playsinline">
+
+{% if is_mobile %}
+    <style type="text/css">
+        body {
+            background-image: url("{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_poster' | get_setting }}");
+        }
+    </style>
+{% else %}
+<video id="video-splash" autoplay="autoplay" muted="muted" playsinline="playsinline">
+    <source src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg' | get_setting }}" type="video/mp4" />
+    <source src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_webm' | get_setting }}" type="video/webm" />
+    <source src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_ogv' | get_setting }}" type="video/ogv" />
 </video>
+{% endif %}
 
 <ul id="cbp-bislideshow" class="cbp-bislideshow">
     {% for bg in bg_imgs %}
@@ -167,12 +170,9 @@
 
                 <h6>BM haus</h6>
 
-                <p>Av. División del Norte 3259-A<br />
-                La Candelaria, Coyoacán<br />
-                04380, CDMX</p>
+                {{ '02 Pagina Inicial.direccion' | get_setting | as_paragraph | safe }}
 
-                <p>Lunes a Viernes de 09:00 a 18:00<br />
-                Sábado de 09:00 a 14:00</p>
+                {{ '02 Pagina Inicial.horario' | get_setting | as_paragraph | safe }}
 
             </div>
 
@@ -181,38 +181,37 @@
         <div class="row">
 
             <div class="col-4 col-md-2">
-                <a title="Teléfono:55 2095 9573" class="btn btn-outline-light btn-block data" href="tel:5520959573" target="_blank">
+                <a title="Teléfono: {{ '02 Pagina Inicial.contacto_telefono' | get_setting }}" class="btn btn-outline-light btn-block data" href="tel:{{ '02 Pagina Inicial.contacto_telefono' | get_setting }}" target="_blank">
                     <!--<i class="fas fa-phone"></i>-->
                     <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_telefono' | get_setting }}" class="splash-ref" />
-                    <!--<small class="d-none d-md-block">55 2095 9573</small>-->
+                    <!--<small class="d-none d-md-block">{{ '02 Pagina Inicial.contacto_telefono' | get_setting }}</small>-->
                 </a>
             </div>
             <div class="col-4 col-md-2">
-                <a title="WhatsApp: 55 2095 9573" class="btn btn-outline-light btn-block data" href="https://api.whatsapp.com/send?phone=525520959573" target="_blank">
+                <a title="WhatsApp: {{ '02 Pagina Inicial.contacto_whats_app' | get_setting }}" class="btn btn-outline-light btn-block data" href="https://api.whatsapp.com/send?phone={{ '02 Pagina Inicial.contacto_whats_app' | get_setting }}" target="_blank">
                     <!--<i class="fab fa-whatsapp"></i>-->
                     <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_whatsapp' | get_setting }}" class="splash-ref" />
-                    <!--<small class="d-none d-md-block">55 2095 9573</small>-->
+                    <!--<small class="d-none d-md-block">{{ '02 Pagina Inicial.contacto_whats_app' | get_setting }}</small>-->
                 </a>
             </div>
             <div class="col-4 col-md-2">
-                <a title="Correo Electrónico: ventas@bmhaus.mx" class="btn btn-outline-light btn-block data" href="mailto:ventas@bmhaus.mx" target="_blank">
+                <a title="Correo Electrónico: {{ '02 Pagina Inicial.contacto_email' | get_setting }}" class="btn btn-outline-light btn-block data" href="mailto:{{ '02 Pagina Inicial.contacto_email' | get_setting }}" target="_blank">
                     <!--<i class="far fa-envelope"></i>-->
                     <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_email' | get_setting }}" class="splash-ref" />
                     <!--<small class="d-none d-md-block">
-                        <span class="d-inline-block">ventas@</span>
-                        <span class="d-inline-block">bmhaus.mx</span>
+                        <span class="d-inline-block">{{ '02 Pagina Inicial.contacto_email' | get_setting }}</span>
                     </small>-->
                 </a>
             </div>
             <div class="col-6 col-md-3">
-                <a title="Facebook" class="btn btn-outline-light btn-block data" href="https://www.facebook.com/" target="_blank">
+                <a title="Facebook" class="btn btn-outline-light btn-block data" href="{{ '02 Pagina Inicial.contacto_fb' | get_setting }}" target="_blank">
                     <!--<i class="fab fa-facebook-f"></i>-->
                     <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_fb' | get_setting }}" class="splash-ref" />
                     <!--<small class="d-none d-md-block">/facebook</small>-->
                 </a>
             </div>
             <div class="col-6 col-md-3">
-                <a title="Instagram" class="btn btn-outline-light btn-block data" href="https://www.instagram.com/" target="_blank">
+                <a title="Instagram" class="btn btn-outline-light btn-block data" href="{{ '02 Pagina Inicial.contacto_ig' | get_setting }}" target="_blank">
                     <!--<i class="fab fa-instagram"></i>-->
                     <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_ig' | get_setting }}" class="splash-ref" />
                     <!--<small class="d-none d-md-block">@instagram</small>-->
@@ -230,23 +229,36 @@
 <script src="{% static 'api/js/jquery.imagesloaded.min.js' %}"></script>
 <script src="{% static 'api/js/cbpBGSlideshow.min.js' %}"></script>
 <script>
-    $(function() {
-        $( "div.screen-spacer").height( $( "#video-splash" ).offset().top + $( "#video-splash" ).height() );
-        $( "#video-splash" )[ 0 ].onended = function() {
+    {% if is_mobile %}
+        $(function() {
+            $( "div.screen-spacer").height( $(window).height() - 100 );
             window.setTimeout( 
                 function() { 
                     cbpBGSlideshow.init();
-                    $( "#video-splash" ).toggle( 
-                        1000, 
-                        function() { 
-                            $( "#video-splash" ).remove(); 
-                        } 
-                    );
                     $( "img.splash_icon" ).toggle(1000);
+                    $( document.body ).css('background-image','none');
                 }, 
-                2000 );
-        }
-    });
+                4000 );
+        });
+    {% else %}
+        $(function() {
+            $( "div.screen-spacer").height( $( "#video-splash" ).offset().top + $( "#video-splash" ).height() );
+            $( "#video-splash" )[ 0 ].onended = function() {
+                window.setTimeout( 
+                    function() { 
+                        cbpBGSlideshow.init();
+                        $( "#video-splash" ).toggle( 
+                            1000, 
+                            function() { 
+                                $( "#video-splash" ).remove(); 
+                            } 
+                        );
+                        $( "img.splash_icon" ).toggle(1000);
+                    }, 
+                    2000 );
+            }
+        });
+    {% endif %}
     let show_form_signin =  ( duration = 1000 ) => {
         $( "form.form-signin" ).toggle( duration, () => { $( "#usr" ).select() } )
     }

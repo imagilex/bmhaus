@@ -149,3 +149,40 @@ def move_uploaded_file(file, upload_to):
         except:
             archivo.write(file.read())
     return path.join(upload_to, path.basename(newfilename))
+
+
+def is_mobile(request):
+    ua = request.META["HTTP_USER_AGENT"].lower()
+    if "ipod" in ua:
+        return True
+    if "iphone" in ua:
+        return True
+    if "android" in ua and "mobile" in ua:
+        return True
+    if "ipdad" in ua:
+        return True
+    if "android" in ua:
+        return True
+    return False
+
+
+def get_setting_fn(sectionvalue, Setting):
+    """
+    Obtiene el valor de un setting
+
+    (string) sectionvalue   Setting a obtener en formato section.value
+
+    return string
+    """
+    section, value = sectionvalue.split(".")
+    return Setting.get_value(section, value)
+
+
+def as_paragraph_fn(text):
+    text = text.replace('\r', '')
+    res = ""
+    for p in text.split('\n'):
+        res += p.strip() + "<br />"
+    res = "<p>{}</p>".format(res)
+    res = res.replace("<br /><br />", '</p><p>')
+    return res

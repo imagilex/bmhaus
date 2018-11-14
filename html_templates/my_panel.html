@@ -5,10 +5,27 @@
 
 {% block content %}
 
+{% for alerta in alertas %}
+<div class="alert alert-secondary" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{ alerta.nota | as_paragraph | safe }}
+    <form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
+        {% csrf_token %}
+        <input type="hidden" name="action" id="action" value="disble-alert" />
+        <input type="hidden" name="alert" id="alert" value="{{ alerta.pk }}" />
+        <button type="submit" class="btn btn-outline-secondary btn-sm">Borrar Alerta</button>
+    </form>
+</div>
+{% endfor %}
+
 <div class="spacer50px"></div>
 <div class="spacer50px"></div>
 
 <h1>Bienvenido {{usuario}}</h1>
+
+
 
 {% if data %}
 <h3>Tu servicio:</h3>
@@ -46,64 +63,64 @@
 <p></p>
 
 <div id="historia-servicio">
-        {% for h in data.instanciaflujo.historia.all %}
-            <div class="card">
-                <div class="card-header" id="header-{{ h.pk }}">
-                    <h5 class="mb-0">
-                        <button data-target="#body-{{ h.pk }}" aria-controls="body-{{ h.pk }}" aria-expanded="{% if data.instanciaflujo.estado_actual == h.accion.estado_final %}true{% else %}false{% endif %}" class="btn btn-link {% if data.instanciaflujo.estado_actual == h.accion.estado_final %}{% else %}collapsed{% endif %}" data-toggle="collapse">
-                            {{ h.accion.estado_final }}
-                        </button>
-                    </h5>
-                </div>
-                <div id="body-{{ h.pk }}" class="collapse {% if data.instanciaflujo.estado_actual == h.accion.estado_final %}show{% endif %}" aria-labelledby="header-{{ h.pk }}" data-parent="#historia-servicio">
-                    <div class="card-body">
-                        Fecha: {{ h.updated_at | date:"d/m/Y H:i" }}
-                        {% for d in h.historia_detalle.all %}
-                            {% if "DoctoOrdenReparacion" == d.tipo_documento_generado %}
-                                <br />
-                                {% if ver_doctoordenreparacion %}
-                                    <a href="{% url 'doctoordenreparacion_see' pk=d.iddocumento_generado %}" target="_blank">
-                                        Ver Orden de Reparación
-                                    </a>
-                                {% endif %}
-                            {% elif "AvanceEnFlujo" == d.tipo_documento_generado %}
-                                <div class="row">
-                                    {% if ver_avancereparacion %}
-                                    <div class="col-sm-6">
-                                        <div class="btn-group float-right" role="group">
-                                            {% if actualizar_avancereparacion %}
-                                                <a href="{% url 'servicio_avanceenflujo_update' pk=d.iddocumento_generado %}" class="btn btn-outline-secondary">
-                                                    <i class="far fa-edit"></i>
-                                                </a>
-                                            {% endif %}
-                                            {% if eliminar_avancereparacion %}
-                                                <a href="{% url 'servicio_avanceenflujo_delete' pk=d.iddocumento_generado %}" class="btn btn-outline-secondary">
-                                                    <i class="far fa-trash-alt"></i>
-                                                </a>
-                                            {% endif %}
-                                        </div>
-                                        {{ data.avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'nota' | as_paragraph | safe }}
-                                    </div>
-                                    <div class="col-sm-6">
-    
-                                        <img src="{{ MEDIA_URL }}{{ data.avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia' }}" style="max-width: 100%;" />
-                                    </div>
-                                    {% endif %}
-                                </div>
-                            {% else %}
-                                <br />
-                                Documento Generado: {{ d }}
+    {% for h in data.instanciaflujo.historia.all %}
+        <div class="card">
+            <div class="card-header" id="header-{{ h.pk }}">
+                <h5 class="mb-0">
+                    <button data-target="#body-{{ h.pk }}" aria-controls="body-{{ h.pk }}" aria-expanded="{% if data.instanciaflujo.estado_actual == h.accion.estado_final %}true{% else %}false{% endif %}" class="btn btn-link {% if data.instanciaflujo.estado_actual == h.accion.estado_final %}{% else %}collapsed{% endif %}" data-toggle="collapse">
+                        {{ h.accion.estado_final }}
+                    </button>
+                </h5>
+            </div>
+            <div id="body-{{ h.pk }}" class="collapse {% if data.instanciaflujo.estado_actual == h.accion.estado_final %}show{% endif %}" aria-labelledby="header-{{ h.pk }}" data-parent="#historia-servicio">
+                <div class="card-body">
+                    Fecha: {{ h.updated_at | date:"d/m/Y H:i" }}
+                    {% for d in h.historia_detalle.all %}
+                        {% if "DoctoOrdenReparacion" == d.tipo_documento_generado %}
+                            <br />
+                            {% if ver_doctoordenreparacion %}
+                                <a href="{% url 'doctoordenreparacion_see' pk=d.iddocumento_generado %}" target="_blank">
+                                    Ver Orden de Reparación
+                                </a>
                             {% endif %}
-                        {% endfor %}
-                    </div>
+                        {% elif "AvanceEnFlujo" == d.tipo_documento_generado %}
+                            <div class="row">
+                                {% if ver_avancereparacion %}
+                                <div class="col-sm-6">
+                                    <div class="btn-group float-right" role="group">
+                                        {% if actualizar_avancereparacion %}
+                                            <a href="{% url 'servicio_avanceenflujo_update' pk=d.iddocumento_generado %}" class="btn btn-outline-secondary">
+                                                <i class="far fa-edit"></i>
+                                            </a>
+                                        {% endif %}
+                                        {% if eliminar_avancereparacion %}
+                                            <a href="{% url 'servicio_avanceenflujo_delete' pk=d.iddocumento_generado %}" class="btn btn-outline-secondary">
+                                                <i class="far fa-trash-alt"></i>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                    {{ data.avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'nota' | as_paragraph | safe }}
+                                </div>
+                                <div class="col-sm-6">
+
+                                    <img src="{{ MEDIA_URL }}{{ data.avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia' }}" style="max-width: 100%;" />
+                                </div>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <br />
+                            Documento Generado: {{ d }}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-        {% endfor %}
-    </div>
-    
-    <script type="text/javascript">
-        $( '#historia-servicio img[src="/media/"]' ).remove();
-    </script>
+        </div>
+    {% endfor %}
+</div>
+
+<script type="text/javascript">
+    $( '#historia-servicio img[src="/media/"]' ).remove();
+</script>
 
 {% endif %}
 

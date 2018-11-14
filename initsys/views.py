@@ -6,6 +6,7 @@ from django.contrib.staticfiles import finders
 from django.conf import settings
 
 from random import shuffle
+from datetime import date
 import os
 import json
 
@@ -85,6 +86,13 @@ def item_with_relations(request):
 @valida_acceso()
 def panel(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    if "POST" == request.method:
+        if "disble-alert" == request.POST.get('action'):
+            alerta = usuario.alertas.get(pk=request.POST.get('alert'))
+            alerta.mostrar_alerta = False
+            alerta.fecha_no_mostrar = date.today()
+            alerta.updated_by = usuario
+            alerta.save()
     data = []
     if Cliente.objects.filter(idusuario=usuario.pk).exists():
         cte = Cliente.objects.get(idusuario=usuario.pk)
@@ -131,6 +139,11 @@ def panel(request):
         'avanceenflujo.avanceenflujo_avance en flujo') \
         or usuario.has_perm_or_has_perm_child(
             'avanceenflujo.ver_avance_en_flujo_avance en flujo')
+    for alerta in usuario.alertas.filter(mostrar_alerta=True, fecha_alerta__lte=date.today(), alertado=False):
+        alerta.alertado = True
+        alerta.fecha_alertado = date.today()
+        alerta.updated_by = usuario
+        alerta.save()
     return render(
         request,
         'my_panel.html', {
@@ -140,4 +153,5 @@ def panel(request):
             'data': data,
             'ver_doctoordenreparacion': ver_doctoordenreparacion,
             'ver_avancereparacion': ver_avancereparacion,
+            'alertas': usuario.alertas.filter(mostrar_alerta=True, fecha_alerta__lte=date.today())
         })

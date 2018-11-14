@@ -9,16 +9,44 @@ import json
 from .models import Cliente
 from .forms import (
     FrmCliente, FrmClienteUsr, FrmClienteContacto, FrmClienteFacturacion)
-from initsys.models import Usr, usr_upload_to
+from initsys.models import Usr, Nota, Alerta, usr_upload_to
 from initsys.forms import FrmDireccion
 from flujo.models import InstanciaFlujo
 from routines.mkitsafe import valida_acceso
 from routines.utils import move_uploaded_file
 
 
+def add_nota(cte, nota, fecha_notificacion, usr):
+    if "" != nota.strip():
+        nota = Nota.objects.create(
+            usuario=cte,
+            nota=nota,
+            created_by=usr,
+            updated_by=usr,
+        )
+        if "" != fecha_notificacion:
+            Alerta.objects.create(
+                usuario=usr,
+                nota="En referencia al cliente {}:\n\n{}".format(
+                    cte, nota
+                ),
+                fecha_alerta=fecha_notificacion,
+                created_by=usr,
+                updated_by=usr
+            )
+
+
 @valida_acceso(['cliente.clientes_user'])
 def index(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    if "POST" == request.method:
+        if "add-note" == request.POST.get('action'):
+            obj = Cliente.objects.get(pk=request.POST.get('nota_cte'))
+            add_nota(
+                obj,
+                request.POST.get('nota').strip(),
+                request.POST.get('fecha_notificacion'),
+                usuario)
     data = list(Cliente.objects.all())
     toolbar = []
     if usuario.has_perm_or_has_perm_child('cliente.agregar_clientes_user'):
@@ -104,6 +132,13 @@ def see(request, pk):
                 instance=obj.direccion_oficina, data=request.POST)
             obj.direccion_oficina.updated_by = usuario
             dir = frm.save()
+        elif "add-note" == request.POST.get('action'):
+            add_nota(
+                obj,
+                request.POST.get('nota').strip(),
+                request.POST.get('fecha_notificacion'),
+                usuario)
+
     frmUsr = FrmClienteUsr(instance=obj)
     frmContacto = FrmClienteContacto(instance=obj)
     frmFacturacion = FrmClienteFacturacion(instance=obj)
@@ -113,6 +148,13 @@ def see(request, pk):
             'type': 'link',
             'view': 'cliente_index',
             'label': '<i class="fas fa-list-ul"></i> Ver todos'})
+    if usuario.has_perm_or_has_perm_child(
+            'nota.ver_notas_del_cliente_nota'):
+        toolbar.append({
+            'type': 'button',
+            'label': '<i class="far fa-comment-alt"></i> Notas',
+            'onclick': 'Cte.showNotasSglCte()',
+        })
     if usuario.has_perm_or_has_perm_child(
             'cliente.actualizar_clientes_user'):
         toolbar.append({
@@ -147,6 +189,8 @@ def see(request, pk):
             instance=obj.direccion_oficina),
         'vehiculos': list(obj.vehiculos.all()),
         'cte': obj,
+        'can_add_note': usuario.has_perm_or_has_perm_child(
+            'nota.ver_notas_del_cliente_nota'),
         })
 
 

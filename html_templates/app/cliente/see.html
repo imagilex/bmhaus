@@ -1,5 +1,6 @@
 {% extends "global/form2.html" %}
 {% load crispy_forms_tags %}
+{% load util_filters %}
 
 {% block extrabefore %}
 {% if fotografia %}
@@ -159,4 +160,41 @@
         </div>
     </form>
 </script>
+
+<script type="text/x-handlebars-template" id="notas-template">
+    <form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
+        {% csrf_token %}
+        {% if can_add_note %}
+        <input type="hidden" name="action" value="add-note" />
+        <div class="row">
+            <div class="col form-group">
+                <label for="nota">Nueva Nota</label>
+                <textarea name="nota" id="nota" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-group">
+                <label for="fecha_notificacion">¿Crear una notificación?</label>
+                <input class="form-control" type="date" name="fecha_notificacion" id="fecha_notificacion" />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Agregar Nota</button>
+        {% endif %}
+
+        {% for nota in cte.notas.all %}
+        <hr />
+        <div class="row">
+            <div class="col">
+                <span class="text-muted">
+                    {{ nota.created_at | date:"d/m/Y" }}: 
+                </span>
+                {{ nota.nota | as_paragraph | safe }}
+                <p class="blockquote-footer">{{ nota.created_by }}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+    </form>
+</script>
+
 {% endblock%}

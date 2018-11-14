@@ -7,10 +7,20 @@
 
 {% if is_mobile %}
     <style type="text/css">
+        .background-image {
+            z-index: -10;
+            width: 100%;
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+    <img class="background-image" src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_poster' | get_setting }}" />
+    <!--<style type="text/css">
         body {
             background-image: url("{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_poster' | get_setting }}");
         }
-    </style>
+    </style>-->
 {% else %}
 <video id="video-splash" autoplay="autoplay" muted="muted" playsinline="playsinline">
     <source src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg' | get_setting }}" type="video/mp4" />
@@ -236,7 +246,9 @@
                 function() { 
                     cbpBGSlideshow.init();
                     $( "img.splash_icon" ).toggle(1000);
-                    $( document.body ).css('background-image','none');
+                    $( ".background-image" ).toggle(1000, function(){
+                        $( ".background-image" ).remove();
+                    } );
                 }, 
                 4000 );
         });
@@ -250,7 +262,7 @@
                         $( "#video-splash" ).toggle( 
                             1000, 
                             function() { 
-                                $( "#video-splash" ).remove(); 
+                                $( "#video-splash" ).remove();
                             } 
                         );
                         $( "img.splash_icon" ).toggle(1000);

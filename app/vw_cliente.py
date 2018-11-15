@@ -13,7 +13,7 @@ from initsys.models import Usr, Nota, Alerta, usr_upload_to
 from initsys.forms import FrmDireccion
 from flujo.models import InstanciaFlujo
 from routines.mkitsafe import valida_acceso
-from routines.utils import move_uploaded_file
+from routines.utils import move_uploaded_file, requires_jquery_ui
 
 
 def add_nota(cte, nota, fecha_notificacion, usr):
@@ -60,7 +60,8 @@ def index(request):
             'menu_main': usuario.main_menu_struct(),
             'titulo': 'Clientes',
             'data': data,
-            'toolbar': toolbar
+            'toolbar': toolbar,
+            'req_ui': requires_jquery_ui(request),
             })
 
 
@@ -138,7 +139,6 @@ def see(request, pk):
                 request.POST.get('nota').strip(),
                 request.POST.get('fecha_notificacion'),
                 usuario)
-
     frmUsr = FrmClienteUsr(instance=obj)
     frmContacto = FrmClienteContacto(instance=obj)
     frmFacturacion = FrmClienteFacturacion(instance=obj)
@@ -191,6 +191,7 @@ def see(request, pk):
         'cte': obj,
         'can_add_note': usuario.has_perm_or_has_perm_child(
             'nota.ver_notas_del_cliente_nota'),
+        'req_ui': requires_jquery_ui(request),
         })
 
 

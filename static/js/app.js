@@ -95,11 +95,13 @@ class clsCliente {
     }
     showNotasSglCte() {
         App.openPanel( $( "#notas-template" ).html(), "Notas del Cliente" );
+        App.setUIControls();
     }
     showNotasCte(idcte,nombre) {
         App.openPanel( $( "#notas-template" ).html(), "Notas: " + nombre );
         $( "#notas-cliente" ).html( $( "#notas-cte-" + idcte + "-template" ).html() );
         $( "#nota_cte" ).attr( 'value', idcte );
+        App.setUIControls()
     }
 }
 

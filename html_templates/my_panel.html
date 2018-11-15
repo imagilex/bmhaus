@@ -15,13 +15,13 @@
         {% csrf_token %}
         <input type="hidden" name="action" id="action" value="disble-alert" />
         <input type="hidden" name="alert" id="alert" value="{{ alerta.pk }}" />
-        <button type="submit" class="btn btn-outline-secondary btn-sm">Borrar Alerta</button>
+        <button type="submit" class="btn btn-outline-secondary btn-sm">Borrar</button>
     </form>
 </div>
+{% empty %}
+<div class="spacer50px"></div>
+<div class="spacer50px"></div>
 {% endfor %}
-
-<div class="spacer50px"></div>
-<div class="spacer50px"></div>
 
 <h1>Bienvenido {{usuario}}</h1>
 

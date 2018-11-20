@@ -1,0 +1,279 @@
+{% extends "global/html_struct.html" %}
+
+{% load static %}
+{% load util_filters %}
+
+{% block extraaftermain %}
+
+{% if is_mobile %}
+    <style type="text/css">
+        .background-image {
+            z-index: -10;
+            width: 100%;
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+    <img class="background-image" src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_poster' | get_setting }}" />
+    <!--<style type="text/css">
+        body {
+            background-image: url("{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_poster' | get_setting }}");
+        }
+    </style>-->
+{% else %}
+<video id="video-splash" autoplay="autoplay" muted="muted" playsinline="playsinline">
+    <source src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg' | get_setting }}" type="video/mp4" />
+    <source src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_webm' | get_setting }}" type="video/webm" />
+    <source src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.video_bkg_ogv' | get_setting }}" type="video/ogv" />
+</video>
+{% endif %}
+
+<ul id="cbp-bislideshow" class="cbp-bislideshow">
+    {% for bg in bg_imgs %}
+        <li><img src="{% static bg %}" /></li>
+    {% endfor %}
+</ul>
+
+<div class="spacer10px"></div>
+
+<div class="left-right-spacer10px">
+
+    <img src="{{ MEDIA_URL }}{{ '01 General.splash_icon' | get_setting }}" class="float-left splash_icon" />
+
+    <div class="float-right">
+        <button type="button" class="btn btn-outline-light degradado-negro btn-login" onclick="show_form_signin()" title="Entrar">
+            <i class="far fa-user"></i>
+        </button>
+    </div>
+    <div class="clearfix"></div>
+    <div class="float-right">
+        <form class="form-signin black-background" style="display: none" method="post" autocomplete="off">
+            {% csrf_token %}
+
+            <h5>Acceso</h5>
+
+            <div id="div_id_usr" class="form-group">
+                <label for="usr" class="col-form-label requiredField">
+                    Usuario<span class="asteriskField">*</span>
+                </label>
+                <div class="">
+                    <input type="text" id="usr" name="usr" class="form-control textinput textInput form-control" autocomplete="off" placeholder="Usuario" maxlength="50" required id="id_usr" />
+                </div>
+            </div>
+            <div id="div_id_pwd" class="form-group">
+                <label for="pwd" class="col-form-label requiredField">
+                    Contraseña<span class="asteriskField">*</span>
+                </label>
+                <div class="">
+                    <input type="password" id="pwd" name="pwd" class="form-control textinput textInput form-control" autocomplete="off" placeholder="Contraseña" maxlength="250" required id="id_pwd" />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-dark btn-block">
+                Entrar
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div class="container">
+
+    <div class="screen-spacer"></div>
+
+    <div class="row">
+
+        <div class="col-md-6 offset-md-3 position-relative">
+
+            <!--<div class="why-us-list text-center">
+                <p class="lead">BM Haus</p>
+            </div>-->
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- <div class="spacer50px"></div> -->
+
+<div class="services-list bkg-gray">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-4">
+                <article class="service" style="background-image: url( '{% static 'background/services/mantenimiento_preventivo.png' %}' );">
+                    <h5 class="degradado-rojo text-center">Mantenimiento Preventivo</h5>
+                    <div class="description">
+                        Para que tu auto se encuentre en perfectas condiciones, asegúrate de realizar todos sus servicios a tiempo. El nuestro incluye cambio de aceite, bujías y filtros de gasolina, aceite y aire.
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="service" style="background-image: url( '{% static 'background/services/frenos.png' %}' );">
+                    <h5 class="degradado-rojo text-center">Frenos</h5>
+                    <div class="description">
+                        Para manejar siempre seguro es necesario que el sistema de frenos se encuentre en óptimas condiciones. Nuestro servicio incluye cambio de balatas, líquido de frenos, sensores y discos.
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="service" style="background-image: url( '{% static 'background/services/suspension.png' %}' );">
+                    <h5 class="degradado-rojo text-center">Suspensión</h5>
+                    <div class="description">
+                        La suavidad y el confort en el manejo dependen de ella. Contamos con una gran variedad de amortiguadores, muelles y resortes para disfrutar esa comodidad de recién salido de agencia.
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="service" style="background-image: url( '{% static 'background/services/sistema_electrico.png' %}' );">
+                    <h5 class="degradado-rojo text-center">Sistema Eléctrico</h5>
+                    <div class="description">
+                        La tecnología automotriz es cada vez más compleja. Por eso contamos con el software original de BMW para diagnosticar cualquier falla electro-mecánica y corregir su funcionamiento.
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="service" style="background-image: url( '{% static 'background/services/alineacion_y_balanceo.png' %}' );">
+                    <h5 class="degradado-rojo text-center">Alineación y Balanceo</h5>
+                    <div class="description">
+                        Para alargar la vida de tus neumáticos, optimizar el consumo de combustible y reducir la vibración al conducir, es muy importante realizar, con regularidad, su alineación y balanceo.
+                    </div>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="service" style="background-image: url( '{% static 'background/services/estetica_automotriz.png' %}' );">
+                    <h5 class="degradado-rojo text-center">Estética Automotriz</h5>
+                    <div class="description">
+                        Después de nuestro servicio, volverás a enamorarte de tu auto. Usamos una gama de productos Premium para recobrar el brillo de la pintura y para el lavado de vestiduras, interiores y motor.
+                    </div>
+                </article>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="container">
+
+    <div class="spacer50px"></div>
+
+    <div class="black-background">
+
+        <div class="row">
+
+            <div class="col-md-8">
+
+                <iframe class="mapa" width="100%" height="300" src="https://maps.google.com/maps?width=100%&height=600&hl=es&q=Av.%20Divisi%C3%B3n%20del%20Norte%203259%2C%20La%20Candelaria%2C%2004380%2C%20Ciudad%20de%20M%C3%A9xico+()&ie=UTF8&t=&z=16&iwloc=B&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                
+            </div>
+            
+            <div class="col-md-4">
+                    
+                <i class="fas fa-map-marked-alt fa-2x"></i>
+
+                <div class="spacer25px"></div>
+
+                <h6>BM haus</h6>
+
+                {{ '02 Pagina Inicial.direccion' | get_setting | as_paragraph | safe }}
+
+                {{ '02 Pagina Inicial.horario' | get_setting | as_paragraph | safe }}
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-4 col-md-2">
+                <a title="Teléfono: {{ '02 Pagina Inicial.contacto_telefono' | get_setting }}" class="btn btn-outline-light btn-block data" href="tel:{{ '02 Pagina Inicial.contacto_telefono' | get_setting }}" target="_blank">
+                    <!--<i class="fas fa-phone"></i>-->
+                    <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_telefono' | get_setting }}" class="splash-ref" />
+                    <!--<small class="d-none d-md-block">{{ '02 Pagina Inicial.contacto_telefono' | get_setting }}</small>-->
+                </a>
+            </div>
+            <div class="col-4 col-md-2">
+                <a title="WhatsApp: {{ '02 Pagina Inicial.contacto_whats_app' | get_setting }}" class="btn btn-outline-light btn-block data" href="https://api.whatsapp.com/send?phone={{ '02 Pagina Inicial.contacto_whats_app' | get_setting }}" target="_blank">
+                    <!--<i class="fab fa-whatsapp"></i>-->
+                    <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_whatsapp' | get_setting }}" class="splash-ref" />
+                    <!--<small class="d-none d-md-block">{{ '02 Pagina Inicial.contacto_whats_app' | get_setting }}</small>-->
+                </a>
+            </div>
+            <div class="col-4 col-md-2">
+                <a title="Correo Electrónico: {{ '02 Pagina Inicial.contacto_email' | get_setting }}" class="btn btn-outline-light btn-block data" href="mailto:{{ '02 Pagina Inicial.contacto_email' | get_setting }}" target="_blank">
+                    <!--<i class="far fa-envelope"></i>-->
+                    <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_email' | get_setting }}" class="splash-ref" />
+                    <!--<small class="d-none d-md-block">
+                        <span class="d-inline-block">{{ '02 Pagina Inicial.contacto_email' | get_setting }}</span>
+                    </small>-->
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a title="Facebook" class="btn btn-outline-light btn-block data" href="{{ '02 Pagina Inicial.contacto_fb' | get_setting }}" target="_blank">
+                    <!--<i class="fab fa-facebook-f"></i>-->
+                    <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_fb' | get_setting }}" class="splash-ref" />
+                    <!--<small class="d-none d-md-block">/facebook</small>-->
+                </a>
+            </div>
+            <div class="col-6 col-md-3">
+                <a title="Instagram" class="btn btn-outline-light btn-block data" href="{{ '02 Pagina Inicial.contacto_ig' | get_setting }}" target="_blank">
+                    <!--<i class="fab fa-instagram"></i>-->
+                    <img src="{{ MEDIA_URL }}{{ '02 Pagina Inicial.img_ig' | get_setting }}" class="splash-ref" />
+                    <!--<small class="d-none d-md-block">@instagram</small>-->
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="spacer50px"></div>
+
+</div>
+
+<script src="{% static 'api/js/jquery.imagesloaded.min.js' %}"></script>
+<script src="{% static 'api/js/cbpBGSlideshow.min.js' %}"></script>
+<script>
+    {% if is_mobile %}
+        $(function() {
+            $( "div.screen-spacer").height( $(window).height() - 100 );
+            window.setTimeout( 
+                function() { 
+                    cbpBGSlideshow.init();
+                    $( "img.splash_icon" ).toggle(1000);
+                    $( ".background-image" ).toggle(1000, function(){
+                        $( ".background-image" ).remove();
+                    } );
+                }, 
+                4000 );
+        });
+    {% else %}
+        $(function() {
+            $( "div.screen-spacer").height( $( "#video-splash" ).offset().top + $( "#video-splash" ).height() );
+            $( "#video-splash" )[ 0 ].onended = function() {
+                window.setTimeout( 
+                    function() { 
+                        cbpBGSlideshow.init();
+                        $( "#video-splash" ).toggle( 
+                            1000, 
+                            function() { 
+                                $( "#video-splash" ).remove();
+                            } 
+                        );
+                        $( "img.splash_icon" ).toggle(1000);
+                    }, 
+                    2000 );
+            }
+        });
+    {% endif %}
+    let show_form_signin =  ( duration = 1000 ) => {
+        $( "form.form-signin" ).toggle( duration, () => { $( "#usr" ).select() } )
+    }
+</script>
+
+{% endblock %}

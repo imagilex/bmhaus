@@ -1,0 +1,200 @@
+{% extends "global/form2.html" %}
+{% load crispy_forms_tags %}
+{% load util_filters %}
+
+{% block extrabefore %}
+{% if fotografia %}
+<div class="row">
+    <div class="col-sm-8 offset-md-2 text-center">
+        <img src="{{ MEDIA_URL }}{{ fotografia }}" class="rounded-circle" height="150" width="150" />
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extraafter %}
+<div class="row">
+    <div class="col-sm-4 offset-md-2">
+        <h5>Dirección Casa</h5>
+        {% if direccion_casa %}
+            {{ direccion_casa.asDireccion | safe }}
+            {% if perms.app.actualizar_clientes_user %}
+                <br />
+                <button type="button" onclick="Cte.showFrmDireccionCasaUpd()" class="btn btn-outline-light">
+                    <i class="fas fa-map-marked"></i>
+                    Actualizar Dirección
+                </button>
+            {% endif %}
+        {% else %}
+            {% if perms.app.actualizar_clientes_user %}
+                <button type="button" onclick="Cte.showFrmDireccionCasaAdd()" class="btn btn-outline-light">
+                    <i class="fas fa-map-marked"></i>
+                    Agregar Dirección
+                </button>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="col-sm-4">
+        <h5>Dirección de Oficina</h5>
+        {% if direccion_oficina %}
+            {{ direccion_oficina.asDireccion | safe }}
+            {% if perms.app.actualizar_clientes_user %}
+                <br />
+                <button type="button" onclick="Cte.showFrmDireccionOficinaUpd()" class="btn btn-outline-light">
+                    <i class="fas fa-map-marked"></i>
+                    Actualizar Dirección
+                </button>
+            {% endif %}
+        {% else %}
+            {% if perms.app.actualizar_clientes_user %}
+                <button type="button" onclick="Cte.showFrmDireccionOficinaAdd()" class="btn btn-outline-light">
+                    <i class="fas fa-map-marked"></i>
+                    Agregar Dirección
+                </button>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+{% if perms.app.vehiculos_vehiculo %}
+
+<h5>Vehiculos</h5>
+
+<table class="table table-striped table-sm table-responsive-md">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Marca</th>
+            <th>Serie</th>
+            <th>Tipo</th>
+            <th>VIN</th>
+            <th>Placa</th>
+            <th class="text-right" colspan="5">
+                {% if perms.app.agregar_vehiculos_vehiculo %}
+                <a href="{% url 'vehiculo_new' pkcte=cte.pk %}" class="btn btn-outline-secondary" title="Nuevo Vehículo">
+                    <i class="far fa-edit"></i>
+                    Nuevo Vehículo
+                </a>
+                {% endif %}
+            </th>
+        </tr>
+    </thead>
+    <tbody id="data-tbl">
+        {% for reg in vehiculos %}
+        <tr>
+            <td>{% if reg.fotografia %}<img class="rounded" src="{{ MEDIA_URL }}{{ reg.fotografia }}" height="40" />{% endif %}</td>
+            <td>{% if reg.marca %}{{ reg.marca }}{% endif %}</td>
+            <td>{% if reg.serie %}{{ reg.serie }}{% endif %}</td>
+            <td>{% if reg.tipo %}{{ reg.tipo }}{% endif %}</td>
+            <td>{% if reg.vin %}{{ reg.vin }}{% endif %}</td>
+            <td>{% if reg.numero_de_placa %}{{ reg.numero_de_placa }}{% endif %}</td>
+            <td>
+                {% if perms.app.agregar_servicios_vehiculo %}
+                <a href="{% url 'servicio_new_taller' pkvehiculo=reg.pk %}" class="btn btn-outline-secondary" title="Recibir en Taller">
+                    <i class="fas fa-play"></i>
+                    Recibir en Taller
+                </a>
+                {% endif %}
+            </td>
+            <td>
+                {% if perms.app.agregar_servicios_vehiculo %}
+                <a href="{% url 'servicio_new_particular' pkvehiculo=reg.pk %}" class="btn btn-outline-secondary" title="Recibir en Domicilio">
+                    <i class="fas fa-play"></i>
+                    Recibir en Domicilio
+                </a>
+                {% endif %}
+            </td>
+            <td class="text-center">
+                {% if perms.initsys.vehiculos_vehiculo %}
+                <a href="{% url 'vehiculo_see' pk=reg.pk %}" class="btn btn-outline-secondary" title="Ver"><i class="far fa-eye"></i></a>
+                {% endif %}
+            </td>
+            <td class="text-center">
+                {% if perms.app.actualizar_vehiculos_vehiculo %}
+                <a href="{% url 'vehiculo_update' pk=reg.pk %}" class="btn btn-outline-secondary" title="Actualizar"><i class="far fa-edit"></i></a>
+                {% endif %}
+            </td>
+            <td class="text-center">
+                {% if perms.app.eliminar_vehiculos_vehiculo %}
+                <a href="{% url 'vehiculo_delete' pk=reg.pk %}" class="btn btn-outline-secondary" title="Eliminar"><i class="far fa-trash-alt"></i></a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endif %}
+
+<script type="text/x-handlebars-template" id="direccion-casa-template">
+    <form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="" />
+        <input type="hidden" name="type" value="casa" />
+        <div class="row">
+            <div class="col-sm-12">
+                {{ frm_direccion_casa | crispy }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <button type="submit" class="btn btn-outline-primary" id="btn-save" >Guardar</button>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/x-handlebars-template" id="direccion-oficina-template">
+    <form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="" />
+        <input type="hidden" name="type" value="oficina" />
+        <div class="row">
+            <div class="col-sm-12">
+                {{ frm_direccion_oficina | crispy }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <button type="submit" class="btn btn-outline-primary" id="btn-save" >Guardar</button>
+            </div>
+        </div>
+    </form>
+</script>
+
+<script type="text/x-handlebars-template" id="notas-template">
+    <form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
+        {% csrf_token %}
+        {% if can_add_note %}
+        <input type="hidden" name="action" value="add-note" />
+        <div class="row">
+            <div class="col form-group">
+                <label for="nota">Nueva Nota</label>
+                <textarea name="nota" id="nota" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-group">
+                <label for="fecha_notificacion">¿Crear una notificación?</label>
+                <input class="form-control" type="date" name="fecha_notificacion" id="fecha_notificacion" />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Agregar Nota</button>
+        {% endif %}
+
+        {% for nota in cte.notas.all %}
+        <hr />
+        <div class="row">
+            <div class="col">
+                <span class="text-muted">
+                    {{ nota.created_at | date:"d/m/Y" }}: 
+                </span>
+                {{ nota.nota | as_paragraph | safe }}
+                <p class="blockquote-footer">{{ nota.created_by }}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+    </form>
+</script>
+
+{% endblock%}

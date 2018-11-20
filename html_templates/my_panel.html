@@ -1,0 +1,166 @@
+{% extends "global/html_struct.html" %}
+
+{% load static %}
+{% load util_filters %}
+
+{% block content %}
+
+{% for alerta in alertas %}
+<div class="alert alert-secondary" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{ alerta.nota | as_paragraph | safe }}
+    <form method="post" autocomplete="off" enctype="multipart/form-data" action="">
+        {% csrf_token %}
+        <input type="hidden" name="action" id="action" value="disble-alert" />
+        <input type="hidden" name="alert" id="alert" value="{{ alerta.pk }}" />
+        <button type="submit" class="btn btn-outline-secondary btn-sm">Borrar</button>
+    </form>
+</div>
+{% endfor %}
+
+<h3>{{usuario}}</h3>
+
+
+
+{% if data %}
+<h5>Tu servicio:</h5>
+
+<div class="row current-service">
+    <div class="col-sm-6">
+        {% if data.vehiculo.fotografia %}
+        <img class="float-left rounded mr-1" src="{{ MEDIA_URL }}{{ data.vehiculo.fotografia }}" height="40" />
+        {% endif %}
+        <p>{{ data.vehiculo }}</p>
+    </div>
+    <div class="col-sm-6">
+        <p class="line-height-1-15">
+            Inicio: {{ data.instanciaflujo.created_at | date:"d/m/Y H:i" }}<br />
+            Actualización: {{ data.instanciaflujo.updated_at | date:"d/m/Y H:i" }}<br />
+            Actual: {{ data.instanciaflujo.estado_actual }}
+        </p>
+    </div>
+</div>
+
+<div class="progress">
+    <div role="progressbar" aria-valuenow="{{ data.instanciaflujo.estado_actual.porcentaje }}" aria-valuemin="0" aria-valuemax="100" 
+        {% if data.instanciaflujo.estado_actual.es_final %}
+            class="progress-bar progress-bar-striped bg-success" 
+        {% elif data.instanciaflujo.estado_actual.es_cancelacion %}
+            class="progress-bar progress-bar-striped bg-danger" 
+        {% else %}
+            class="progress-bar progress-bar-striped bg-info" 
+        {% endif %}
+        style="width: {{ data.instanciaflujo.estado_actual.porcentaje }}%" >
+        {{ data.instanciaflujo.estado_actual.porcentaje | floatformat:0 }}%
+    </div>
+</div>
+
+<p></p>
+
+<div id="historia-servicio">
+    {% for h in data.instanciaflujo.historia.all %}
+        <div class="card">
+            <div class="card-header" id="header-{{ h.pk }}">
+                <h5 class="mb-0">
+                    <button data-target="#body-{{ h.pk }}" aria-controls="body-{{ h.pk }}" aria-expanded="{% if data.instanciaflujo.estado_actual == h.accion.estado_final %}true{% else %}false{% endif %}" class="btn btn-link {% if data.instanciaflujo.estado_actual == h.accion.estado_final %}{% else %}collapsed{% endif %}" data-toggle="collapse">
+                        {{ h.accion.estado_final }}
+                    </button>
+                </h5>
+            </div>
+            <div id="body-{{ h.pk }}" class="collapse {% if data.instanciaflujo.estado_actual == h.accion.estado_final %}show{% endif %}" aria-labelledby="header-{{ h.pk }}" data-parent="#historia-servicio">
+                <div class="card-body">
+                    Fecha: {{ h.updated_at | date:"d/m/Y H:i" }}
+                    {% for d in h.historia_detalle.all %}
+                        {% if "DoctoOrdenReparacion" == d.tipo_documento_generado %}
+                            <br />
+                            {% if ver_doctoordenreparacion %}
+                                <a href="{% url 'doctoordenreparacion_see' pk=d.iddocumento_generado %}" target="_blank">
+                                    Ver Orden de Reparación
+                                </a>
+                            {% endif %}
+                        {% elif "AvanceEnFlujo" == d.tipo_documento_generado %}
+                            <div class="row">
+                                {% if ver_avancereparacion %}
+                                <div class="col-sm-6">
+                                    <div class="btn-group float-right" role="group">
+                                        {% if actualizar_avancereparacion %}
+                                            <a href="{% url 'servicio_avanceenflujo_update' pk=d.iddocumento_generado %}" class="btn btn-outline-secondary">
+                                                <i class="far fa-edit"></i>
+                                            </a>
+                                        {% endif %}
+                                        {% if eliminar_avancereparacion %}
+                                            <a href="{% url 'servicio_avanceenflujo_delete' pk=d.iddocumento_generado %}" class="btn btn-outline-secondary">
+                                                <i class="far fa-trash-alt"></i>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                    {{ data.avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'nota' | as_paragraph | safe }}
+                                </div>
+                                <div class="col-sm-6">
+
+                                    <img src="{{ MEDIA_URL }}{{ data.avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia' }}" style="max-width: 100%;" />
+                                </div>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <br />
+                            Documento Generado: {{ d }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<script type="text/javascript">
+    $( '#historia-servicio img[src="/media/"]' ).remove();
+</script>
+
+{% endif %}
+
+<div class="services-list bkg-gray">
+
+    <div class="container">
+
+        <div class="row">
+
+            {% for mp in menu_main.perms %}
+
+                {% if 0 == mp.items_qty %}
+
+                    <div class="col-md-4 col-lg-3" {% if mp.permiso.vista %}onclick="location.href=BASE_URL + '{% url mp.permiso.vista %}'"{% endif %}>
+                        <article class="opt-menu service" style="background-image: url( '{% static mp.permiso.codename %}.png' );">
+                            <h5 class="degradado-rojo">
+                                {{ mp.permiso.mostrar_como }}
+                            </h5>
+                        </article>
+                    </div>
+
+                {% else %}
+
+                    {% for it in mp.items %}
+
+                        <div class="col-md-4 col-lg-3" {% if it.vista %}onclick="location.href=BASE_URL + '{% url it.vista %}'"{% endif %}>
+                            <article class="opt-menu service" style="background-image: url( '{% static it.codename %}.png' );">
+                                <h5 class="degradado-rojo">
+                                    {{ it.mostrar_como }}
+                                </h5>
+                            </article>
+                        </div>
+
+                    {% endfor %}
+                
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

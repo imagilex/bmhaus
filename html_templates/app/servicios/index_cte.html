@@ -1,0 +1,13 @@
+{% extends "global/html_struct.html" %}
+{% load humanize %}
+{% load i18n %}
+
+{% block content %}
+<!-- app/servicios/index_cte.html/content -->
+<div class="card-columns">
+    {% for servicio in data %}
+        {% include "app/servicios/card.html" %}
+    {% endfor %}
+</div>
+<!-- app/servicios/index.html/content end -->
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends "global/html_struct.html" %}
+{% load crispy_forms_tags %}
+{% load util_filters %}
+
+{% block content %}
+
+<form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="{% url 'servicio_executeaccion' %}">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-sm-6">
+            <h5>Propietario</h5>
+            {{ propietario }}
+        </div>
+        <div class="col-sm-6">
+            <h5>Vehiculo</h5>
+            {{ vehiculo }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col sm-6">
+            {% if titulo_frm_1 %}<h5>{{ titulo_frm_1 }}</h5>{% endif %}
+            {{ frm1 | crispy }}
+        </div>
+        <div class="col sm-6">
+            <table style="width: 100%;">
+                <tr>
+                    <td style="width: 50%">Kilometros</td>
+                    <td style="width: 50%">Gasolina</td>
+                </tr>
+                <tr>
+                    <td class="text-center" style="width: 50%">
+                        {% if obj.fotografia_kilometros %}
+                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_kilometros }}" class="contrato-img01 rounded ml-1 mr-1" />
+                        {% endif %}
+                    </td>
+                    <td class="text-center" style="width: 50%">
+                        {% if obj.fotografia_tanque_de_gasolina %}
+                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_tanque_de_gasolina }}" class="contrato-img01 rounded ml-1 mr-1" />
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+            <table style="width: 100%">
+                <tr>
+                    <td style="width: 30%">
+                    
+                    </td>
+                    <td style="width: 30%" class="text-center">
+                        {% if obj.fotografia_lateral_izquierdo %}
+                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_lateral_izquierdo }}" class="contrato-img02" />
+                        {% else %}
+                            Fotografia Lateral Izquierdo
+                        {% endif %}
+                    </td>
+                    <td style="width: 30%">
+                    
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 30%" class="text-right">
+                        {% if obj.fotografia_frente %}
+                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_frente }}" class="contrato-img02" />
+                        {% else %}
+                            Fotografia Frente
+                        {% endif %}
+                    </td>
+                    <td style="width: 30%" class="text-center">
+                        {% if obj.fotografia_superior %}
+                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_superior }}" class="contrato-img02" />
+                        {% else %}
+                            Fotografia Superior
+                        {% endif %}
+                    </td>
+                    <td style="width: 30%" class="text-left">
+                        {% if obj.fotografia_trasera %}
+                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_trasera }}" class="contrato-img02" />
+                        {% else %}
+                            Fotografia Trasera
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 30%">
+                    
+                    </td>
+                    <td style="width: 30%" class="text-center">
+                        {% if obj.fotografia_lateral_derecho %}
+                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_lateral_derecho }}" class="contrato-img02" />
+                        {% else %}
+                            Fotografia Lateral Derecho
+                        {% endif %}
+                    </td>
+                    <td style="width: 30%">
+                    
+                    </td>
+                </tr>
+            </table>
+            <h5>Dirección</h5>
+            {{ direccion | safe }}
+        </div>
+    </div>
+    <div class="row inventario-contrato">
+        <div class="col-sm-4">
+            {% if titulo_frm_3 %}<h5>{{ titulo_frm_3 }}</h5>{% endif %}
+            {{ frm3 | crispy }}
+        </div>
+        <div class="col-sm-4">
+            {% if titulo_frm_4 %}<h5>{{ titulo_frm_4 }}</h5>{% endif %}
+            {{ frm4 | crispy }}
+        </div>
+        <div class="col-sm-4">
+            {% if titulo_frm_5 %}<h5>{{ titulo_frm_5 }}</h5>{% endif %}
+            {{ frm5 | crispy }}
+            {% if titulo_frm_6 %}<h5>{{ titulo_frm_6 }}</h5>{% endif %}
+            {{ frm6 | crispy }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 offset-sm-1 text-center">
+            Firma del Prestador del Servicio
+            {% if obj.firma_del_prestador_del_servicio %}
+                <br /><img src="{{ MEDIA_URL }}{{ obj.firma_del_prestador_del_servicio }}" class="contrato-firma rounded" />
+            {% endif %}
+        </div>
+        <div class="col-sm-4 offset-sm-1 text-center">
+            Firma del Consumidor
+            {% if obj.firma_del_consumidor %}
+                <br /><img src="{{ MEDIA_URL }}{{ obj.firma_del_consumidor }}" class="contrato-firma rounded" />
+            {% endif %}
+        </div>
+    </div>
+    <div class="clausulas-contrato">
+        <h5>Contrato de Prestación de Servicios</h5>
+        {{ '03 Legal.contrato_prestacion_servicios' | get_setting | as_paragraph | safe }}
+    </div>
+</form>
+
+{% endblock %}

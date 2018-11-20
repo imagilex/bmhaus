@@ -1,0 +1,112 @@
+{% extends "global/html_struct.html" %}
+{% load crispy_forms_tags %}
+{% load util_filters %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-4">
+        {% if cliente.fotografia %}
+        <img class="rounded-circle float-left" src="{{ MEDIA_URL }}{{ cliente.fotografia }}" height="40" width="40" />
+        {% endif %}
+        <p class="traslateY35">&nbsp;{{ cliente }}</p><br />
+    </div>
+    <div class="col-sm-4">
+        {% if vehiculo.fotografia %}
+        <img class="float-left rounded mr-1" src="{{ MEDIA_URL }}{{ vehiculo.fotografia }}" height="40" />
+        {% endif %}
+        <p class="traslateY35">{{ vehiculo }}</p><br />
+    </div>
+    <div class="col-sm-4">
+        <p class="service-data">
+            Inicio: {{ instanciaflujo.created_at | date:"d/m/Y H:i" }}<br />
+            Actualización: {{ instanciaflujo.updated_at | date:"d/m/Y H:i" }}<br />
+            Estado: {{ instanciaflujo.estado_actual }}
+        </p>
+    </div>
+</div>
+
+<h5>Detalles del servicio:</h5>
+
+<div class="progress">
+    <div role="progressbar" aria-valuenow="{{ instanciaflujo.estado_actual.porcentaje }}" aria-valuemin="0" aria-valuemax="100" 
+        {% if instanciaflujo.estado_actual.es_final %}
+            class="progress-bar progress-bar-striped bg-success" 
+        {% elif instanciaflujo.estado_actual.es_cancelacion %}
+            class="progress-bar progress-bar-striped bg-danger" 
+        {% else %}
+            class="progress-bar progress-bar-striped bg-info" 
+        {% endif %}
+        style="width: {{ instanciaflujo.estado_actual.porcentaje }}%" >
+        {{ instanciaflujo.estado_actual.porcentaje | floatformat:0 }}%
+    </div>
+</div>
+
+<p></p>
+
+<div id="historia-servicio">
+    {% for h in instanciaflujo.historia.all %}
+        <div class="card">
+            <div class="card-header" id="header-{{ h.pk }}">
+                <h5 class="mb-0">
+                    <button 
+                        data-target="#body-{{ h.pk }}" 
+                        aria-controls="body-{{ h.pk }}" 
+                        aria-expanded="{% if instanciaflujo.estado_actual == h.accion.estado_final %}true{% else %}false{% endif %}" 
+                        class="btn btn-link {% if instanciaflujo.estado_actual == h.accion.estado_final %}{% else %}collapsed{% endif %} text-left btn-block" 
+                        data-toggle="collapse" >
+                        {{ h.accion.estado_final }}
+                    </button>
+                </h5>
+            </div>
+            <div id="body-{{ h.pk }}" class="collapse {% if instanciaflujo.estado_actual == h.accion.estado_final %}show{% endif %}" aria-labelledby="header-{{ h.pk }}" data-parent="#historia-servicio">
+                <div class="card-body">
+                    Fecha: {{ h.updated_at | date:"d/m/Y H:i" }}
+                    {% for d in h.historia_detalle.all %}
+                        {% if "DoctoOrdenReparacion" == d.tipo_documento_generado %}
+                            <br />
+                            {% if ver_doctoordenreparacion %}
+                                <a href="{% url 'doctoordenreparacion_see' pk=d.iddocumento_generado %}" target="_blank">
+                                    Ver Orden de Reparación
+                                </a>
+                            {% endif %}
+                        {% elif "AvanceEnFlujo" == d.tipo_documento_generado %}
+                            <div class="row">
+                                {% if ver_avancereparacion %}
+                                <div class="col-sm-6">
+                                    <div class="btn-group float-right" role="group">
+                                        {% if actualizar_avancereparacion %}
+                                            <a href="{% url 'servicio_avanceenflujo_update' pk=d.iddocumento_generado %}" class="btn btn-outline-secondary">
+                                                <i class="far fa-edit"></i>
+                                            </a>
+                                        {% endif %}
+                                        {% if eliminar_avancereparacion %}
+                                            <a href="{% url 'servicio_avanceenflujo_delete' pk=d.iddocumento_generado %}" class="btn btn-outline-secondary">
+                                                <i class="far fa-trash-alt"></i>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                    {{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'nota' | as_paragraph | safe }}
+                                </div>
+                                <div class="col-sm-6">
+
+                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia' }}" class="rounded" style="max-width: 100%;" />
+                                </div>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <br />
+                            Documento Generado: {{ d }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<script type="text/javascript">
+    $( '#historia-servicio img[src="/media/"]' ).remove();
+</script>
+
+{% endblock %}

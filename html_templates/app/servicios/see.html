@@ -5,24 +5,23 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-sm-6">
-        <h5>Cliente</h5>
+    <div class="col-sm-4">
         {% if cliente.fotografia %}
         <img class="rounded-circle float-left" src="{{ MEDIA_URL }}{{ cliente.fotografia }}" height="40" width="40" />
         {% endif %}
-        <p>{{ cliente }}</p>
-        <h5>Vehículo</h5>
-        {% if vehiculo.fotografia %}
-        <img class="float-left" src="{{ MEDIA_URL }}{{ vehiculo.fotografia }}" height="40" />
-        {% endif %}
-        <p>{{ vehiculo }}</p>
+        <p class="traslateY35">&nbsp;{{ cliente }}</p><br />
     </div>
-    <div class="col-sm-6">
-        <h5>Servicio</h5>
-        <p>
-            Inicio del Servicio: {{ instanciaflujo.created_at | date:"d/m/Y H:i" }}<br />
-            Última Actualización: {{ instanciaflujo.updated_at | date:"d/m/Y H:i" }}<br />
-            Estado Actual: {{ instanciaflujo.estado_actual }}
+    <div class="col-sm-4">
+        {% if vehiculo.fotografia %}
+        <img class="float-left rounded mr-1" src="{{ MEDIA_URL }}{{ vehiculo.fotografia }}" height="40" />
+        {% endif %}
+        <p class="traslateY35">{{ vehiculo }}</p><br />
+    </div>
+    <div class="col-sm-4">
+        <p class="service-data">
+            Inicio: {{ instanciaflujo.created_at | date:"d/m/Y H:i" }}<br />
+            Actualización: {{ instanciaflujo.updated_at | date:"d/m/Y H:i" }}<br />
+            Estado: {{ instanciaflujo.estado_actual }}
         </p>
     </div>
 </div>
@@ -50,7 +49,12 @@
         <div class="card">
             <div class="card-header" id="header-{{ h.pk }}">
                 <h5 class="mb-0">
-                    <button data-target="#body-{{ h.pk }}" aria-controls="body-{{ h.pk }}" aria-expanded="{% if instanciaflujo.estado_actual == h.accion.estado_final %}true{% else %}false{% endif %}" class="btn btn-link {% if instanciaflujo.estado_actual == h.accion.estado_final %}{% else %}collapsed{% endif %}" data-toggle="collapse">
+                    <button 
+                        data-target="#body-{{ h.pk }}" 
+                        aria-controls="body-{{ h.pk }}" 
+                        aria-expanded="{% if instanciaflujo.estado_actual == h.accion.estado_final %}true{% else %}false{% endif %}" 
+                        class="btn btn-link {% if instanciaflujo.estado_actual == h.accion.estado_final %}{% else %}collapsed{% endif %} text-left btn-block" 
+                        data-toggle="collapse" >
                         {{ h.accion.estado_final }}
                     </button>
                 </h5>
@@ -86,7 +90,7 @@
                                 </div>
                                 <div class="col-sm-6">
 
-                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia' }}" style="max-width: 100%;" />
+                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia' }}" class="rounded" style="max-width: 100%;" />
                                 </div>
                                 {% endif %}
                             </div>

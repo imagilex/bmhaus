@@ -171,11 +171,11 @@ urlpatterns = [
         vw_cliente.index,
         name="cliente_index"),
     path(
-        'miperfil/',
+        'mi-perfil/',
         vw_cliente.profile,
         name="cliente_profile"),
     path(
-        'misservicios/',
+        'mis-servicios/',
         vw_cliente.services,
         name="servicios_cliente"),
 
@@ -201,17 +201,17 @@ urlpatterns = [
         vw_vehiculo.index,
         name="vehiculo_index"),
     path(
-        'misvehiculos/',
+        'mis-vehiculos/',
         vw_vehiculo.my_vehicles,
         name="vehiculos_cliente"),
 
     # Servicio
     path(
-        'servicio/nuevo/entaller/<pkvehiculo>',
+        'servicio/nuevo/en-taller/<pkvehiculo>',
         vw_servicios.new_from_taller,
         name="servicio_new_taller"),
     path(
-        'servicio/nuevo/endireccionparticular/<pkvehiculo>',
+        'servicio/nuevo/en-direccion-particular/<pkvehiculo>',
         vw_servicios.new_from_dir_particular,
         name="servicio_new_particular"),
     path(
@@ -245,15 +245,15 @@ urlpatterns = [
 
     # DoctoOrdenReparacion
     path(
-        'ordendereparacion/<pk>/',
+        'orden-de-reparacion/<pk>/',
         vw_doctoordenreparacion.see,
         name="doctoordenreparacion_see"),
     path(
-        'ordendereparacion/actualizar/<pk>/',
+        'orden-de-reparacion/actualizar/<pk>/',
         vw_doctoordenreparacion.update,
         name="doctoordenreparacion_update"),
     path(
-        'ordendereparacion/eliminar/<pk>/',
+        'orden-de-reparacion/eliminar/<pk>/',
         vw_doctoordenreparacion.delete,
         name="doctoordenreparacion_delete"),
 ]

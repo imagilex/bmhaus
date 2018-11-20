@@ -13,7 +13,10 @@ from initsys.models import Usr, Nota, Alerta, usr_upload_to
 from initsys.forms import FrmDireccion
 from flujo.models import InstanciaFlujo
 from routines.mkitsafe import valida_acceso
-from routines.utils import move_uploaded_file, requires_jquery_ui
+from routines.utils import (
+    move_uploaded_file,
+    requires_jquery_ui,
+    hipernormalize)
 
 
 def add_nota(cte, nota, fecha_notificacion, usr):
@@ -39,6 +42,8 @@ def add_nota(cte, nota, fecha_notificacion, usr):
 @valida_acceso(['cliente.clientes_user'])
 def index(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    search_value = ""
+    data = list(Cliente.objects.all())
     if "POST" == request.method:
         if "add-note" == request.POST.get('action'):
             obj = Cliente.objects.get(pk=request.POST.get('nota_cte'))
@@ -47,13 +52,27 @@ def index(request):
                 request.POST.get('nota').strip(),
                 request.POST.get('fecha_notificacion'),
                 usuario)
-    data = list(Cliente.objects.all())
+        elif "search" == request.POST.get('action'):
+            search_value = hipernormalize(request.POST.get('valor'))
+            data = [reg for reg in data if 
+                search_value in hipernormalize(reg.usuario) \
+                or search_value in hipernormalize(reg.email) \
+                or search_value in hipernormalize(reg.telefono) \
+                or search_value in hipernormalize(reg.celular) \
+                or search_value in hipernormalize(reg.telefono_oficina) \
+                or search_value in hipernormalize(reg.first_name) \
+                or search_value in hipernormalize(reg.last_name) \
+                or search_value in hipernormalize(reg.apellido_materno) \
+                or search_value in hipernormalize(reg.razon_social) \
+                or search_value in hipernormalize(reg.rfc)
+            ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child('cliente.agregar_clientes_user'):
         toolbar.append({
             'type': 'link',
             'view': 'cliente_new',
             'label': '<i class="far fa-file"></i> Nuevo'})
+    toolbar.append({'type': 'search'})
     return render(
         request,
         'app/cliente/index.html', {
@@ -62,6 +81,7 @@ def index(request):
             'data': data,
             'toolbar': toolbar,
             'req_ui': requires_jquery_ui(request),
+            'search_value': search_value,
             })
 
 
@@ -310,7 +330,7 @@ def services(request):
         request,
         'app/servicios/index_cte.html', {
             'menu_main': usuario.main_menu_struct(),
-            'titulo': 'Servicios',
+            'titulo': 'Mis Servicios',
             'data': data,
             'toolbar': toolbar
             })

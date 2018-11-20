@@ -107,11 +107,11 @@ class Vehiculo(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['numero_de_placa', 'marca', 'serie', 'modelo']
+        ordering = ['marca', 'serie', 'tipo', 'numero_de_placa']
 
     def __str__(self):
-        return "{} - {} {}".format(
-            self.numero_de_placa, self.marca, self.serie)
+        return "{} {} {}".format(
+            self.marca or '', self.serie or '', self.tipo or '').strip()
 
     def __unicode__(self):
         return self.__str__()

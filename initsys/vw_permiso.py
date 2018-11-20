@@ -7,18 +7,32 @@ from django.db.models import ProtectedError
 from .forms import FrmPermiso
 from .models import Permiso, Usr
 from routines.mkitsafe import valida_acceso
-from routines.utils import clean_name
+from routines.utils import clean_name, hipernormalize
 
 
 @valida_acceso(['permiso.permisos_permiso'])
 def index(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    search_value = ""
     root_perms = Permiso.objects.filter(permiso_padre__isnull=True)
     data = []
     for obj in root_perms:
         aux = PermisoTableStruct(obj)
         for p in aux:
             data.append(p)
+    if "POST" == request.method:
+        if "search" == request.POST.get('action'):
+            search_value = hipernormalize(request.POST.get('valor'))
+            data = [reg for reg in data if 
+                search_value in hipernormalize(reg.nombre) \
+                or search_value in hipernormalize(reg.mostrar_como) \
+                or search_value in hipernormalize(reg.descripcion) \
+                or search_value in hipernormalize(reg.vista) \
+                or search_value in hipernormalize(reg.permiso_padre) \
+                or search_value in hipernormalize(reg.name) \
+                or search_value in hipernormalize(reg.content_type) \
+                or search_value in hipernormalize(reg.codename)
+            ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child(
             'permiso.agregar_permisos_permiso'):
@@ -31,13 +45,15 @@ def index(request):
             'type': 'link',
             'view': 'permission_index',
             'label': '<i class="fas fa-glasses"></i> Perms'})
+    toolbar.append({'type': 'search'})
     return render(
         request,
         'initsys/permiso/index.html', {
             'menu_main': usuario.main_menu_struct(),
             'titulo': 'Permisos',
             'data': data,
-            'toolbar': toolbar
+            'toolbar': toolbar,
+            'search_value': search_value,
             })
 
 
@@ -161,6 +177,16 @@ def delete(request, pk):
 @valida_acceso(['permission.perms_permission'])
 def permission_index(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    search_value = ""
+    data = Permission.objects.all().order_by('content_type')
+    if "POST" == request.method:
+        if "search" == request.POST.get('action'):
+            search_value = hipernormalize(request.POST.get('valor'))
+            data = [reg for reg in data if 
+                search_value in hipernormalize(reg.name) \
+                or search_value in hipernormalize(reg.content_type) \
+                or search_value in hipernormalize(reg.codename)
+            ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child('permiso.permisos_permiso'):
         toolbar.append({
@@ -168,11 +194,13 @@ def permission_index(request):
             'view': 'permiso_index',
             'label': '<i class="fas fa-glasses"></i> Permisos'
         })
+    toolbar.append({'type': 'search'})
     return render(request, 'initsys/permiso/permission.html', {
-        'data': Permission.objects.all().order_by('content_type'),
+        'data': data,
         'menu_main': usuario.main_menu_struct(),
         'titulo': 'Permission',
-        'toolbar': toolbar
+        'toolbar': toolbar,
+        'search_value': search_value,
     })
 
 

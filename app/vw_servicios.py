@@ -24,7 +24,7 @@ from .forms import (
 from flujo.models import (
     Flujo, Estado, Accion, InstanciaFlujo, InstanciaHistoriaDetalle)
 from routines.mkitsafe import valida_acceso
-from routines.utils import move_uploaded_file
+from routines.utils import move_uploaded_file, hipernormalize
 from initsys.models import Usr
 
 
@@ -298,6 +298,7 @@ def index(request):
         tipo_instancia="Vehiculo",
         flujo__name='temporal_operaciones').order_by(
             'terminado', '-created_at'))
+    search_value = ""
     data = []
     for iserv in instancias_servicios:
         extra_data = json.loads(iserv.extra_data)
@@ -311,14 +312,24 @@ def index(request):
             'instancia': iserv,
             'pagado': pagado,
         })
+    if "POST" == request.method:
+        if "search" == request.POST.get('action'):
+            search_value = hipernormalize(request.POST.get('valor'))
+            data = [reg for reg in data if
+                search_value in hipernormalize(reg['vehiculo']) \
+                or search_value in hipernormalize(reg['vehiculo'].propietario) \
+                or search_value in hipernormalize(reg['instancia'].estado_actual)
+            ]
     toolbar = []
+    toolbar.append({'type': 'search'})
     return render(
         request,
         'app/servicios/index.html', {
             'menu_main': usuario.main_menu_struct(),
             'titulo': 'Servicios',
             'data': data,
-            'toolbar': toolbar
+            'toolbar': toolbar,
+            'search_value': search_value,
             })
 
 
@@ -327,6 +338,9 @@ def index(request):
 def see(request, pk):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     toolbar = []
+    if not InstanciaFlujo.objects.filter(pk=pk).exists():
+        return HttpResponseRedirect(reverse(
+            'item_no_encontrado'))
     instanciaflujo = InstanciaFlujo.objects.get(pk=pk)
     extra_data = json.loads(instanciaflujo.extra_data)
     vehiculo = Vehiculo.objects.get(pk=extra_data['idobjeto'])
@@ -420,6 +434,9 @@ def aplicar_accion(request, pkinstanciaflujo, pkaccion):
     'avanceenflujo.actualizar_avance_en_flujo_avance en flujo'])
 def update_avanceenflujo(request, pk):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    if not AvanceEnFlujo.objects.filter(pk=pk).exists():
+        return HttpResponseRedirect(reverse(
+            'item_no_encontrado'))
     obj = AvanceEnFlujo.objects.get(pk=pk)
     frm = FrmAvanceEnFlujo(instance=obj, data=request.POST or None)
     if "POST" == request.method:

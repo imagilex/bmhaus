@@ -1,6 +1,7 @@
 from django.conf import settings
 
 from os import path, mkdir
+from unicodedata import normalize
 
 
 def print_error(message, level="Warning"):
@@ -82,17 +83,7 @@ def month_name(month):
     return ""
 
 
-def clean_name(name, to_lower=True):
-    """
-    Limpia un nombre para generar un nombre inglés y sustituye los
-    espacios por _
-
-    (string) name               nombre a limpiar
-    (boolean) to_lower = True   convertir a minusculas
-
-    return string
-    """
-    name = name.replace(" ", "_")
+def unaccent(name):
     name = name.replace("ñ", "n")
     name = name.replace("Ñ", "N")
     name = name.replace("á", "a")
@@ -115,6 +106,20 @@ def clean_name(name, to_lower=True):
     name = name.replace("ö", "O")
     name = name.replace("ü", "u")
     name = name.replace("Ü", "U")
+    return name
+
+def clean_name(name, to_lower=True):
+    """
+    Limpia un nombre para generar un nombre inglés y sustituye los
+    espacios por _
+
+    (string) name               nombre a limpiar
+    (boolean) to_lower = True   convertir a minusculas
+
+    return string
+    """
+    name = name.replace(" ", "_")
+    name = unaccent(name)
     if to_lower is True:
         name = name.lower()
     return name
@@ -186,3 +191,11 @@ def as_paragraph_fn(text):
     res = "<p>{}</p>".format(res)
     res = res.replace("<br /><br />", '</p><p>')
     return res
+
+def hipernormalize(text=None):
+    if text is None:
+        text = ''
+    elif "str" != type(text).__name__:
+        text = "{}".format(text)
+    forma = "NFKC"
+    return unaccent(normalize(forma, text).lower())

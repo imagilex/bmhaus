@@ -9,7 +9,7 @@
             <th>Cliente</th>
             <th>Marca</th>
             <th>Serie</th>
-            <th>Modelo</th>
+            <th>Tipo</th>
             <th>VIN</th>
             <th>Placa</th>
             <th class="text-right" colspan="5">
@@ -19,11 +19,11 @@
     <tbody id="data-tbl">
         {% for reg in vehiculos %}
         <tr>
-            <td>{% if reg.fotografia %}<img class="" src="{{ MEDIA_URL }}{{ reg.fotografia }}" height="40" />{% endif %}</td>
+            <td>{% if reg.fotografia %}<img class="rounded" src="{{ MEDIA_URL }}{{ reg.fotografia }}" height="40" />{% endif %}</td>
             <td>{% if reg.propietario %}{{ reg.propietario }}{% endif %}</td>
             <td>{% if reg.marca %}{{ reg.marca }}{% endif %}</td>
             <td>{% if reg.serie %}{{ reg.serie }}{% endif %}</td>
-            <td>{% if reg.modelo %}{{ reg.modelo }}{% endif %}</td>
+            <td>{% if reg.tipo %}{{ reg.tipo }}{% endif %}</td>
             <td>{% if reg.vin %}{{ reg.vin }}{% endif %}</td>
             <td>{% if reg.numero_de_placa %}{{ reg.numero_de_placa }}{% endif %}</td>
             <td>

@@ -11,18 +11,30 @@ from os import remove
 from .forms import FrmUsuario
 from .models import Usr, usr_upload_to
 from routines.mkitsafe import valida_acceso
-from routines.utils import move_uploaded_file
+from routines.utils import move_uploaded_file, hipernormalize
 
 
 @valida_acceso(['usr.usuarios_user'])
 def index(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
     root_usrs = Usr.objects.filter(depende_de__isnull=True)
+    search_value = ""
     data = []
     for obj in root_usrs:
         data.append(obj)
         for h in obj.descendencia():
             data.append(h)
+    if "POST" == request.method:
+        if "search" == request.POST.get('action'):
+            search_value = hipernormalize(request.POST.get('valor'))
+            data = [reg for reg in data if 
+                search_value in hipernormalize(reg.usuario) \
+                or search_value in hipernormalize(reg.email) \
+                or search_value in hipernormalize(reg.telefono) \
+                or search_value in hipernormalize(reg.celular) \
+                or search_value in hipernormalize(reg.first_name) \
+                or search_value in hipernormalize(reg.last_name)
+            ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child('usr.agregar_usuarios_user'):
         toolbar.append({
@@ -34,13 +46,15 @@ def index(request):
             'type': 'link',
             'view': 'user_index',
             'label': '<i class="fas fa-glasses"></i> Users'})
+    toolbar.append({'type': 'search'})
     return render(
         request,
         'initsys/usuario/index.html', {
             'menu_main': usuario.main_menu_struct(),
             'titulo': 'Usuarios',
             'data': data,
-            'toolbar': toolbar
+            'toolbar': toolbar,
+            'search_value': search_value,
             })
 
 
@@ -169,19 +183,32 @@ def delete(request, pk):
 @valida_acceso(['user.users_user'])
 def user_index(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    search_value = ""
+    data = User.objects.all()
+    if "POST" == request.method:
+        if "search" == request.POST.get('action'):
+            search_value = hipernormalize(request.POST.get('valor'))
+            data = [reg for reg in data if 
+                search_value in hipernormalize(reg.username) \
+                or search_value in hipernormalize(reg.email) \
+                or search_value in hipernormalize(reg.first_name) \
+                or search_value in hipernormalize(reg.last_name)
+            ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child('usr.usuarios_user'):
         toolbar.append({
             'type': 'link',
             'view': 'usuario_index',
             'label': '<i class="fas fa-glasses"></i> Usuarios'})
+    toolbar.append({'type': 'search'})
     return render(
         request,
         'initsys/users/index.html',
         {
-            'data': User.objects.all(),
+            'data': data,
             'menu_main': usuario.main_menu_struct(),
             'titulo': 'Root Users',
-            'toolbar': toolbar
+            'toolbar': toolbar,
+            'search_value': search_value,
         }
     )

@@ -6,24 +6,43 @@ from django.db.models import ProtectedError
 from .models import Cliente, Vehiculo, vehiculo_upload_to
 from .forms import FrmVehiculo
 from initsys.models import Usr
+from flujo.models import InstanciaFlujo
 from routines.mkitsafe import valida_acceso
-from routines.utils import move_uploaded_file
+from routines.utils import move_uploaded_file, hipernormalize
 
 
 @valida_acceso(['vehiculo.vehiculos_vehiculo'])
 def index(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
-    vehiculos = list(Vehiculo.objects.all().order_by(
+    search_value = ""
+    data = list(Vehiculo.objects.all().order_by(
         'propietario', 'marca', 'serie', 'modelo', 'numero_de_placa'))
+    if "POST" == request.method:
+        if "search" == request.POST.get('action'):
+            search_value = hipernormalize(request.POST.get('valor'))
+            data = [reg for reg in data if 
+                search_value in hipernormalize(reg.propietario) \
+                or search_value in hipernormalize(reg.marca) \
+                or search_value in hipernormalize(reg.serie) \
+                or search_value in hipernormalize(reg.modelo) \
+                or search_value in hipernormalize(reg.año) \
+                or search_value in hipernormalize(reg.clase) \
+                or search_value in hipernormalize(reg.tipo) \
+                or search_value in hipernormalize(reg.color) \
+                or search_value in hipernormalize(reg.vin) \
+                or search_value in hipernormalize(reg.numero_de_placa)
+            ]
     toolbar = []
+    toolbar.append({'type': 'search'})
     return render(
         request,
         'app/vehiculo/index.html',
         {
             'menu_main': usuario.main_menu_struct(),
             'titulo': 'Vehiculos',
-            'vehiculos': vehiculos,
+            'vehiculos': data,
             'toolbar': toolbar,
+            'search_value': search_value,
         }
     )
 
@@ -85,14 +104,31 @@ def see(request, pk):
             'view': 'vehiculo_update',
             'label': '<i class="far fa-trash-alt"></i> Eliminar',
             'pk': pk})
+    ids = '{"idobjeto":' + pk + '}'
+    instancias_servicios = list(InstanciaFlujo.objects.filter(
+        tipo_instancia="Vehiculo",
+        flujo__name='temporal_operaciones', extra_data=ids).order_by(
+            'terminado', '-created_at'))
+    data = []
+    for iserv in instancias_servicios:
+        pagado = False
+        for h in iserv.historia.all():
+            if "pagar" == h.accion.name:
+                pagado = True
+                break
+        data.append({
+            'vehiculo': obj,
+            'instancia': iserv,
+            'pagado': pagado,
+        })
     return render(request, 'app/vehiculo/see.html', {
         'menu_main': usuario.main_menu_struct(),
-        'titulo': 'Vehiculo',
-        'titulo_descripcion': obj,
+        'titulo': obj,
         'read_only': True,
         'frm': frm,
         'fotografia': obj.fotografia,
         'toolbar': toolbar,
+        'data': data,
         })
 
 
@@ -150,7 +186,7 @@ def my_vehicles(request):
     cte = Cliente.objects.get(idusuario=usuario.pk)
     return render(request, 'app/vehiculo/mis_vehiculos.html', {
         'menu_main': usuario.main_menu_struct(),
-        'titulo': 'Mis Vehículos',
+        'titulo': 'Mis Autos',
         'vehiculos': [{
             'pk': v.pk,
             'name': "{}".format(v),

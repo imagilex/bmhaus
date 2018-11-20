@@ -4,13 +4,15 @@ from django.http import HttpResponseRedirect
 
 from .forms import FrmSetting
 from .models import Setting, Usr, setting_upload_to
-from routines.utils import move_uploaded_file
+from routines.utils import move_uploaded_file, hipernormalize
 from routines.mkitsafe import valida_acceso
 
 
 @valida_acceso()
 def index(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    search_value = ""
+    data = Setting.objects.filter(es_multiple=False)
     if "POST" == request.method:
         if "singles" == request.POST.get('action'):
             parametros = Setting.objects.filter(es_multiple=False)
@@ -29,19 +31,43 @@ def index(request):
                         parametro.valor = move_uploaded_file(
                             file, setting_upload_to)
                         parametro.save()
+            data = Setting.objects.filter(es_multiple=False)
+        elif "search" == request.POST.get('action'):
+            search_value = hipernormalize(request.POST.get('valor'))
+            data = [reg for reg in data if 
+                search_value in hipernormalize(reg.seccion) \
+                or search_value in hipernormalize(reg.nombre) \
+                or search_value in hipernormalize(reg.nombre_para_mostrar) \
+                or search_value in hipernormalize(reg.tipo)
+            ]
+    toolbar = []
+    toolbar.append({'type': 'search'})
     return render(
         request,
         'initsys/setting/values.html', {
             'menu_main': usuario.main_menu_struct(),
             'titulo': 'Parámetros del Sistema',
-            'singles': Setting.objects.filter(es_multiple=False),
-            'multiples': Setting.objects.filter(es_multiple=True)
+            'singles': data,
+            'multiples': Setting.objects.filter(es_multiple=True),
+            'toolbar': toolbar,
+            'search_value': search_value,
         })
 
 
 @valida_acceso(['setting.administrar_settings_setting'])
 def index_adm(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    search_value = ""
+    data = Setting.objects.all()
+    if "POST" == request.method:
+        if "search" == request.POST.get('action'):
+            search_value = hipernormalize(request.POST.get('valor'))
+            data = [reg for reg in data if 
+                search_value in hipernormalize(reg.seccion) \
+                or search_value in hipernormalize(reg.nombre) \
+                or search_value in hipernormalize(reg.nombre_para_mostrar) \
+                or search_value in hipernormalize(reg.tipo)
+            ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child(
             'setting.agregar_settings_setting'):
@@ -49,13 +75,15 @@ def index_adm(request):
             'type': 'link',
             'view': 'setting_new',
             'label': '<i class="far fa-file"></i> Nuevo'})
+    toolbar.append({'type': 'search'})
     return render(
         request,
         'initsys/setting/index.html', {
             'menu_main': usuario.main_menu_struct(),
             'titulo': 'Administración de Parámetros',
-            'data': Setting.objects.all(),
-            'toolbar': toolbar
+            'data': data,
+            'toolbar': toolbar,
+            'search_value': search_value,
         })
 
 

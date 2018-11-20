@@ -371,3 +371,29 @@ img.contrato-img02 {
 .card.tarjeta-servicio {
     color: #74744e;
 }
+
+.line-height-1-15 {
+    line-height: 1.15;
+}
+
+div.current-service p {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+p.service-data {
+    font-size: 0.80rem;
+}
+
+.traslateY35 {
+    transform: translateY(35%);
+}
+
+#historia-servicio .card-header {
+    padding: 0;
+}
+
+.search-box {
+    background-color: #dee2e6;
+}

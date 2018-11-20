@@ -7,24 +7,35 @@ from django.db.models import ProtectedError
 from .models import Usr, Permiso
 from .vw_permiso import PermisoTableStruct
 from routines.mkitsafe import valida_acceso
+from routines.utils import hipernormalize
 
 
 @valida_acceso(['group.perfiles_group'])
 def index(request):
     usuario = Usr.objects.filter(id=request.user.pk)[0]
+    search_value = ""
+    data = Group.objects.all().order_by('name')
+    if "POST" == request.method:
+        if "search" == request.POST.get('action'):
+            search_value = hipernormalize(request.POST.get('valor'))
+            data = [reg for reg in data if 
+                search_value in hipernormalize(reg.name)
+            ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child('group.agregar_perfiles_group'):
         toolbar.append({
             'type': 'link',
             'view': 'perfil_new',
             'label': '<i class="far fa-file"></i> Nuevo'})
+    toolbar.append({'type': 'search'})
     return render(
         request,
         'initsys/perfil/index.html', {
             'menu_main': usuario.main_menu_struct(),
             'titulo': 'Perfiles',
-            'data': Group.objects.all().order_by('name'),
-            'toolbar': toolbar
+            'data': data,
+            'toolbar': toolbar,
+            'search_value': search_value,
         })
 
 

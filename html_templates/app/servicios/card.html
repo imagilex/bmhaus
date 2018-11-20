@@ -1,0 +1,31 @@
+<div class="card tarjeta-servicio">
+    {% if servicio.vehiculo.fotografia %}
+    <img class="card-img-top" src="{{ MEDIA_URL }}{{ servicio.vehiculo.fotografia }}">
+    {% endif %}
+    <div class="progress">
+        <div role="progressbar" aria-valuenow="{{ servicio.instancia.estado_actual.porcentaje }}" aria-valuemin="0" aria-valuemax="100" 
+            {% if servicio.instancia.estado_actual.es_final %}
+                class="progress-bar progress-bar-striped bg-success" 
+            {% elif servicio.instancia.estado_actual.es_cancelacion %}
+                class="progress-bar progress-bar-striped bg-danger" 
+            {% else %}
+                class="progress-bar progress-bar-striped bg-info" 
+            {% endif %}
+            style="width: {{ servicio.instancia.estado_actual.porcentaje }}%" >
+            {{ servicio.instancia.estado_actual.porcentaje | floatformat:0 }}%
+        </div>
+    </div>
+    <div class="card-body">
+        {% if perms.app.servicios_vehiculo or perms.initsys.mis_servicios_permiso %}
+            <a href="{% url 'servicio_see' pk=servicio.instancia.pk %}" class="btn btn-outline-secondary float-right" title="Ver"><i class="far fa-eye"></i></a>
+        {% endif %}
+        <h5 class="card-title">{{ servicio.vehiculo }}</h5>
+        <p class="card-text service-data">
+            Fecha: {{ servicio.instancia.created_at | date:"d/m/Y H:i" }}<br />
+            Terminado: {% if servicio.instancia.terminado %}Sí{% else %}No{% endif %}<br />
+            Cancelado: {% if servicio.instancia.estado_actual.es_cancelacion %}Sí{% else %}No{% endif %}<br />
+            Estado: {{ servicio.instancia.estado_actual }}<br />
+            ¿Tiene Pagos? {% if servicio.pagado %}Sí{% else %}No{% endif %}<br />
+        </p>
+    </div>
+</div>

@@ -30,12 +30,12 @@
                 <tr>
                     <td class="text-center" style="width: 50%">
                         {% if obj.fotografia_kilometros %}
-                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_kilometros }}" class="contrato-img01" />
+                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_kilometros }}" class="contrato-img01 rounded ml-1 mr-1" />
                         {% endif %}
                     </td>
                     <td class="text-center" style="width: 50%">
                         {% if obj.fotografia_tanque_de_gasolina %}
-                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_tanque_de_gasolina }}" class="contrato-img01" />
+                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_tanque_de_gasolina }}" class="contrato-img01 rounded ml-1 mr-1" />
                         {% endif %}
                     </td>
                 </tr>
@@ -119,13 +119,13 @@
         <div class="col-sm-4 offset-sm-1 text-center">
             Firma del Prestador del Servicio
             {% if obj.firma_del_prestador_del_servicio %}
-                <br /><img src="{{ MEDIA_URL }}{{ obj.firma_del_prestador_del_servicio }}" class="contrato-firma" />
+                <br /><img src="{{ MEDIA_URL }}{{ obj.firma_del_prestador_del_servicio }}" class="contrato-firma rounded" />
             {% endif %}
         </div>
         <div class="col-sm-4 offset-sm-1 text-center">
             Firma del Consumidor
             {% if obj.firma_del_consumidor %}
-                <br /><img src="{{ MEDIA_URL }}{{ obj.firma_del_consumidor }}" class="contrato-firma" />
+                <br /><img src="{{ MEDIA_URL }}{{ obj.firma_del_consumidor }}" class="contrato-firma rounded" />
             {% endif %}
         </div>
     </div>

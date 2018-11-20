@@ -14,6 +14,19 @@
             <button type="button" class="btn btn-outline-secondary" onclick="{{ item.onclick }}">
                 {{ item.label | safe }}
             </button>
+        {% elif 'search' == item.type %}
+            <form class="form-inline mr-1 ml-1" method="post" action="" autocomplete="off">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="search" />
+                <div class="input-group">
+                    <input value="{{ search_value }}" class="form-control search-box" type="search" placeholder="Buscar" aria-label="Buscar" name="valor" />
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
         {% else %}
             <div class="alert alert-danger" role="alert">
                 Tipo de item no implementado: {{ item }}

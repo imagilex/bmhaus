@@ -57,6 +57,13 @@ class clsApp {
         frm.find( "textarea" ).attr( "readonly", true );
         frm.find( "button" ).attr( "readonly", true );
         frm.find( "select" ).attr( "readonly", true );
+        frm.find('input[type="file"]').parent().parent().remove();
+        frm.find('input[type="number"]').each( function() {
+            let valor = this.value;
+            if( valor.indexOf( '.' ) >-1 ) {
+                this.value = valor.substr( 0, valor.indexOf( '.' ) + 3 );
+            }
+        } );
         frm.find( "#btn-save" ).remove();
     }
     showPrivacyPolicy(){

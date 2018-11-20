@@ -4,8 +4,17 @@
 {% if fotografia %}
 <div class="row">
     <div class="col-sm-8 offset-md-2 text-center">
-        <img src="{{ MEDIA_URL }}{{ fotografia }}" class="" height="150" />
+        <img src="{{ MEDIA_URL }}{{ fotografia }}" class="rounded" height="150" />
     </div>
 </div>
 {% endif %}
+{% endblock %}
+
+{% block extraafter %}
+<h5>Servicios</h5>
+<div class="card-columns">
+    {% for servicio in data %}
+        {% include "app/servicios/card.html" %}
+    {% endfor %}
+</div>
 {% endblock %}

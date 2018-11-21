@@ -193,7 +193,7 @@ div.services-list h5:before {
 }
 
 div.services-list article div.description {
-    background: rgba( 0, 0, 0, 0.20 );
+    background: rgba( 0, 0, 0, 0.40 );
     font-size: 1.0rem;
     padding: 5px;
     border-radius: 5px;

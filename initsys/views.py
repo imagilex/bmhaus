@@ -13,6 +13,7 @@ import json
 from .forms import AccUsr
 from .models import Usr
 from app.models import Cliente, AvanceEnFlujo
+from app.functions import merge_flujo_acciones
 from flujo.models import InstanciaFlujo
 from routines.mkitsafe import valida_acceso
 from routines.utils import is_mobile
@@ -127,6 +128,7 @@ def panel(request):
             data = {
                 'vehiculo': cte.vehiculos.get(pk=extra_data['idobjeto']),
                 'instanciaflujo': iserv,
+                'flujo_servicio': merge_flujo_acciones(iserv),
                 'pagado': pagado,
                 'avanceenflujo': avanceenflujo,
             }
@@ -153,5 +155,5 @@ def panel(request):
             'data': data,
             'ver_doctoordenreparacion': ver_doctoordenreparacion,
             'ver_avancereparacion': ver_avancereparacion,
-            'alertas': usuario.alertas.filter(mostrar_alerta=True, fecha_alerta__lte=date.today())
+            'alertas': usuario.alertas.filter(mostrar_alerta=True, fecha_alerta__lte=date.today()),
         })

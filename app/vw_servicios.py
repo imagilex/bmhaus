@@ -21,6 +21,7 @@ from .forms import (
     FrmDoctoOrdenReparacionComponentesMecanicos,
     FrmDoctoOrdenReparacionFirmas,
     FrmAvanceEnFlujo)
+from .functions import merge_flujo_acciones
 from flujo.models import (
     Flujo, Estado, Accion, InstanciaFlujo, InstanciaHistoriaDetalle)
 from routines.mkitsafe import valida_acceso
@@ -378,6 +379,7 @@ def see(request, pk):
             'vehiculo': vehiculo,
             'cliente': cliente,
             'instanciaflujo': instanciaflujo,
+            'flujo_servicio': merge_flujo_acciones(instanciaflujo),
             'avanceenflujo': avanceenflujo,
             'ver_doctoordenreparacion': ver_doctoordenreparacion,
             'ver_avancereparacion': ver_avancereparacion,

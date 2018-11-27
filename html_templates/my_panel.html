@@ -28,8 +28,8 @@
 <!--<h5>Tu servicio:</h5>-->
 
 <div class="text-center">
-    <canvas id="canvas"></canvas>
-    <script src="{% static 'api/js/teslahud.js' %}"></script>
+    <canvas id="service-indicator"></canvas>
+    <script src="{% static 'api/js/speedometer.js' %}"></script>
 </div>
 
 <div class="row current-service">
@@ -169,26 +169,8 @@
 </div>
 
 <script type="text/javascript">
-    let milliseconds = 50;
-    let inc_vel = 1;
-    let inc_rpm = 0.1;
-    let current_vel = 0;
-    let current_rmp = 0;
-    let max_vel = {{ data.instanciaflujo.estado_actual.porcentaje }};
-    let max_rpm = 0.{{ data.instanciaflujo.historia.all.count }};
-    function paintSpeedo() {
-        drawSpeedo( current_vel, current_vel/10, current_rmp, 100 );
-        if( current_vel < max_vel ) {
-            current_vel += inc_vel;
-        }
-        if( current_rmp < max_rpm ) {
-            current_rmp += inc_rpm;
-        }
-        if( current_vel <= max_vel || current_rmp <= max_rpm ) {
-            window.setTimeout( paintSpeedo, milliseconds );
-        }
-    }
-    paintSpeedo();
+    let speedometer = new Speedometer( 140, "service-indicator" );
+    speedometer.animate( {{ data.instanciaflujo.estado_actual.porcentaje }} );
 </script>
 
 {% endblock %}

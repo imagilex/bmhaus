@@ -49,10 +49,10 @@ class Speedometer {
 
         this.canvas.textAlign = "center";
         this.canvas.font = `${this.width / ( 80 / 7 )}px MuseoSans_900-webfont`;
-        this.canvas.fillText( vel, this.center.x, this.center.y / ( 25 / 23 ) );
+        this.canvas.fillText( `${vel}${this.unit}`, this.center.x, this.center.y / ( 25 / 23 ) );
 
-        this.canvas.font = `${this.width / ( 160 / 9 )}px MuseoSans_900-webfont`;
-        this.canvas.fillText( this.unit, this.center.x, this.center.y / ( 25 / 26 ) );
+        //this.canvas.font = `${this.width / ( 160 / 9 )}px MuseoSans_900-webfont`;
+        //this.canvas.fillText( this.unit, this.center.x, this.center.y / ( 25 / 26 ) );
 
         this.canvas.fillStyle = "#ffffff";
 

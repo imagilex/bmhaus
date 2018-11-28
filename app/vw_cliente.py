@@ -3,6 +3,8 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group
 from django.db.models import ProtectedError
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
 
 import json
 
@@ -102,6 +104,16 @@ def new(request):
             obj.save()
             obj.groups.add(Group.objects.get(name='Cliente'))
             obj.save()
+            if obj.email is not None and obj.email.strip() != "":
+                plain_mail = render(request,'app/email/cliente_new.txt',{'usuario': obj}).content.decode('utf-8')
+                html_mail = render(request,'app/email/cliente_new.html',{'usuario': obj}).content.decode('utf-8')
+                email = EmailMultiAlternatives(
+                    "Bienvenido a BMhaus",
+                    plain_mail,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [obj.email])
+                email.attach_alternative(html_mail, "text/html")
+                email.send()
             return HttpResponseRedirect(reverse(
                 'cliente_see', kwargs={'pk': obj.pk}
             ))
@@ -222,6 +234,11 @@ def update(request, pk):
         return HttpResponseRedirect(reverse(
             'item_no_encontrado'))
     obj = Cliente.objects.get(pk=pk)
+    data_original = {
+        'email': obj.email,
+        'user': obj.usuario,
+        'password': obj.contraseña,
+    }
     if 'POST' == request.method:
         frm = FrmCliente(instance=obj, data=request.POST)
         if frm.is_valid():
@@ -236,6 +253,17 @@ def update(request, pk):
             obj.save()
             obj.groups.add(Group.objects.get(name='Cliente'))
             obj.save()
+            if data_original['email'] != obj.email or data_original['user'] != obj.usuario or data_original['password'] != obj.contraseña:
+                if obj.email is not None and obj.email.strip() != "":
+                    plain_mail = render(request,'app/email/cliente_upd.txt',{'usuario': obj}).content.decode('utf-8')
+                    html_mail = render(request,'app/email/cliente_upd.html',{'usuario': obj}).content.decode('utf-8')
+                    email = EmailMultiAlternatives(
+                        "Actualización en Datos de Acceso a BMhaus",
+                        plain_mail,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [obj.email])
+                    email.attach_alternative(html_mail, "text/html")
+                    email.send()
             return HttpResponseRedirect(reverse(
                 'cliente_see', kwargs={'pk': obj.pk}
             ))

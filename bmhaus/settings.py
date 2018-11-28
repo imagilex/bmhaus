@@ -130,7 +130,7 @@ USE_L10N = True
 USE_TZ = True
 
 EMAIL_HOST = 'mail.bmhaus.mx'
-EMAIL_PORT = '995'
+EMAIL_PORT = '465'
 EMAIL_HOST_USER = 'no-reply@bmhaus.mx'
 EMAIL_HOST_PASSWORD = 'esteauto2018$'
 EMAIL_USE_SSL = True

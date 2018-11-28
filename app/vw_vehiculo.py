@@ -20,18 +20,19 @@ def index(request):
     if "POST" == request.method:
         if "search" == request.POST.get('action'):
             search_value = hipernormalize(request.POST.get('valor'))
-            data = [reg for reg in data if 
-                search_value in hipernormalize(reg.propietario) \
-                or search_value in hipernormalize(reg.marca) \
-                or search_value in hipernormalize(reg.serie) \
-                or search_value in hipernormalize(reg.modelo) \
-                or search_value in hipernormalize(reg.año) \
-                or search_value in hipernormalize(reg.clase) \
-                or search_value in hipernormalize(reg.tipo) \
-                or search_value in hipernormalize(reg.color) \
-                or search_value in hipernormalize(reg.vin) \
-                or search_value in hipernormalize(reg.numero_de_placa)
-            ]
+            data = [reg
+                    for reg in data if (
+                        search_value in hipernormalize(reg.propietario)
+                        or search_value in hipernormalize(reg.marca)
+                        or search_value in hipernormalize(reg.serie)
+                        or search_value in hipernormalize(reg.modelo)
+                        or search_value in hipernormalize(reg.año)
+                        or search_value in hipernormalize(reg.clase)
+                        or search_value in hipernormalize(reg.tipo)
+                        or search_value in hipernormalize(reg.color)
+                        or search_value in hipernormalize(reg.vin)
+                        or search_value in hipernormalize(reg.numero_de_placa))
+                    ]
     toolbar = []
     toolbar.append({'type': 'search'})
     return render(

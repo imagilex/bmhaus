@@ -1,10 +1,12 @@
 from flujo.models import InstanciaFlujo
 
+
 def merge_flujo_acciones(instanciaflujo):
     historia = []
     last_h = None
     for h in instanciaflujo.historia.all():
-        if last_h is None or last_h['accion'].estado_final != h.accion.estado_final:
+        if (last_h is None
+                or last_h['accion'].estado_final != h.accion.estado_final):
             if last_h is not None:
                 historia.append(last_h)
             last_h = {

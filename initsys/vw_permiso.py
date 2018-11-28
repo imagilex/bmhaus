@@ -23,16 +23,17 @@ def index(request):
     if "POST" == request.method:
         if "search" == request.POST.get('action'):
             search_value = hipernormalize(request.POST.get('valor'))
-            data = [reg for reg in data if 
-                search_value in hipernormalize(reg.nombre) \
-                or search_value in hipernormalize(reg.mostrar_como) \
-                or search_value in hipernormalize(reg.descripcion) \
-                or search_value in hipernormalize(reg.vista) \
-                or search_value in hipernormalize(reg.permiso_padre) \
-                or search_value in hipernormalize(reg.name) \
-                or search_value in hipernormalize(reg.content_type) \
-                or search_value in hipernormalize(reg.codename)
-            ]
+            data = [reg
+                    for reg in data if (
+                        search_value in hipernormalize(reg.nombre)
+                        or search_value in hipernormalize(reg.mostrar_como)
+                        or search_value in hipernormalize(reg.descripcion)
+                        or search_value in hipernormalize(reg.vista)
+                        or search_value in hipernormalize(reg.permiso_padre)
+                        or search_value in hipernormalize(reg.name)
+                        or search_value in hipernormalize(reg.content_type)
+                        or search_value in hipernormalize(reg.codename))
+                    ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child(
             'permiso.agregar_permisos_permiso'):
@@ -182,11 +183,12 @@ def permission_index(request):
     if "POST" == request.method:
         if "search" == request.POST.get('action'):
             search_value = hipernormalize(request.POST.get('valor'))
-            data = [reg for reg in data if 
-                search_value in hipernormalize(reg.name) \
-                or search_value in hipernormalize(reg.content_type) \
-                or search_value in hipernormalize(reg.codename)
-            ]
+            data = [reg
+                    for reg in data if (
+                        search_value in hipernormalize(reg.name)
+                        or search_value in hipernormalize(reg.content_type)
+                        or search_value in hipernormalize(reg.codename))
+                    ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child('permiso.permisos_permiso'):
         toolbar.append({

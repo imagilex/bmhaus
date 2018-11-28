@@ -108,6 +108,7 @@ def unaccent(name):
     name = name.replace("Ü", "U")
     return name
 
+
 def clean_name(name, to_lower=True):
     """
     Limpia un nombre para generar un nombre inglés y sustituye los
@@ -191,6 +192,7 @@ def as_paragraph_fn(text):
     res = "<p>{}</p>".format(res)
     res = res.replace("<br /><br />", '</p><p>')
     return res
+
 
 def hipernormalize(text=None):
     if text is None:

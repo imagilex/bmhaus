@@ -56,18 +56,20 @@ def index(request):
                 usuario)
         elif "search" == request.POST.get('action'):
             search_value = hipernormalize(request.POST.get('valor'))
-            data = [reg for reg in data if 
-                search_value in hipernormalize(reg.usuario) \
-                or search_value in hipernormalize(reg.email) \
-                or search_value in hipernormalize(reg.telefono) \
-                or search_value in hipernormalize(reg.celular) \
-                or search_value in hipernormalize(reg.telefono_oficina) \
-                or search_value in hipernormalize(reg.first_name) \
-                or search_value in hipernormalize(reg.last_name) \
-                or search_value in hipernormalize(reg.apellido_materno) \
-                or search_value in hipernormalize(reg.razon_social) \
-                or search_value in hipernormalize(reg.rfc)
-            ]
+            data = [reg
+                    for reg in data if (
+                        search_value in hipernormalize(reg.usuario)
+                        or search_value in hipernormalize(reg.email)
+                        or search_value in hipernormalize(reg.telefono)
+                        or search_value in hipernormalize(reg.celular)
+                        or search_value in hipernormalize(reg.telefono_oficina)
+                        or search_value in hipernormalize(reg.first_name)
+                        or search_value in hipernormalize(reg.last_name)
+                        or search_value in hipernormalize(reg.apellido_materno)
+                        or search_value in hipernormalize(reg.razon_social)
+                        or search_value in hipernormalize(reg.rfc)
+                    )
+                    ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child('cliente.agregar_clientes_user'):
         toolbar.append({
@@ -105,8 +107,14 @@ def new(request):
             obj.groups.add(Group.objects.get(name='Cliente'))
             obj.save()
             if obj.email is not None and obj.email.strip() != "":
-                plain_mail = render(request,'app/email/cliente_new.txt',{'usuario': obj}).content.decode('utf-8')
-                html_mail = render(request,'app/email/cliente_new.html',{'usuario': obj}).content.decode('utf-8')
+                plain_mail = render(
+                    request,
+                    'app/email/cliente_new.txt',
+                    {'usuario': obj}).content.decode('utf-8')
+                html_mail = render(
+                    request,
+                    'app/email/cliente_new.html',
+                    {'usuario': obj}).content.decode('utf-8')
                 email = EmailMultiAlternatives(
                     "Bienvenido a BMhaus",
                     plain_mail,
@@ -253,10 +261,18 @@ def update(request, pk):
             obj.save()
             obj.groups.add(Group.objects.get(name='Cliente'))
             obj.save()
-            if data_original['email'] != obj.email or data_original['user'] != obj.usuario or data_original['password'] != obj.contraseña:
+            if (data_original['email'] != obj.email
+                    or data_original['user'] != obj.usuario
+                    or data_original['password'] != obj.contraseña):
                 if obj.email is not None and obj.email.strip() != "":
-                    plain_mail = render(request,'app/email/cliente_upd.txt',{'usuario': obj}).content.decode('utf-8')
-                    html_mail = render(request,'app/email/cliente_upd.html',{'usuario': obj}).content.decode('utf-8')
+                    plain_mail = render(
+                        request,
+                        'app/email/cliente_upd.txt',
+                        {'usuario': obj}).content.decode('utf-8')
+                    html_mail = render(
+                        request,
+                        'app/email/cliente_upd.html',
+                        {'usuario': obj}).content.decode('utf-8')
                     email = EmailMultiAlternatives(
                         "Actualización en Datos de Acceso a BMhaus",
                         plain_mail,

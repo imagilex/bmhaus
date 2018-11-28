@@ -135,13 +135,17 @@ def panel(request):
     ver_doctoordenreparacion = usuario.has_perm_or_has_perm_child(
         'doctoordenreparacion.'
         'doctoordenreparacion_docto orden reparacion') \
-        or usuario.has_perm_or_has_perm_child('doctoordenreparacion.'
-        'ver_orden_de_reparacion_docto orden reparacion')
+        or usuario.has_perm_or_has_perm_child(
+            'doctoordenreparacion.'
+            'ver_orden_de_reparacion_docto orden reparacion')
     ver_avancereparacion = usuario.has_perm_or_has_perm_child(
         'avanceenflujo.avanceenflujo_avance en flujo') \
         or usuario.has_perm_or_has_perm_child(
             'avanceenflujo.ver_avance_en_flujo_avance en flujo')
-    for alerta in usuario.alertas.filter(mostrar_alerta=True, fecha_alerta__lte=date.today(), alertado=False):
+    for alerta in usuario.alertas.filter(
+            mostrar_alerta=True,
+            fecha_alerta__lte=date.today(),
+            alertado=False):
         alerta.alertado = True
         alerta.fecha_alertado = date.today()
         alerta.updated_by = usuario
@@ -155,5 +159,6 @@ def panel(request):
             'data': data,
             'ver_doctoordenreparacion': ver_doctoordenreparacion,
             'ver_avancereparacion': ver_avancereparacion,
-            'alertas': usuario.alertas.filter(mostrar_alerta=True, fecha_alerta__lte=date.today()),
+            'alertas': usuario.alertas.filter(
+                mostrar_alerta=True, fecha_alerta__lte=date.today()),
         })

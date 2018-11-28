@@ -34,12 +34,14 @@ def index(request):
             data = Setting.objects.filter(es_multiple=False)
         elif "search" == request.POST.get('action'):
             search_value = hipernormalize(request.POST.get('valor'))
-            data = [reg for reg in data if 
-                search_value in hipernormalize(reg.seccion) \
-                or search_value in hipernormalize(reg.nombre) \
-                or search_value in hipernormalize(reg.nombre_para_mostrar) \
-                or search_value in hipernormalize(reg.tipo)
-            ]
+            data = [reg
+                    for reg in data if (
+                        search_value in hipernormalize(reg.seccion)
+                        or search_value in hipernormalize(reg.nombre)
+                        or search_value in hipernormalize(
+                            reg.nombre_para_mostrar)
+                        or search_value in hipernormalize(reg.tipo))
+                    ]
     toolbar = []
     toolbar.append({'type': 'search'})
     return render(
@@ -62,12 +64,14 @@ def index_adm(request):
     if "POST" == request.method:
         if "search" == request.POST.get('action'):
             search_value = hipernormalize(request.POST.get('valor'))
-            data = [reg for reg in data if 
-                search_value in hipernormalize(reg.seccion) \
-                or search_value in hipernormalize(reg.nombre) \
-                or search_value in hipernormalize(reg.nombre_para_mostrar) \
-                or search_value in hipernormalize(reg.tipo)
-            ]
+            data = [reg
+                    for reg in data if (
+                        search_value in hipernormalize(reg.seccion)
+                        or search_value in hipernormalize(reg.nombre)
+                        or search_value in hipernormalize(
+                            reg.nombre_para_mostrar)
+                        or search_value in hipernormalize(reg.tipo))
+                    ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child(
             'setting.agregar_settings_setting'):

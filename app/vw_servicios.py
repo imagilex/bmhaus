@@ -316,11 +316,15 @@ def index(request):
     if "POST" == request.method:
         if "search" == request.POST.get('action'):
             search_value = hipernormalize(request.POST.get('valor'))
-            data = [reg for reg in data if
-                search_value in hipernormalize(reg['vehiculo']) \
-                or search_value in hipernormalize(reg['vehiculo'].propietario) \
-                or search_value in hipernormalize(reg['instancia'].estado_actual)
-            ]
+            data = [reg
+                    for reg in data if (
+                        search_value in hipernormalize(reg['vehiculo'])
+                        or search_value
+                        in hipernormalize(reg['vehiculo'].propietario)
+                        or search_value
+                        in hipernormalize(reg['instancia'].estado_actual)
+                    )
+                    ]
     toolbar = []
     toolbar.append({'type': 'search'})
     return render(
@@ -359,12 +363,14 @@ def see(request, pk):
     ver_doctoordenreparacion = usuario.has_perm_or_has_perm_child(
         'doctoordenreparacion.'
         'doctoordenreparacion_docto orden reparacion') or \
-        usuario.has_perm_or_has_perm_child('doctoordenreparacion.'
-        'ver_orden_de_reparacion_docto orden reparacion')
+        usuario.has_perm_or_has_perm_child(
+            'doctoordenreparacion.'
+            'ver_orden_de_reparacion_docto orden reparacion')
     ver_avancereparacion = usuario.has_perm_or_has_perm_child(
         'avanceenflujo.avanceenflujo_avance en flujo') or \
-        usuario.has_perm_or_has_perm_child('avanceenflujo.'
-        'ver_avance_en_flujo_avance en flujo')
+        usuario.has_perm_or_has_perm_child(
+            'avanceenflujo.'
+            'ver_avance_en_flujo_avance en flujo')
     actualizar_avancereparacion = usuario.has_perm_or_has_perm_child(
         'avanceenflujo.actualizar_avance_en_flujo_avance en flujo')
     eliminar_avancereparacion = usuario.has_perm_or_has_perm_child(

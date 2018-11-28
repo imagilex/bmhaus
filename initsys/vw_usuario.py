@@ -27,14 +27,15 @@ def index(request):
     if "POST" == request.method:
         if "search" == request.POST.get('action'):
             search_value = hipernormalize(request.POST.get('valor'))
-            data = [reg for reg in data if 
-                search_value in hipernormalize(reg.usuario) \
-                or search_value in hipernormalize(reg.email) \
-                or search_value in hipernormalize(reg.telefono) \
-                or search_value in hipernormalize(reg.celular) \
-                or search_value in hipernormalize(reg.first_name) \
-                or search_value in hipernormalize(reg.last_name)
-            ]
+            data = [reg
+                    for reg in data if (
+                        search_value in hipernormalize(reg.usuario)
+                        or search_value in hipernormalize(reg.email)
+                        or search_value in hipernormalize(reg.telefono)
+                        or search_value in hipernormalize(reg.celular)
+                        or search_value in hipernormalize(reg.first_name)
+                        or search_value in hipernormalize(reg.last_name))
+                    ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child('usr.agregar_usuarios_user'):
         toolbar.append({
@@ -188,12 +189,13 @@ def user_index(request):
     if "POST" == request.method:
         if "search" == request.POST.get('action'):
             search_value = hipernormalize(request.POST.get('valor'))
-            data = [reg for reg in data if 
-                search_value in hipernormalize(reg.username) \
-                or search_value in hipernormalize(reg.email) \
-                or search_value in hipernormalize(reg.first_name) \
-                or search_value in hipernormalize(reg.last_name)
-            ]
+            data = [reg
+                    for reg in data if (
+                        search_value in hipernormalize(reg.username)
+                        or search_value in hipernormalize(reg.email)
+                        or search_value in hipernormalize(reg.first_name)
+                        or search_value in hipernormalize(reg.last_name))
+                    ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child('usr.usuarios_user'):
         toolbar.append({

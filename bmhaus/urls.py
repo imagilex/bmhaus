@@ -20,7 +20,10 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from initsys import views, vw_permiso, vw_usuario, vw_perfil, vw_settings
-from app import vw_cliente, vw_vehiculo, vw_servicios, vw_doctoordenreparacion
+from app import (
+    vw_cliente, vw_vehiculo, vw_servicios, vw_doctoordenreparacion)
+from inventario import (
+    vw_pieza, vw_proveedor, vw_ordendecompra, vw_ordendeentrada)
 
 urlpatterns = [
     # Base urls
@@ -256,6 +259,95 @@ urlpatterns = [
         'orden-de-reparacion/eliminar/<pk>/',
         vw_doctoordenreparacion.delete,
         name="doctoordenreparacion_delete"),
+
+    # Piezas
+    path(
+        'refaccion/actualizar/<pk>/',
+        vw_pieza.update,
+        name='pieza_update'),
+    path(
+        'refaccion/eliminar/<pk>/',
+        vw_pieza.delete,
+        name='pieza_delete'),
+    path(
+        'refaccion/nuevo/',
+        vw_pieza.new,
+        name='pieza_new'),
+    path(
+        'refaccion/<pk>/',
+        vw_pieza.see,
+        name='pieza_see'),
+    path(
+        'refacciones/',
+        vw_pieza.index,
+        name='pieza_index'),
+
+    # Proveedores
+    path(
+        'proveedor/actualizar/<pk>/',
+        vw_proveedor.update,
+        name='proveedor_update'),
+    path(
+        'proveedor/eliminar/<pk>/',
+        vw_proveedor.delete,
+        name='proveedor_delete'),
+    path(
+        'proveedor/nuevo/',
+        vw_proveedor.new,
+        name='proveedor_new'),
+    path(
+        'proveedor/<pk>/',
+        vw_proveedor.see,
+        name='proveedor_see'),
+    path(
+        'proveedores/',
+        vw_proveedor.index,
+        name='proveedor_index'),
+
+    # Órdenes de Compra
+    path(
+        'orden-de-compra/actualizar/<pk>/',
+        vw_ordendecompra.update,
+        name='ordendecompra_update'),
+    path(
+        'orden-de-compra/eliminar/<pk>/',
+        vw_ordendecompra.delete,
+        name='ordendecompra_delete'),
+    path(
+        'orden-de-compra/nueva/',
+        vw_ordendecompra.new,
+        name='ordendecompra_new'),
+    path(
+        'orden-de-compra/<pk>/',
+        vw_ordendecompra.see,
+        name='ordendecompra_see'),
+    path(
+        'ordenes-de-compra/',
+        vw_ordendecompra.index,
+        name='ordendecompra_index'),
+
+    # Órdenes de Entrada
+    path(
+        'orden-de-entrada/actualizar/<pk>/',
+        vw_ordendeentrada.update,
+        name='ordendeentrada_update'),
+    path(
+        'orden-de-entrada/eliminar/<pk>/',
+        vw_ordendeentrada.delete,
+        name='ordendeentrada_delete'),
+    path(
+        'orden-de-entrada/nueva/',
+        vw_ordendeentrada.new,
+        name='ordendeentrada_new'),
+    path(
+        'orden-de-entrada/<pk>/',
+        vw_ordendeentrada.see,
+        name='ordendeentrada_see'),
+    path(
+        'ordenes-de-entrada/',
+        vw_ordendeentrada.index,
+        name='ordendeentrada_index'),
+
 ]
 
 urlpatterns += static(

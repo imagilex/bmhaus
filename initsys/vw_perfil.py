@@ -18,9 +18,10 @@ def index(request):
     if "POST" == request.method:
         if "search" == request.POST.get('action'):
             search_value = hipernormalize(request.POST.get('valor'))
-            data = [reg for reg in data if 
-                search_value in hipernormalize(reg.name)
-            ]
+            data = [reg
+                    for reg in data if search_value in hipernormalize(
+                        reg.name)
+                    ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child('group.agregar_perfiles_group'):
         toolbar.append({

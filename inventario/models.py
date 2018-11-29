@@ -49,6 +49,8 @@ class Pieza(models.Model):
         max_digits=13, decimal_places=6, default=0.0)
     porcentaje_de_iva = models.DecimalField(
         max_digits=4, decimal_places=2, default=16.0)
+    minimo_inventario = models.PositiveSmallIntegerField(default=0)
+    maximo_inventario = models.PositiveSmallIntegerField(default=0)
     proveedores = models.ManyToManyField(
         Proveedor, through='Proveedor_Piezas',
         through_fields=('pieza', 'proveedor'),

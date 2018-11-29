@@ -13,6 +13,8 @@ class FrmPieza(forms.ModelForm):
             'modelo',
             'precio',
             'porcentaje_de_iva',
+            'minimo_inventario',
+            'maximo_inventario',
             'claveprodserv',
             'claveunidad',
             'impuesto',
@@ -24,6 +26,12 @@ class FrmPieza(forms.ModelForm):
             'claveunidad': 'Clave de la Unidad',
             'impuesto': 'Impuesto',
             'tipofactor': 'Tipo de Factor',
+            'minimo_inventario': 'Número mínimo de piezas en inventario',
+            'maximo_inventario': 'Número máxmio de piezas en inventario',
+        }
+        help_texts = {
+            'minimo_inventario': '0 para desactivar',
+            'maximo_inventario': '0 para desactivar',
         }
 
 

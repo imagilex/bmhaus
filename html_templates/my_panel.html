@@ -20,12 +20,17 @@
 </div>
 {% endfor %}
 
-<h3>{{usuario}}</h3>
+<!--<h3>{{usuario}}</h3>-->
 
 
 
 {% if data %}
-<h5>Tu servicio:</h5>
+<!--<h5>Tu servicio:</h5>-->
+
+<div class="text-center">
+    <canvas id="service-indicator"></canvas>
+    <script src="{% static 'api/js/speedometer.js' %}"></script>
+</div>
 
 <div class="row current-service">
     <div class="col-sm-6">
@@ -43,7 +48,7 @@
     </div>
 </div>
 
-<div class="progress">
+<!--<div class="progress">
     <div role="progressbar" aria-valuenow="{{ data.instanciaflujo.estado_actual.porcentaje }}" aria-valuemin="0" aria-valuemax="100" 
         {% if data.instanciaflujo.estado_actual.es_final %}
             class="progress-bar progress-bar-striped bg-success" 
@@ -55,7 +60,7 @@
         style="width: {{ data.instanciaflujo.estado_actual.porcentaje }}%" >
         {{ data.instanciaflujo.estado_actual.porcentaje | floatformat:0 }}%
     </div>
-</div>
+</div>-->
 
 <p></p>
 
@@ -166,5 +171,10 @@
     </div>
 
 </div>
+
+<script type="text/javascript">
+    let speedometer = new Speedometer( 140, "service-indicator" );
+    speedometer.animate( {{ data.instanciaflujo.estado_actual.porcentaje }} );
+</script>
 
 {% endblock %}

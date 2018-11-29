@@ -254,7 +254,7 @@
         });
     {% else %}
         $(function() {
-            $( "div.screen-spacer").height( $( "#video-splash" ).offset().top + $( "#video-splash" ).height() );
+            $( "div.screen-spacer").height( $(window).height() - 100 );
             $( "#video-splash" )[ 0 ].onended = function() {
                 window.setTimeout( 
                     function() { 

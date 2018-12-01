@@ -1,0 +1,48 @@
+{% extends "global/html_struct.html" %}
+{% load util_filters %}
+{% load humanize %}
+{% load i18n %}
+
+{% block content %}
+
+<table class="table table-striped table-sm table-responsive-md">
+    <thead>
+        <tr>
+            <th>Refacción</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th class="text-right" colspan="3"></th>
+        </tr>
+    </thead>
+    <tbody id="data-tbl">
+        {% for reg in data %}
+            <tr>
+                <td>{{ reg.nombre | ifNone }}</td>
+                <td>{{ reg.marca | ifNone }}</td>
+                <td>{{ reg.modelo | ifNone }}</td>
+                <td>{{ reg.precio | money2display }}</td>
+                <td>{{ reg.cantidadEnInventario | intcomma }}</td>
+                <td class="text-center">
+                    {% if perms.inventario.refacciones_pieza %}
+                    <a href="{% url 'pieza_see' pk=reg.pk %}" class="btn btn-outline-secondary" title="Ver"><i class="far fa-eye"></i></a>
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if perms.inventario.actualizar_refacciones_pieza %}
+                    <a href="{% url 'pieza_update' pk=reg.pk %}" class="btn btn-outline-secondary" title="Actualizar"><i class="far fa-edit"></i></a>
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if perms.inventario.eliminar_refacciones_pieza %}
+                    <a href="{% url 'pieza_delete' pk=reg.pk %}" class="btn btn-outline-secondary" title="Eliminar"><i class="far fa-trash-alt"></i></a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+        

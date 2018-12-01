@@ -1,0 +1,39 @@
+{% extends "global/html_struct.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-8 offset-md-2">
+        <form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
+            {% csrf_token %}
+            {{ frm | crispy }}
+            <h5>Refacciones</h5>
+
+            <table class="table table-striped table-sm table-responsive-md">
+                <thead>
+                    <tr>
+                        <th>Refacción</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody id="data-tbl">
+                    {% for pza in piezas %}
+                        <tr>
+                            <td>
+                                {{ pza.pieza }}
+                            </td>
+                            <td>
+                                <input type="number" value="{{ pza.cantidad }}" class="form-control" name="pza-cant-{{ pza.pk }}" id="pza-cant-{{ pza.pk }}" />
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <button type="submit" class="btn btn-outline-primary" id="btn-save" >Guardar</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

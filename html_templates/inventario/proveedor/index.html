@@ -1,0 +1,46 @@
+{% extends "global/html_struct.html" %}
+{% load util_filters %}
+
+{% block content %}
+
+<table class="table table-striped table-sm table-responsive-md">
+    <thead>
+        <tr>
+            <th>Razon Social</th>
+            <th>Nombre</th>
+            <th>RFC</th>
+            <th>Teléfono</th>
+            <th>Extension</th>
+            <th class="text-right" colspan="3"></th>
+        </tr>
+    </thead>
+    <tbody id="data-tbl">
+        {% for reg in data %}
+            <tr>
+                <td>{{ reg.razon_social | ifNone }}</td>
+                <td>{{ reg.nombre | ifNone }}</td>
+                <td>{{ reg.rfc | ifNone }}</td>
+                <td>{{ reg.telefono | ifNone }}</td>
+                <td>{{ reg.extension | ifNone }}</td>
+                <td class="text-center">
+                    {% if perms.inventario.proveedores_proveedor %}
+                    <a href="{% url 'proveedor_see' pk=reg.pk %}" class="btn btn-outline-secondary" title="Ver"><i class="far fa-eye"></i></a>
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if perms.inventario.actualizar_proveedores_proveedor %}
+                    <a href="{% url 'proveedor_update' pk=reg.pk %}" class="btn btn-outline-secondary" title="Actualizar"><i class="far fa-edit"></i></a>
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if perms.inventario.eliminar_proveedores_proveedor %}
+                    <a href="{% url 'proveedor_delete' pk=reg.pk %}" class="btn btn-outline-secondary" title="Eliminar"><i class="far fa-trash-alt"></i></a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+        

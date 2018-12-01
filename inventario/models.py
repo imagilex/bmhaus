@@ -1,9 +1,25 @@
 from django.db import models
 
-from datetime import datetime
+from datetime import datetime, date
 
 from initsys.models import Usr, Direccion
 from cfdi.models import OpcionCatalogoSAT
+
+
+def newIdentificadorForOrdenDeCompra():
+    today = datetime.now()
+    res = "OC-" + today.strftime("%y%m") + "-"
+    res += "{:03d}".format(OrdenDeCompra.objects.filter(
+        identificador__startswith=res).count() + 1)
+    return res
+
+
+def newIdentificadorForOrdenDeEntrada():
+    today = datetime.now()
+    res = "OE-" + today.strftime("%y%m") + "-"
+    res += "{:03d}".format(OrdenDeEntrada.objects.filter(
+        identificador__startswith=res).count() + 1)
+    return res
 
 # Create your models here.
 
@@ -94,6 +110,9 @@ class Pieza(models.Model):
     def __unicode__(self):
         return self.__str__()
 
+    def cantidadEnInventario(self):
+        return 150
+
 
 class Proveedor_Piezas(models.Model):
     idproveedor_piezas = models.AutoField(primary_key=True)
@@ -120,10 +139,11 @@ class Proveedor_Piezas(models.Model):
 
 class OrdenDeCompra(models.Model):
     idordendecompra = models.AutoField(primary_key=True)
+    identificador = models.CharField(max_length=50, blank=True)
     proveedor = models.ForeignKey(
         Proveedor, on_delete=models.PROTECT,
         related_name="ordenesdecompra")
-    fecha = models.DateField(default=datetime.today)
+    fecha = models.DateField(default=date.today)
     piezas = models.ManyToManyField(
         Pieza, through='Piezas_OrdenDeCompra',
         through_fields=('ordendecompra', 'pieza'),
@@ -142,7 +162,7 @@ class OrdenDeCompra(models.Model):
 
     def __str__(self):
         return "({}) {} - {}".format(
-            self.idordendecompra, self.proveedor, self.fecha)
+            self.identificador, self.proveedor, self.fecha)
 
     def __unicode__(self):
         return self.__str__()
@@ -150,9 +170,14 @@ class OrdenDeCompra(models.Model):
 
 class Piezas_OrdenDeCompra(models.Model):
     idpiezas_ordendecompra = models.AutoField(primary_key=True)
-    pieza = models.ForeignKey(Pieza, on_delete=models.CASCADE)
+    pieza = models.ForeignKey(
+        Pieza,
+        on_delete=models.CASCADE,
+        related_name="ordenesdecompra_en_que_se_requiere")
     ordendecompra = models.ForeignKey(
-        OrdenDeCompra, on_delete=models.CASCADE)
+        OrdenDeCompra,
+        on_delete=models.CASCADE,
+        related_name="piezas_requeridas")
     cantidad = models.PositiveSmallIntegerField(default=0)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL,
@@ -175,10 +200,11 @@ class Piezas_OrdenDeCompra(models.Model):
 
 class OrdenDeEntrada(models.Model):
     idordendeentrada = models.AutoField(primary_key=True)
+    identificador = models.CharField(max_length=50, blank=True)
     proveedor = models.ForeignKey(
         Proveedor, on_delete=models.PROTECT,
         related_name="ordenesdeentrada")
-    fecha = models.DateField(default=datetime.today)
+    fecha = models.DateField(default=date.today)
     piezas = models.ManyToManyField(
         Pieza, through='Piezas_OrdenDeEntrada',
         through_fields=('ordendeentrada', 'pieza'),
@@ -200,7 +226,7 @@ class OrdenDeEntrada(models.Model):
 
     def __str__(self):
         return "({}) {} - {}".format(
-            self.idordendecompra, self.proveedor, self.fecha)
+            self.identificador, self.proveedor, self.fecha)
 
     def __unicode__(self):
         return self.__str__()

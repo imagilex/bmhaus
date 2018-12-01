@@ -253,7 +253,6 @@ def update(request, pk):
             obj = frm.save(commit=False)
             obj.username = obj.usuario
             obj.set_password(obj.contraseña)
-            obj.created_by = usuario
             obj.updated_by = usuario
             if request.FILES.get('fotografia'):
                 obj.fotografia = move_uploaded_file(

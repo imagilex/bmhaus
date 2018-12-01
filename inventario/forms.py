@@ -69,12 +69,40 @@ class FrmOrdenDeCompra(forms.ModelForm):
             'fecha': forms.TextInput(attrs={'type': 'date'}),
         }
 
+class FrmOrdenDeCompraSee(forms.ModelForm):
+
+    class Meta:
+        model = OrdenDeCompra
+        fields = [
+            'identificador',
+            'proveedor',
+            'fecha',
+        ]
+        widgets = {
+            'fecha': forms.TextInput(attrs={'type': 'date'}),
+        }
+
 
 class FrmOrdenDeEntrada(forms.ModelForm):
 
     class Meta:
         model = OrdenDeEntrada
         fields = [
+            'proveedor',
+            'fecha',
+            'orden_de_compra',
+        ]
+        widgets = {
+            'fecha': forms.TextInput(attrs={'type': 'date'}),
+        }
+
+
+class FrmOrdenDeEntradaSee(forms.ModelForm):
+
+    class Meta:
+        model = OrdenDeEntrada
+        fields = [
+            'identificador',
             'proveedor',
             'fecha',
             'orden_de_compra',

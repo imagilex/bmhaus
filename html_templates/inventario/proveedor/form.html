@@ -1,0 +1,53 @@
+{% extends "global/html_struct.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-sm-4 offset-md-2">
+            {% if titulo_frm_1 %}<h5>{{ titulo_frm_1 }}</h5>{% endif %}
+            {{ frm | crispy }}
+        </div>
+        <div class="col-sm-4">
+            {% if titulo_frm_2 %}<h5>{{ titulo_frm_2 }}</h5>{% endif %}
+            {{ frm2 | crispy }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8 offset-md-2">
+
+        <h5>Refacciones <small>que surte este proveedor</small></h5>
+        
+        </div>
+    </div>
+
+    <div class="row">
+        {% for pza in piezas %}
+            <div class="col-sm-4 {% if not forloop.counter|divisibleby:2 %}offset-md-2{% endif %}">
+                <label for="pzas{{ pza.pk }}">
+                    {% if pza in piezas_que_surte %}
+                        <input type="checkbox" checked="checked" name="pzas" id="pzas{{ pza.pk }}" value="{{ pza.pk }}" />
+                    {% else %}
+                        <input type="checkbox" name="pzas" id="pzas{{ pza.pk }}" value="{{ pza.pk }}" />
+                    {% endif %}
+                    {{ pza }}
+                </label>
+            </div>
+            {% empty %}
+            <div class="col-sm-8 offset-sm-2">
+                No hay piezas
+            </div>
+        {% endfor %}
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-8 offset-md-2">
+            <button type="submit" class="btn btn-outline-primary" id="btn-save" >Guardar</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

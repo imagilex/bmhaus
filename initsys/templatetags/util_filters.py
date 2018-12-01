@@ -49,3 +49,8 @@ def get_setting(sectionvalue):
 @register.filter
 def keyvalue(dict, key):
     return dict[key]
+
+
+@register.filter
+def ifNone(value, default=""):
+    return value or default

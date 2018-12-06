@@ -15,6 +15,8 @@
                     <tr>
                         <th>Refacción</th>
                         <th>Cantidad</th>
+                        <th>Costo</th>
+                        <th>Importe</th>
                     </tr>
                 </thead>
                 <tbody id="data-tbl">
@@ -25,7 +27,13 @@
                                 <span class="pza{% for prov in proveedores %}{% if pza in prov.piezas.all %} prov-{{ prov.pk }}{% endif %}{% endfor %}"></span>
                             </td>
                             <td>
-                                <input type="number" class="form-control" name="pza-cant-{{ pza.pk }}" id="pza-cant-{{ pza.pk }}" value="{% for pza_req in piezas_requeridas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.cantidad}}{% endif %}{% endfor %}" />
+                                <input type="number" class="form-control" name="pza-cant-{{ pza.pk }}" id="pza-cant-{{ pza.pk }}" value="{% for pza_req in piezas_entradas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.cantidad}}{% endif %}{% endfor %}" onchange="calculaImporte({{ pza.pk }})" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" name="pza-costo-{{ pza.pk }}" id="pza-costo-{{ pza.pk }}" value="{% for pza_req in piezas_entradas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.costo}}{% endif %}{% endfor %}" onchange="calculaImporte({{ pza.pk }})" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" name="pza-importe-{{ pza.pk }}" id="pza-importe-{{ pza.pk }}" value="{% for pza_req in piezas_entradas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.importe}}{% endif %}{% endfor %}" />
                             </td>
                         </tr>
                     {% endfor %}
@@ -51,6 +59,24 @@
     $( "#id_proveedor" ).change( setPzasProvIndicador );
     if( "" != $( "#id_proveedor" ).val() ) {
         setPzasProvIndicador();
+    }
+    let calculaImporte = (idpza) => {
+        let cantidad = parseFloat( $( "#pza-cant-" + idpza ).val() );
+        let costo = parseFloat( $( "#pza-costo-" + idpza ).val() );
+        let importe = costo * cantidad;
+        if( !isNaN( cantidad ) ) {
+            $( "#pza-cant-" + idpza )[0].value = cantidad.asMoney();
+        } else {
+            $( "#pza-importe-" + idpza )[0].value = '';
+        }
+        if( !isNaN( costo ) ) {
+            $( "#pza-costo-" + idpza )[0].value = costo.asMoney();
+        } else {
+            $( "#pza-importe-" + idpza )[0].value = '';
+        }
+        if( !isNaN( importe ) ) {
+            $( "#pza-importe-" + idpza )[0].value = importe.asMoney();
+        }
     }
 </script>
 

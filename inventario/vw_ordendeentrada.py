@@ -3,11 +3,16 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.db.models import ProtectedError
 
-from .models import OrdenDeEntrada, newIdentificadorForOrdenDeEntrada, Pieza
+from .models import (
+    OrdenDeEntrada,
+    newIdentificadorForOrdenDeEntrada,
+    Pieza,
+    Proveedor,
+    Piezas_OrdenDeEntrada)
 from .forms import FrmOrdenDeEntrada, FrmOrdenDeEntradaSee
 from initsys.models import Usr
 from routines.mkitsafe import valida_acceso
-from routines.utils import hipernormalize
+from routines.utils import hipernormalize, truncate, requires_jquery_ui
 
 
 @valida_acceso(['pieza.ordenes_de_entrada_pieza'])
@@ -23,7 +28,8 @@ def index(request):
                 )
                 ]
     toolbar = []
-    if usuario.has_perm_or_has_perm_child('ordendeentrada.agregar_ordenes_de_entrada_orden de entrada'):
+    if usuario.has_perm_or_has_perm_child(
+            'ordendeentrada.agregar_ordenes_de_entrada_orden de entrada'):
         toolbar.append({
             'type': 'link',
             'view': 'ordendeentrada_new',
@@ -39,9 +45,16 @@ def index(request):
             'toolbar': toolbar,
             'search_value': search_value,
             'permiso': {
-                'ver': usuario.has_perm_or_has_perm_child('ordendeentrada.ordenes_de_entrada_pieza'),
-                'actualizar': usuario.has_perm_or_has_perm_child('ordendeentrada.actualizar_ordenes_de_entrada_orden de entrada'),
-                'eliminar': usuario.has_perm_or_has_perm_child('ordendeentrada.eliminar_ordenes_de_entrada_orden de entrada'),
+                'ver': usuario.has_perm_or_has_perm_child(
+                    'pieza.ordenes_de_entrada_pieza'),
+                'actualizar': usuario.has_perm_or_has_perm_child(
+                    'ordendeentrada.'
+                    'actualizar_ordenes_de_entrada_orden de entrada'
+                    ),
+                'eliminar': usuario.has_perm_or_has_perm_child(
+                    'ordendeentrada.'
+                    'eliminar_ordenes_de_entrada_orden de entrada'
+                    ),
             }
             })
 
@@ -58,14 +71,30 @@ def new(request):
             obj.created_by = usuario
             obj.updated_by = usuario
             obj.save()
-        return HttpResponseRedirect(reverse(
-            'ordendeentrada_see', kwargs={'pk': obj.pk}))
-    return render(request, 'inventario/ordendecompra/form.html', {
+            for pza in Pieza.objects.all():
+                cant = request.POST.get("pza-cant-{}".format(pza.pk))
+                costo = request.POST.get("pza-costo-{}".format(pza.pk))
+                importe = request.POST.get("pza-importe-{}".format(pza.pk))
+                if cant and costo and importe:
+                    Piezas_OrdenDeEntrada.objects.create(
+                        pieza=pza,
+                        ordendeentrada=obj,
+                        cantidad=truncate(cant),
+                        costo=float(costo),
+                        importe=float(importe),
+                        created_by=usuario,
+                        updated_by=usuario
+                    )
+            return HttpResponseRedirect(reverse(
+                'ordendeentrada_see', kwargs={'pk': obj.pk}))
+    return render(request, 'inventario/ordendeentrada/form.html', {
         'menu_main': usuario.main_menu_struct(),
         'titulo': 'Órden de Entrada',
         'titulo_descripcion': 'Nueva',
         'frm': frm,
         'piezas': list(Pieza.objects.all()),
+        'proveedores': list(Proveedor.objects.all()),
+        'req_ui': requires_jquery_ui(request),
     })
 
 
@@ -97,14 +126,18 @@ def see(request, pk):
             'view': 'ordendeentrada_delete',
             'label': '<i class="far fa-trash-alt"></i> Eliminar',
             'pk': pk})
-    return render(request, 'inventario/ordendecompra/form.html', {
+    return render(request, 'inventario/ordendeentrada/see.html', {
         'menu_main': usuario.main_menu_struct(),
         'titulo': 'Órden de Entrada',
         'titulo_descripcion': obj,
         'read_only': True,
         'frm': frm,
         'toolbar': toolbar,
+        'piezas': list(obj.piezas_entradas.all()),
+        'obj': obj,
+        'req_ui': requires_jquery_ui(request),
         })
+
 
 @valida_acceso([
     'ordendeentrada.actualizar_ordenes_de_entrada_orden de entrada'])
@@ -113,6 +146,40 @@ def update(request, pk):
     if not OrdenDeEntrada.objects.filter(pk=pk).exists():
         return HttpResponseRedirect(reverse(
             'item_no_encontrado'))
+    obj = OrdenDeEntrada.objects.get(pk=pk)
+    frm = FrmOrdenDeEntrada(instance=obj, data=request.POST or None)
+    if 'POST' == request.method:
+        if frm.is_valid():
+            obj = frm.save(commit=False)
+            obj.updated_by = usuario
+            obj.save()
+            Piezas_OrdenDeEntrada.objects.filter(ordendeentrada=obj).delete()
+            for pza in Pieza.objects.all():
+                cant = request.POST.get("pza-cant-{}".format(pza.pk))
+                costo = request.POST.get("pza-costo-{}".format(pza.pk))
+                importe = request.POST.get("pza-importe-{}".format(pza.pk))
+                if cant and costo and importe:
+                    Piezas_OrdenDeEntrada.objects.create(
+                        pieza=pza,
+                        ordendeentrada=obj,
+                        cantidad=truncate(cant),
+                        costo=float(costo),
+                        importe=float(importe),
+                        created_by=usuario,
+                        updated_by=usuario
+                    )
+            return HttpResponseRedirect(reverse(
+                'ordendeentrada_see', kwargs={'pk': obj.pk}))
+    return render(request, 'inventario/ordendeentrada/form.html', {
+        'menu_main': usuario.main_menu_struct(),
+        'titulo': 'Órden de Entrada',
+        'titulo_descripcion': obj,
+        'frm': frm,
+        'piezas': list(Pieza.objects.all()),
+        'proveedores': list(Proveedor.objects.all()),
+        'piezas_entradas': list(obj.piezas_entradas.all()),
+        'req_ui': requires_jquery_ui(request),
+    })
 
 
 @valida_acceso([

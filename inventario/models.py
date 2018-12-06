@@ -1,6 +1,7 @@
 from django.db import models
 
 from datetime import datetime, date
+from decimal import Decimal
 
 from initsys.models import Usr, Direccion
 from cfdi.models import OpcionCatalogoSAT
@@ -111,7 +112,17 @@ class Pieza(models.Model):
         return self.__str__()
 
     def cantidadEnInventario(self):
-        return 150
+        return self.entradas() - self.salidas()
+
+    def entradas(self):
+        res = 0
+        for oep in self.ordenes_de_entrada_en_que_llega.all():
+            res += oep.cantidad
+        return res
+
+    def salidas(self):
+        res = 0
+        return res
 
 
 class Proveedor_Piezas(models.Model):
@@ -231,12 +242,29 @@ class OrdenDeEntrada(models.Model):
     def __unicode__(self):
         return self.__str__()
 
+    def piezas_total(self):
+        res = Decimal(0.0)
+        for pza in self.piezas_entradas.all():
+            res += pza.cantidad
+        return res
+
+    def importe_total(self):
+        res = Decimal(0.0)
+        for pza in self.piezas_entradas.all():
+            res += pza.importe
+        return res
+
 
 class Piezas_OrdenDeEntrada(models.Model):
     idpiezas_ordendeentrada = models.AutoField(primary_key=True)
-    pieza = models.ForeignKey(Pieza, on_delete=models.CASCADE)
+    pieza = models.ForeignKey(
+        Pieza,
+        on_delete=models.CASCADE,
+        related_name='ordenes_de_entrada_en_que_llega')
     ordendeentrada = models.ForeignKey(
-        OrdenDeEntrada, on_delete=models.CASCADE)
+        OrdenDeEntrada,
+        on_delete=models.CASCADE,
+        related_name="piezas_entradas")
     cantidad = models.PositiveSmallIntegerField(default=0)
     costo = models.DecimalField(
         max_digits=13, decimal_places=6, default=0.0)

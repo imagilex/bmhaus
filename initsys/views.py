@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.staticfiles import finders
 from django.conf import settings
+from django.db import connection
 
 from random import shuffle
 from datetime import date
@@ -162,3 +163,34 @@ def panel(request):
             'alertas': usuario.alertas.filter(
                 mostrar_alerta=True, fecha_alerta__lte=date.today()),
         })
+
+
+@valida_acceso()
+def sql(request):
+    'https://docs.djangoproject.com/en/2.1/topics/db/sql/'
+    usuario = Usr.objects.filter(id=request.user.pk)[0]
+    sql = ""
+    getrows = True
+    rows = False
+    header = False
+    error = False
+    if "POST" == request.method:
+        sql = request.POST.get('sql')
+        getrows = request.POST.get('getrows') == 'yes'
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute(sql)
+                if getrows:
+                    rows = cursor.fetchall()
+                    header = [c[0] for c in cursor.description ]
+            except Exception as e:
+                error = "{}".format( e )
+    return render(request,'sql.html',{
+        'menu_main': usuario.main_menu_struct(),
+        'titulo': 'SQL',
+        'sql': sql,
+        'getrows': getrows,
+        'rows': rows,
+        'header': header,
+        'error': error,
+    })

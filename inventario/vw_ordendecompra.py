@@ -7,11 +7,12 @@ from .models import (
     OrdenDeCompra,
     newIdentificadorForOrdenDeCompra,
     Pieza,
-    Piezas_OrdenDeCompra)
+    Piezas_OrdenDeCompra,
+    Proveedor)
 from .forms import FrmOrdenDeCompra, FrmOrdenDeCompraSee
 from initsys.models import Usr
 from routines.mkitsafe import valida_acceso
-from routines.utils import hipernormalize
+from routines.utils import hipernormalize, truncate, requires_jquery_ui
 
 
 @valida_acceso(['pieza.ordenes_de_compra_pieza'])
@@ -23,11 +24,13 @@ def index(request):
         search_value = hipernormalize(request.POST.get('valor'))
         data = [reg
                 for reg in data if(
-                    search_value in hipernormalize(reg.proveedor)
+                    search_value in hipernormalize(reg.identificador)
+                    or search_value in hipernormalize(reg.proveedor)
                 )
                 ]
     toolbar = []
-    if usuario.has_perm_or_has_perm_child('ordendecompra.agregar_ordenes_de_compra_orden de compra'):
+    if usuario.has_perm_or_has_perm_child(
+            'ordendecompra.agregar_ordenes_de_compra_orden de compra'):
         toolbar.append({
             'type': 'link',
             'view': 'ordendecompra_new',
@@ -43,9 +46,17 @@ def index(request):
             'toolbar': toolbar,
             'search_value': search_value,
             'permiso': {
-                'ver': usuario.has_perm_or_has_perm_child('pieza.ordenes_de_compra_pieza'),
-                'actualizar': usuario.has_perm_or_has_perm_child('ordendecompra.actualizar_ordenes_de_compra_orden de compra'),
-                'eliminar': usuario.has_perm_or_has_perm_child('ordendecompra.eliminar_ordenes_de_compra_orden de compra'),
+                'ver': usuario.has_perm_or_has_perm_child(
+                    'pieza.ordenes_de_compra_pieza'
+                    ),
+                'actualizar': usuario.has_perm_or_has_perm_child(
+                    'ordendecompra.'
+                    'actualizar_ordenes_de_compra_orden de compra'
+                    ),
+                'eliminar': usuario.has_perm_or_has_perm_child(
+                    'ordendecompra.'
+                    'eliminar_ordenes_de_compra_orden de compra'
+                    ),
             }
             })
 
@@ -67,7 +78,7 @@ def new(request):
                     Piezas_OrdenDeCompra.objects.create(
                         pieza=pza,
                         ordendecompra=obj,
-                        cantidad=int(cant),
+                        cantidad=truncate(cant),
                         created_by=usuario,
                         updated_by=usuario
                     )
@@ -79,6 +90,8 @@ def new(request):
         'titulo_descripcion': 'Nueva',
         'frm': frm,
         'piezas': list(Pieza.objects.all()),
+        'proveedores': list(Proveedor.objects.all()),
+        'req_ui': requires_jquery_ui(request),
     })
 
 
@@ -119,6 +132,7 @@ def see(request, pk):
         'frm': frm,
         'toolbar': toolbar,
         'piezas': list(obj.piezas_requeridas.all()),
+        'req_ui': requires_jquery_ui(request),
         })
 
 
@@ -128,6 +142,36 @@ def update(request, pk):
     if not OrdenDeCompra.objects.filter(pk=pk).exists():
         return HttpResponseRedirect(reverse(
             'item_no_encontrado'))
+    obj = OrdenDeCompra.objects.get(pk=pk)
+    frm = FrmOrdenDeCompra(instance=obj, data=request.POST or None)
+    if 'POST' == request.method:
+        if frm.is_valid():
+            obj = frm.save(commit=False)
+            obj.updated_by = usuario
+            obj.save()
+            Piezas_OrdenDeCompra.objects.filter(ordendecompra=obj).delete()
+            for pza in Pieza.objects.all():
+                cant = request.POST.get("pza-cant-{}".format(pza.pk))
+                if cant:
+                    Piezas_OrdenDeCompra.objects.create(
+                        pieza=pza,
+                        ordendecompra=obj,
+                        cantidad=truncate(cant),
+                        created_by=usuario,
+                        updated_by=usuario
+                    )
+        return HttpResponseRedirect(reverse(
+            'ordendecompra_see', kwargs={'pk': obj.pk}))
+    return render(request, 'inventario/ordendecompra/form.html', {
+        'menu_main': usuario.main_menu_struct(),
+        'titulo': 'Órden de Compra',
+        'titulo_descripcion': obj,
+        'frm': frm,
+        'piezas': list(Pieza.objects.all()),
+        'proveedores': list(Proveedor.objects.all()),
+        'piezas_requeridas': list(obj.piezas_requeridas.all()),
+        'req_ui': requires_jquery_ui(request),
+    })
 
 
 @valida_acceso(['ordendecompra.eliminar_ordenes_de_compra_orden de compra'])

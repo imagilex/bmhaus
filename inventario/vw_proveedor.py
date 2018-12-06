@@ -29,7 +29,8 @@ def index(request):
                 )
                 ]
     toolbar = []
-    if usuario.has_perm_or_has_perm_child('proveedor.agregar_proveedores_proveedor'):
+    if usuario.has_perm_or_has_perm_child(
+            'proveedor.agregar_proveedores_proveedor'):
         toolbar.append({
             'type': 'link',
             'view': 'proveedor_new',
@@ -174,7 +175,6 @@ def delete(request, pk):
         Proveedor_Piezas.objects.filter(proveedor=obj).delete()
         obj.delete()
     except ProtectedError as err:
-        print(err)
         return HttpResponseRedirect(reverse(
             'item_con_relaciones'))
     return HttpResponseRedirect(reverse('proveedor_index'))

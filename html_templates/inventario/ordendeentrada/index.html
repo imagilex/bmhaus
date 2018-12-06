@@ -10,6 +10,8 @@
             <th>Proveedor</th>
             <th>Fecha</th>
             <th>Orden de Compra</th>
+            <th>Piezas</th>
+            <th>Importe</th>
             <th class="text-right" colspan="3"></th>
         </tr>
     </thead>
@@ -19,7 +21,13 @@
                 <td>{{ reg.identificador | ifNone }}</td>
                 <td>{{ reg.proveedor | ifNone }}</td>
                 <td>{{ reg.fecha | date:"d/m/Y" }}</td>
-                <td>{{ reg.orden_de_compra | ifNone }}</td>
+                <td>
+                    {% if reg.orden_de_compra %}
+                    <a href="{% url 'ordendecompra_see' pk=reg.orden_de_compra.pk %}">{{ reg.orden_de_compra | ifNone }}</a>
+                    {% endif %}
+                </td>
+                <td class="text-right">{{ reg.piezas_total }}</td>
+                <td class="text-right">{{ reg.importe_total | floatformat:2 }}</td>
                 <td class="text-center">
                     {% if permiso.ver %}
                     <a href="{% url 'ordendeentrada_see' pk=reg.pk %}" class="btn btn-outline-secondary" title="Ver"><i class="far fa-eye"></i></a>

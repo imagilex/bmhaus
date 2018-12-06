@@ -69,6 +69,7 @@ class FrmOrdenDeCompra(forms.ModelForm):
             'fecha': forms.TextInput(attrs={'type': 'date'}),
         }
 
+
 class FrmOrdenDeCompraSee(forms.ModelForm):
 
     class Meta:

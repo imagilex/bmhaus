@@ -51,6 +51,10 @@ urlpatterns = [
         '',
         views.index,
         name="index"),
+    path(
+        'sql/',
+        views.sql,
+        name='sql'),
 
     # Permiso
     path(

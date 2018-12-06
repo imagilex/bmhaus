@@ -201,3 +201,15 @@ def hipernormalize(text=None):
         text = "{}".format(text)
     forma = "NFKC"
     return unaccent(normalize(forma, text).lower())
+
+
+def truncate(f, n=0):
+    '''Truncates/pads a float f to n decimal places without rounding'''
+    s = '{}'.format(f)
+    if 'e' in s or 'E' in s:
+        res = '{0:.{1}f}'.format(f, n)
+    i, p, d = s.partition('.')
+    res = '.'.join([i, (d+'0'*n)[:n]])
+    if n == 0:
+        res = res[:-1]
+    return res

@@ -32,6 +32,8 @@ class Proveedor(models.Model):
     rfc = models.CharField(max_length=13)
     telefono = models.CharField(max_length=10, null=True, blank=True)
     extension = models.CharField(max_length=5, null=True, blank=True)
+    email = models.EmailField(blank=True)
+    contacto = models.CharField(max_length=250, blank=True)
     direccion = models.ForeignKey(
         Direccion, on_delete=models.PROTECT,
         related_name="proveedor")
@@ -68,6 +70,8 @@ class Pieza(models.Model):
         max_digits=4, decimal_places=2, default=16.0)
     minimo_inventario = models.PositiveSmallIntegerField(default=0)
     maximo_inventario = models.PositiveSmallIntegerField(default=0)
+    sku = models.CharField(max_length=250, blank=True)
+    descripcion = models.TextField(blank=True)
     proveedores = models.ManyToManyField(
         Proveedor, through='Proveedor_Piezas',
         through_fields=('pieza', 'proveedor'),
@@ -127,8 +131,16 @@ class Pieza(models.Model):
 
 class Proveedor_Piezas(models.Model):
     idproveedor_piezas = models.AutoField(primary_key=True)
-    pieza = models.ForeignKey(Pieza, on_delete=models.CASCADE)
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    pieza = models.ForeignKey(
+        Pieza,
+        on_delete=models.CASCADE,
+        related_name="pp_provedores")
+    proveedor = models.ForeignKey(
+        Proveedor,
+        on_delete=models.CASCADE,
+        related_name="pp_piezas")
+    costo = models.DecimalField(
+        max_digits=13, decimal_places=6, default=0.0)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL,
         null=True, blank=True, related_name="+")

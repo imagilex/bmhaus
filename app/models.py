@@ -13,6 +13,14 @@ doctoordenreparacion_upload_to = 'doctoordenreparacion'
 avanceenflujo_upload_to = 'avanceenflujo'
 
 
+def newIdentificadorForDoctoOrdenReparacion():
+    today = datetime.now()
+    res = "OR-" + today.strftime("%y%m") + "-"
+    res += "{:03d}".format(DoctoOrdenReparacion.objects.filter(
+        identificador__startswith=res).count() + 1)
+    return res
+
+
 def getTime():
     return datetime.time(datetime.now())
 
@@ -119,6 +127,7 @@ class Vehiculo(models.Model):
 
 class DoctoOrdenReparacion(models.Model):
     iddoctoordenreparacion = models.AutoField(primary_key=True)
+    identificador = models.CharField(max_length=50, blank=True)
     vehiculo = models.ForeignKey(
         Vehiculo, on_delete=models.PROTECT,
         related_name="ordenesreparacion")

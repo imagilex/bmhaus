@@ -2,11 +2,18 @@
     .print {
         display: none;
     }
+    body.body-spacer {
+        padding-top: 75px;
+        color: #bdc6d3;
+    }
 }
 
 @media print {
     .no-print {
         display: none;
+    }
+    body.body-spacer {
+        padding: 0px;
     }
 }
 
@@ -102,11 +109,6 @@ body {
     background-size: cover; 
     background-attachment: fixed;
     background-repeat: no-repeat;
-    color: #bdc6d3;
-}
-
-body.body-spacer {
-    padding-top: 75px;
     color: #bdc6d3;
 }
 
@@ -342,7 +344,7 @@ a, a:hover, a:active, a:focus, a:visited {
 }
 
 .clausulas-contrato {
-    font-size: 10pt;
+    font-size: 9.5pt;
     text-align: justify;
     page-break-before: always;
 }

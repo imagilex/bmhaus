@@ -233,6 +233,27 @@ class FrmDoctoOrdenReparacion(forms.ModelForm):
             "le fue entregado, exceptuando las consecuencias inevitables "
             "del diagnóstico.",
         }
+        labels = {
+            'fecha_de_recepcion': 'Fecha de recepción',
+            'hora_de_recepcion': 'Hora de recepción',
+            'fotografia_kilometros': 'Fotografía kilómetros',
+            'fotografia_tanque_de_gasolina': 'Fotografía tanque de gasolina',
+            'fotografia_superior': 'Fotografía superior',
+            'fotografia_frente': 'Fotografía frente',
+            'fotografia_trasera': 'Fotografía trasera',
+            'fotografia_lateral_izquierdo': 'Fotografía lateral izquierdo',
+            'fotografia_lateral_derecho': 'Fotografía lateral derecho',
+            'tapon_de_ruedas': 'Tapón de ruedas',
+            'tapon_de_gasolina': 'Tapón de gasolina',
+            'carroceria_sin_golpes': 'Carrocería sin golpes',
+            'calefaccion': 'Calefacción',
+            'llanta_de_refaccion': 'Llanta de refacción',
+            'extingidor': 'Extinguidor',
+            'tapon_de_aceite': 'Tapón de aceite',
+            'tapon_de_radiador': 'Tapón de radiador',
+            'bateria': 'Batería',
+            'costo_de_revision': 'Costo de revisión',
+        }
 
 
 class FrmDoctoOrdenReparacionGenerales01(forms.ModelForm):
@@ -258,6 +279,12 @@ class FrmDoctoOrdenReparacionGenerales01(forms.ModelForm):
             "le fue entregado, exceptuando las consecuencias inevitables "
             "del diagnóstico.",
         }
+        
+        labels = {
+            'fecha_de_recepcion': 'Fecha de recepción',
+            'hora_de_recepcion': 'Hora de recepción',
+            'costo_de_revision': 'Costo de revisión',
+        }
 
 
 class FrmDoctoOrdenReparacionGenerales02(forms.ModelForm):
@@ -273,6 +300,15 @@ class FrmDoctoOrdenReparacionGenerales02(forms.ModelForm):
             'fotografia_lateral_izquierdo',
             'fotografia_lateral_derecho',
         ]
+        labels = {
+            'fotografia_kilometros': 'Fotografía kilómetros',
+            'fotografia_tanque_de_gasolina': 'Fotografía tanque de gasolina',
+            'fotografia_superior': 'Fotografía superior',
+            'fotografia_frente': 'Fotografía frente',
+            'fotografia_trasera': 'Fotografía trasera',
+            'fotografia_lateral_izquierdo': 'Fotografía lateral izquierdo',
+            'fotografia_lateral_derecho': 'Fotografía lateral derecho',
+        }
 
 
 class FrmDoctoOrdenReparacionExteriores(forms.ModelForm):
@@ -294,6 +330,11 @@ class FrmDoctoOrdenReparacionExteriores(forms.ModelForm):
             'bocinas_de_claxon',
             'limpiadores',
         ]
+        labels = {
+            'tapon_de_ruedas': 'Tapón de ruedas',
+            'tapon_de_gasolina': 'Tapón de gasolina',
+            'carroceria_sin_golpes': 'Carrocería sin golpes',
+        }
 
 
 class FrmDoctoOrdenReparacionInteriores(forms.ModelForm):
@@ -314,6 +355,9 @@ class FrmDoctoOrdenReparacionInteriores(forms.ModelForm):
             'tapetes',
             'vestiduras',
         ]
+        labels = {
+            'calefaccion': 'Calefacción',
+        }
 
 
 class FrmDoctoOrdenReparacionAccesorios(forms.ModelForm):
@@ -329,6 +373,10 @@ class FrmDoctoOrdenReparacionAccesorios(forms.ModelForm):
             'llanta_de_refaccion',
             'extingidor',
         ]
+        labels = {
+            'llanta_de_refaccion': 'Llanta de refacción',
+            'extingidor': 'Extinguidor',
+        }
 
 
 class FrmDoctoOrdenReparacionComponentesMecanicos(forms.ModelForm):
@@ -343,6 +391,11 @@ class FrmDoctoOrdenReparacionComponentesMecanicos(forms.ModelForm):
             'filtro_de_aire',
             'bateria',
         ]
+        labels = {
+            'tapon_de_aceite': 'Tapón de aceite',
+            'tapon_de_radiador': 'Tapón de radiador',
+            'bateria': 'Batería',
+        }
 
 
 class FrmDoctoOrdenReparacionFirmas(forms.ModelForm):

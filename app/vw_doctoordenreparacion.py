@@ -63,8 +63,8 @@ def see(request, pk):
         {
             'menu_main': usuario.main_menu_struct(),
             'titulo': 'Orden de Reparación',
-            'titulo_descripcion': "{}/{}".format(
-                vehiculo.propietario, vehiculo),
+            'titulo_descripcion': \
+                '<span id="txt_identificador" class="no-print"></span>',
             'toolbar': toolbar,
             'titulo_frm_1': '',
             'frm1': FrmDoctoOrdenReparacionGenerales01(instance=obj),

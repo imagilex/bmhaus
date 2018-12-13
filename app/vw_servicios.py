@@ -10,7 +10,8 @@ from .models import (
     DoctoOrdenReparacion,
     AvanceEnFlujo,
     doctoordenreparacion_upload_to,
-    avanceenflujo_upload_to)
+    avanceenflujo_upload_to,
+    newIdentificadorForDoctoOrdenReparacion)
 from .forms import (
     FrmDoctoOrdenReparacion,
     FrmDoctoOrdenReparacionGenerales01,
@@ -162,6 +163,7 @@ def executeaccion(request):
                     obj.vehiculo = vehiculo
                     obj.created_by = usuario
                     obj.updated_by = usuario
+                    obj.identificador = newIdentificadorForDoctoOrdenReparacion()
                     if request.FILES.get('fotografia_kilometros'):
                         obj.fotografia_kilometros = move_uploaded_file(
                             request.FILES.get('fotografia_kilometros'),

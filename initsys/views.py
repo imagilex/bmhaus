@@ -182,10 +182,10 @@ def sql(request):
                 cursor.execute(sql)
                 if getrows:
                     rows = cursor.fetchall()
-                    header = [c[0] for c in cursor.description ]
+                    header = [c[0] for c in cursor.description]
             except Exception as e:
-                error = "{}".format( e )
-    return render(request,'sql.html',{
+                error = "{}".format(e)
+    return render(request, 'sql.html', {
         'menu_main': usuario.main_menu_struct(),
         'titulo': 'SQL',
         'sql': sql,

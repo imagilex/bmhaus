@@ -71,11 +71,11 @@
 
             {% if titulo %}
                 <h1>
-					{{ titulo }}
+					{{ titulo | safe }}
 					
 					{% if titulo_descripcion %}
 						<small class="text-muted">
-							{{ titulo_descripcion }}
+							{{ titulo_descripcion | safe }}
 						</small>
 					{% endif %}
 

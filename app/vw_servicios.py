@@ -266,6 +266,22 @@ def executeaccion(request):
                         obj.fotografia = move_uploaded_file(
                             request.FILES.get('fotografia'),
                             avanceenflujo_upload_to)
+                    if request.FILES.get('fotografia_2'):
+                        obj.fotografia_2 = move_uploaded_file(
+                            request.FILES.get('fotografia_2'),
+                            avanceenflujo_upload_to)
+                    if request.FILES.get('fotografia_3'):
+                        obj.fotografia_3 = move_uploaded_file(
+                            request.FILES.get('fotografia_3'),
+                            avanceenflujo_upload_to)
+                    if request.FILES.get('fotografia_4'):
+                        obj.fotografia_4 = move_uploaded_file(
+                            request.FILES.get('fotografia_4'),
+                            avanceenflujo_upload_to)
+                    if request.FILES.get('fotografia_5'):
+                        obj.fotografia_5 = move_uploaded_file(
+                            request.FILES.get('fotografia_5'),
+                            avanceenflujo_upload_to)
                     obj.save()
                     historia = instanciaflujo.historia.create(
                         accion=accion,
@@ -361,7 +377,16 @@ def see(request, pk):
                     'pk': aef.pk,
                     'nota': aef.nota,
                     'fotografia': "{}".format(aef.fotografia).replace(
-                        '\\', '/')}
+                        '\\', '/'),
+                    'fotografia_2': "{}".format(aef.fotografia_2).replace(
+                        '\\', '/'),
+                    'fotografia_3': "{}".format(aef.fotografia_3).replace(
+                        '\\', '/'),
+                    'fotografia_4': "{}".format(aef.fotografia_4).replace(
+                        '\\', '/'),
+                    'fotografia_5': "{}".format(aef.fotografia_5).replace(
+                        '\\', '/'),
+                    }
     ver_doctoordenreparacion = usuario.has_perm_or_has_perm_child(
         'doctoordenreparacion.'
         'doctoordenreparacion_docto orden reparacion') or \
@@ -377,6 +402,7 @@ def see(request, pk):
         'avanceenflujo.actualizar_avance_en_flujo_avance en flujo')
     eliminar_avancereparacion = usuario.has_perm_or_has_perm_child(
         'avanceenflujo.eliminar_avance_en_flujo_avance en flujo')
+    print(merge_flujo_acciones(instanciaflujo))
     return render(
         request,
         'app/servicios/see.html', {

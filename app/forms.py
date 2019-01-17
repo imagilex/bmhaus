@@ -417,4 +417,8 @@ class FrmAvanceEnFlujo(forms.ModelForm):
         fields = [
             'nota',
             'fotografia',
+            'fotografia_2',
+            'fotografia_3',
+            'fotografia_4',
+            'fotografia_5',
         ]

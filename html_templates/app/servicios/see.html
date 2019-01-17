@@ -93,8 +93,11 @@
                                     {{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'nota' | as_paragraph | safe }}
                                 </div>
                                 <div class="col-sm-6">
-
-                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia' }}" class="rounded" style="max-width: 100%;" />
+                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia' }}" class="rounded" style="max-width: 100%; margin-bottom: 5px;" />
+                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia_2' }}" class="rounded" style="max-width: 100%; margin-bottom: 5px;" />
+                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia_3' }}" class="rounded" style="max-width: 100%; margin-bottom: 5px;" />
+                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia_4' }}" class="rounded" style="max-width: 100%; margin-bottom: 5px;" />
+                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia_5' }}" class="rounded" style="max-width: 100%; margin-bottom: 5px;" />
                                 </div>
                                 {% endif %}
                             </div>

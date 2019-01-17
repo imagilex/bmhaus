@@ -234,7 +234,15 @@ class AvanceEnFlujo(models.Model):
     idavanceenflujo = models.AutoField(primary_key=True)
     nota = models.TextField(null=True, blank=True)
     fotografia = models.ImageField(
-        null=True, blank=True, upload_to=avanceenflujo_upload_to)
+        blank=True, upload_to=avanceenflujo_upload_to)
+    fotografia_2 = models.ImageField(
+        blank=True, upload_to=avanceenflujo_upload_to)
+    fotografia_3 = models.ImageField(
+        blank=True, upload_to=avanceenflujo_upload_to)
+    fotografia_4 = models.ImageField(
+        blank=True, upload_to=avanceenflujo_upload_to)
+    fotografia_5 = models.ImageField(
+        blank=True, upload_to=avanceenflujo_upload_to)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL,
         null=True, blank=True, related_name="+")

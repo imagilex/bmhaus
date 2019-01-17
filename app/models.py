@@ -118,36 +118,53 @@ class Vehiculo(models.Model):
         ordering = ['marca', 'serie', 'tipo', 'numero_de_placa']
 
     def __str__(self):
-        return "{} {} {}".format(
-            self.marca or '', self.serie or '', self.tipo or '').strip()
+        return "{} {}".format(
+            self.marca or '', self.tipo or '').strip()
 
     def __unicode__(self):
         return self.__str__()
 
 
 class DoctoOrdenReparacion(models.Model):
+    estado_tanque_gasolina_0 = '0'
+    estado_tanque_gasolina_1_4 = '1_4'
+    estado_tanque_gasolina_1_2 = '1_2'
+    estado_tanque_gasolina_3_4 = '3_4'
+    estado_tanque_gasolina_4_4 = '4_4'
+    estado_tanque_gasolina = (
+        (estado_tanque_gasolina_0, '0'),
+        (estado_tanque_gasolina_1_4, '1/4'),
+        (estado_tanque_gasolina_1_2, '1/2'),
+        (estado_tanque_gasolina_3_4, '3/4'),
+        (estado_tanque_gasolina_4_4, '4/4'),
+    )
     iddoctoordenreparacion = models.AutoField(primary_key=True)
     identificador = models.CharField(max_length=50, blank=True)
     vehiculo = models.ForeignKey(
         Vehiculo, on_delete=models.PROTECT,
         related_name="ordenesreparacion")
+    kilometros = models.IntegerField(blank=True, default=0)
+    tanque_de_gasolina = models.CharField(
+        max_length=20,
+        choices=estado_tanque_gasolina,
+        default=estado_tanque_gasolina_0)
     fotografia_kilometros = models.ImageField(
-        null=True, blank=True, upload_to=doctoordenreparacion_upload_to)
+        blank=True, upload_to=doctoordenreparacion_upload_to)
     fotografia_tanque_de_gasolina = models.ImageField(
-        null=True, blank=True, upload_to=doctoordenreparacion_upload_to)
+        blank=True, upload_to=doctoordenreparacion_upload_to)
     fotografia_superior = models.ImageField(
-        null=True, blank=True, upload_to=doctoordenreparacion_upload_to)
+        blank=True, upload_to=doctoordenreparacion_upload_to)
     fotografia_frente = models.ImageField(
-        null=True, blank=True, upload_to=doctoordenreparacion_upload_to)
+        blank=True, upload_to=doctoordenreparacion_upload_to)
     fotografia_trasera = models.ImageField(
-        null=True, blank=True, upload_to=doctoordenreparacion_upload_to)
+        blank=True, upload_to=doctoordenreparacion_upload_to)
     fotografia_lateral_izquierdo = models.ImageField(
-        null=True, blank=True, upload_to=doctoordenreparacion_upload_to)
+        blank=True, upload_to=doctoordenreparacion_upload_to)
     fotografia_lateral_derecho = models.ImageField(
-        null=True, blank=True, upload_to=doctoordenreparacion_upload_to)
+        blank=True, upload_to=doctoordenreparacion_upload_to)
     fecha_de_recepcion = models.DateField(default=date.today)
     hora_de_recepcion = models.TimeField(default=getTime)
-    servicio_solicitado = models.TextField(null=True, blank=True)
+    servicio_solicitado = models.TextField(blank=True)
     unidad_de_luces = models.BooleanField(default=False)
     cuartos = models.BooleanField(default=False)
     antena = models.BooleanField(default=False)
@@ -188,10 +205,11 @@ class DoctoOrdenReparacion(models.Model):
     bateria = models.BooleanField(default=False)
     costo_de_revision = models.DecimalField(
         max_digits=13, decimal_places=6)
+    observaciones = models.TextField(blank=True)
     firma_del_prestador_del_servicio = models.ImageField(
-        null=True, blank=True, upload_to=doctoordenreparacion_upload_to)
+        blank=True, upload_to=doctoordenreparacion_upload_to)
     firma_del_consumidor = models.ImageField(
-        null=True, blank=True, upload_to=doctoordenreparacion_upload_to)
+        blank=True, upload_to=doctoordenreparacion_upload_to)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL,
         null=True, blank=True, related_name="+")

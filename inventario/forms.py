@@ -27,7 +27,7 @@ class FrmPieza(forms.ModelForm):
             'impuesto': 'Impuesto',
             'tipofactor': 'Tipo de Factor',
             'minimo_inventario': 'Número mínimo de piezas en inventario',
-            'maximo_inventario': 'Número máxmio de piezas en inventario',
+            'maximo_inventario': 'Número máximo de piezas en inventario',
         }
         help_texts = {
             'minimo_inventario': '0 para desactivar',
@@ -43,16 +43,27 @@ class FrmProveedor(forms.ModelForm):
             'nombre',
             'razon_social',
             'rfc',
+            'banco',
+            'clabe',
+            'contacto',
+            'email',
             'telefono',
             'extension',
+            'telefono_2',
+            'telefono_3',
         ]
         labels = {
             'rfc': 'RFC',
             'telefono': 'Teléfono',
-            'extension': 'Extensión'
+            'telefono_2': 'Teléfono 02',
+            'telefono_3': 'Teléfono 03',
+            'extension': 'Extensión',
+            'clabe' : 'CLABE / Número de Cuenta'
         }
         widgets = {
             'telefono': forms.TextInput(attrs={'type': 'tel'}),
+            'telefono_2': forms.TextInput(attrs={'type': 'tel'}),
+            'telefono_3': forms.TextInput(attrs={'type': 'tel'}),
             'extension': forms.TextInput(attrs={'type': 'number'}),
         }
 

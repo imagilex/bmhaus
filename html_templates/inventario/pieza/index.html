@@ -13,6 +13,7 @@
             <th>Modelo</th>
             <th>Precio</th>
             <th>Cantidad</th>
+            <th>Proveedor</th>
             <th class="text-right" colspan="3"></th>
         </tr>
     </thead>
@@ -24,6 +25,11 @@
                 <td>{{ reg.modelo | ifNone }}</td>
                 <td class="text-right">{{ reg.precio | money2display }}</td>
                 <td class="text-right">{{ reg.cantidadEnInventario | intcomma }}</td>
+                <td>
+                    {% for pp in reg.pp_provedores.all %}
+                        {{ pp.proveedor }}<br />
+                    {% endfor %}
+                </td>
                 <td class="text-center">
                     {% if perms.inventario.refacciones_pieza %}
                     <a href="{% url 'pieza_see' pk=reg.pk %}" class="btn btn-outline-secondary" title="Ver"><i class="far fa-eye"></i></a>

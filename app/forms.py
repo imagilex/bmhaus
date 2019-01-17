@@ -166,8 +166,8 @@ class FrmDoctoOrdenReparacion(forms.ModelForm):
             'fecha_de_recepcion',
             'hora_de_recepcion',
             'servicio_solicitado',
-            'fotografia_kilometros',
-            'fotografia_tanque_de_gasolina',
+            'kilometros',
+            'tanque_de_gasolina',
             'fotografia_superior',
             'fotografia_frente',
             'fotografia_trasera',
@@ -218,6 +218,7 @@ class FrmDoctoOrdenReparacion(forms.ModelForm):
 
             'costo_de_revision',
 
+            'observaciones',
             'firma_del_prestador_del_servicio',
             'firma_del_consumidor',
         ]
@@ -236,8 +237,8 @@ class FrmDoctoOrdenReparacion(forms.ModelForm):
         labels = {
             'fecha_de_recepcion': 'Fecha de recepción',
             'hora_de_recepcion': 'Hora de recepción',
-            'fotografia_kilometros': 'Fotografía kilómetros',
-            'fotografia_tanque_de_gasolina': 'Fotografía tanque de gasolina',
+            'kilometros': 'Kilómetros',
+            'tanque_de_gasolina': 'Tanque de gasolina',
             'fotografia_superior': 'Fotografía superior',
             'fotografia_frente': 'Fotografía frente',
             'fotografia_trasera': 'Fotografía trasera',
@@ -292,8 +293,8 @@ class FrmDoctoOrdenReparacionGenerales02(forms.ModelForm):
     class Meta:
         model = DoctoOrdenReparacion
         fields = [
-            'fotografia_kilometros',
-            'fotografia_tanque_de_gasolina',
+            'kilometros',
+            'tanque_de_gasolina',
             'fotografia_superior',
             'fotografia_frente',
             'fotografia_trasera',
@@ -301,8 +302,8 @@ class FrmDoctoOrdenReparacionGenerales02(forms.ModelForm):
             'fotografia_lateral_derecho',
         ]
         labels = {
-            'fotografia_kilometros': 'Fotografía kilómetros',
-            'fotografia_tanque_de_gasolina': 'Fotografía tanque de gasolina',
+            'kilometros': 'Kilómetros',
+            'tanque_de_gasolina': 'Tanque de gasolina',
             'fotografia_superior': 'Fotografía superior',
             'fotografia_frente': 'Fotografía frente',
             'fotografia_trasera': 'Fotografía trasera',
@@ -403,6 +404,7 @@ class FrmDoctoOrdenReparacionFirmas(forms.ModelForm):
     class Meta:
         model = DoctoOrdenReparacion
         fields = [
+            'observaciones',
             'firma_del_prestador_del_servicio',
             'firma_del_consumidor',
         ]

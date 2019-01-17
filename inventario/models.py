@@ -6,6 +6,214 @@ from decimal import Decimal
 from initsys.models import Usr, Direccion
 from cfdi.models import OpcionCatalogoSAT
 
+banco_BANAMEX = 'BANAMEX'
+banco_BANCOMEXT = 'BANCOMEXT'
+banco_BANOBRAS = 'BANOBRAS'
+banco_BBVABANCOMER = 'BBVA BANCOMER'
+banco_SANTANDER = 'SANTANDER'
+banco_BANJERCITO = 'BANJERCITO'
+banco_HSBC = 'HSBC'
+banco_GEMONEY = 'GE MONEY'
+banco_BAJIO = 'BAJÍO'
+banco_IXE = 'IXE'
+banco_INBURSA = 'INBURSA'
+banco_INTERACCIONES = 'INTERACCIONES'
+banco_MIFEL = 'MIFEL'
+banco_SCOTIABANK = 'SCOTIABANK'
+banco_BANREGIO = 'BANREGIO'
+banco_INVEX = 'INVEX'
+banco_BANSI = 'BANSI'
+banco_AFIRME = 'AFIRME'
+banco_BANORTE = 'BANORTE'
+banco_ABNAMRO = 'ABNAMRO'
+banco_AMERICANEXPRESS = 'AMERICAN EXPRESS'
+banco_BAMSA = 'BAMSA'
+banco_TOKYO = 'TOKYO'
+banco_JPMORGAN = 'JP MORGAN'
+banco_BMONEX = 'BMONEX'
+banco_VEPORMAS = 'VE POR MAS'
+banco_ING = 'ING'
+banco_DEUTSCHE = 'DEUTSCHE'
+banco_CREDITSUISSE = 'CREDIT SUISSE'
+banco_AZTECA = 'AZTECA'
+banco_AUTOFIN = 'AUTOFIN'
+banco_BARCLAYS = 'BARCLAYS'
+banco_COMPARTAMOS = 'COMPARTAMOS'
+banco_FAMSA = 'FAMSA'
+banco_BMULTIVA = 'BMULTIVA'
+banco_PRUDENTIAL = 'PRUDENTIAL'
+banco_WALMART = 'WAL-MART'
+banco_NAFIN = 'NAFIN'
+banco_REGIONAL = 'REGIONAL'
+banco_BANCOPPEL = 'BANCOPPEL'
+banco_ABCCAPITAL = 'ABC CAPITAL'
+banco_UBSBANK = 'UBS BANK'
+banco_FACIL = 'FÁCIL'
+banco_VOLKSWAGEN = 'VOLKSWAGEN'
+banco_CIBanco = 'CIBanco'
+banco_BBASE = 'BBASE'
+banco_BANKAOOL = 'BANKAOOL'
+banco_PagaTodo = 'PagaTodo'
+banco_BIM = 'BIM'
+banco_SABADELL = 'SABADELL'
+banco_BANSEFI = 'BANSEFI'
+banco_HIPOTECARIAFEDERAL = 'HIPOTECARIA FEDERAL'
+banco_MONEXCB = 'MONEXCB'
+banco_GBM = 'GBM'
+banco_MASARICB = 'MASARI CB'
+banco_INBURSA = 'C.B. INBURSA'
+banco_VALUE = 'VALUÉ'
+banco_CBBASE = 'CB BASE'
+banco_TIBER = 'TIBER'
+banco_VECTOR = 'VECTOR'
+banco_BB = 'B&B'
+banco_INTERCAM = 'INTERCAM'
+banco_MULTIVA = 'MULTIVA'
+banco_ACCIVAL = 'ACCIVAL'
+banco_MERRILLLYNCH = 'MERRILL LYNCH'
+banco_FINAMEX = 'FINAMEX'
+banco_VALMEX = 'VALMEX'
+banco_UNICA = 'ÚNICA'
+banco_ASEGURADORAMAPFRE = 'ASEGURADORA MAPFRE'
+banco_AFOREPROFUTURO = 'AFORE PROFUTURO'
+banco_CBACTINBER = 'CB ACTINBER'
+banco_ACTINVESI = 'ACTINVE SI'
+banco_SKANDIA = 'SKANDIA'
+banco_CONSULTORÍA = 'CONSULTORÍA'
+banco_CBDEUTSCHE = 'CBDEUTSCHE'
+banco_ZURICH = 'ZURICH'
+banco_ZURICHVI = 'ZURICHVI'
+banco_HIPOTECARIASUCASITA = 'HIPOTECARIA SU CASITA'
+banco_INTERCAM = 'C.B. INTERCAM'
+banco_VANGUARDIA = 'C.B. VANGUARDIA'
+banco_BULLTICKCB = 'BULLTICK C.B.'
+banco_STERLING = 'STERLING'
+banco_FINCOMUN = 'FINCOMUN'
+banco_HDISEGUROS = 'HDI SEGUROS'
+banco_ORDER = 'ORDER'
+banco_AKALA = 'AKALA'
+banco_JPMORGANCB = 'JP MORGAN C.B.'
+banco_REFORMA = 'REFORMA'
+banco_STP = 'STP'
+banco_TELECOMM = 'TELECOMM'
+banco_EVERCORE = 'EVERCORE'
+banco_SKANDIA = 'SKANDIA'
+banco_SEGMTY = 'SEGMTY'
+banco_ASEA = 'ASEA'
+banco_KUSPIT = 'KUSPIT'
+banco_SOFIEXPRESS = 'SOFIEXPRESS'
+banco_UNAGRA = 'UNAGRA'
+banco_OPCIONESEMPRESARIALESDELNOROESTE = 'OPCIONES EMPRESARIALES DEL NOROESTE'
+banco_LIBERTAD = 'LIBERTAD'
+banco_CLS = 'CLS'
+banco_INDEVAL = 'INDEVAL'
+banco_N_A = 'N/A'
+
+bancos = (
+    (banco_ABCCAPITAL, banco_ABCCAPITAL),
+    (banco_ABNAMRO, banco_ABNAMRO),
+    (banco_ACCIVAL, banco_ACCIVAL),
+    (banco_ACTINVESI, banco_ACTINVESI),
+    (banco_AFIRME, banco_AFIRME),
+    (banco_AFOREPROFUTURO, banco_AFOREPROFUTURO),
+    (banco_AKALA, banco_AKALA),
+    (banco_AMERICANEXPRESS, banco_AMERICANEXPRESS),
+    (banco_ASEA, banco_ASEA),
+    (banco_ASEGURADORAMAPFRE, banco_ASEGURADORAMAPFRE),
+    (banco_AUTOFIN, banco_AUTOFIN),
+    (banco_AZTECA, banco_AZTECA),
+    (banco_BB, banco_BB),
+    (banco_BAJIO, banco_BAJIO),
+    (banco_BAMSA, banco_BAMSA),
+    (banco_BANAMEX, banco_BANAMEX),
+    (banco_BANCOMEXT, banco_BANCOMEXT),
+    (banco_BANCOPPEL, banco_BANCOPPEL),
+    (banco_BANJERCITO, banco_BANJERCITO),
+    (banco_BANKAOOL, banco_BANKAOOL),
+    (banco_BANOBRAS, banco_BANOBRAS),
+    (banco_BANORTE, banco_BANORTE),
+    (banco_BANREGIO, banco_BANREGIO),
+    (banco_BANSEFI, banco_BANSEFI),
+    (banco_BANSI, banco_BANSI),
+    (banco_BARCLAYS, banco_BARCLAYS),
+    (banco_BBASE, banco_BBASE),
+    (banco_BBVABANCOMER, banco_BBVABANCOMER),
+    (banco_BIM, banco_BIM),
+    (banco_BMONEX, banco_BMONEX),
+    (banco_BMULTIVA, banco_BMULTIVA),
+    (banco_BULLTICKCB, banco_BULLTICKCB),
+    (banco_INBURSA, banco_INBURSA),
+    (banco_INTERCAM, banco_INTERCAM),
+    (banco_VANGUARDIA, banco_VANGUARDIA),
+    (banco_CBACTINBER, banco_CBACTINBER),
+    (banco_CBBASE, banco_CBBASE),
+    (banco_CBDEUTSCHE, banco_CBDEUTSCHE),
+    (banco_CIBanco, banco_CIBanco),
+    (banco_CLS, banco_CLS),
+    (banco_COMPARTAMOS, banco_COMPARTAMOS),
+    (banco_CONSULTORÍA, banco_CONSULTORÍA),
+    (banco_CREDITSUISSE, banco_CREDITSUISSE),
+    (banco_DEUTSCHE, banco_DEUTSCHE),
+    (banco_EVERCORE, banco_EVERCORE),
+    (banco_FACIL, banco_FACIL),
+    (banco_FAMSA, banco_FAMSA),
+    (banco_FINAMEX, banco_FINAMEX),
+    (banco_FINCOMUN, banco_FINCOMUN),
+    (banco_GBM, banco_GBM),
+    (banco_GEMONEY, banco_GEMONEY),
+    (banco_HDISEGUROS, banco_HDISEGUROS),
+    (banco_HIPOTECARIAFEDERAL, banco_HIPOTECARIAFEDERAL),
+    (banco_HIPOTECARIASUCASITA, banco_HIPOTECARIASUCASITA),
+    (banco_HSBC, banco_HSBC),
+    (banco_INBURSA, banco_INBURSA),
+    (banco_INDEVAL, banco_INDEVAL),
+    (banco_ING, banco_ING),
+    (banco_INTERACCIONES, banco_INTERACCIONES),
+    (banco_INTERCAM, banco_INTERCAM),
+    (banco_INVEX, banco_INVEX),
+    (banco_IXE, banco_IXE),
+    (banco_JPMORGAN, banco_JPMORGAN),
+    (banco_JPMORGANCB, banco_JPMORGANCB),
+    (banco_KUSPIT, banco_KUSPIT),
+    (banco_LIBERTAD, banco_LIBERTAD),
+    (banco_MASARICB, banco_MASARICB),
+    (banco_MERRILLLYNCH, banco_MERRILLLYNCH),
+    (banco_MIFEL, banco_MIFEL),
+    (banco_MONEXCB, banco_MONEXCB),
+    (banco_MULTIVA, banco_MULTIVA),
+    (banco_N_A, banco_N_A),
+    (banco_NAFIN, banco_NAFIN),
+    (banco_OPCIONESEMPRESARIALESDELNOROESTE, banco_OPCIONESEMPRESARIALESDELNOROESTE),
+    (banco_ORDER, banco_ORDER),
+    (banco_PagaTodo, banco_PagaTodo),
+    (banco_PRUDENTIAL, banco_PRUDENTIAL),
+    (banco_REFORMA, banco_REFORMA),
+    (banco_REGIONAL, banco_REGIONAL),
+    (banco_SABADELL, banco_SABADELL),
+    (banco_SANTANDER, banco_SANTANDER),
+    (banco_SCOTIABANK, banco_SCOTIABANK),
+    (banco_SEGMTY, banco_SEGMTY),
+    (banco_SKANDIA, banco_SKANDIA),
+    (banco_SKANDIA, banco_SKANDIA),
+    (banco_SOFIEXPRESS, banco_SOFIEXPRESS),
+    (banco_STERLING, banco_STERLING),
+    (banco_STP, banco_STP),
+    (banco_TELECOMM, banco_TELECOMM),
+    (banco_TIBER, banco_TIBER),
+    (banco_TOKYO, banco_TOKYO),
+    (banco_UBSBANK, banco_UBSBANK),
+    (banco_UNAGRA, banco_UNAGRA),
+    (banco_UNICA, banco_UNICA),
+    (banco_VALMEX, banco_VALMEX),
+    (banco_VALUE, banco_VALUE),
+    (banco_VEPORMAS, banco_VEPORMAS),
+    (banco_VECTOR, banco_VECTOR),
+    (banco_VOLKSWAGEN, banco_VOLKSWAGEN),
+    (banco_WALMART, banco_WALMART),
+    (banco_ZURICH, banco_ZURICH),
+    (banco_ZURICHVI, banco_ZURICHVI),
+)
+
 
 def newIdentificadorForOrdenDeCompra():
     today = datetime.now()
@@ -28,15 +236,20 @@ def newIdentificadorForOrdenDeEntrada():
 class Proveedor(models.Model):
     idproveedor = models.AutoField(primary_key=True)
     razon_social = models.CharField(max_length=100)
-    nombre = models.CharField(max_length=254, null=True, blank=True)
+    nombre = models.CharField(max_length=254, blank=True)
     rfc = models.CharField(max_length=13)
-    telefono = models.CharField(max_length=10, null=True, blank=True)
-    extension = models.CharField(max_length=5, null=True, blank=True)
+    telefono = models.CharField(max_length=10, blank=True)
+    extension = models.CharField(max_length=5, blank=True)
+    telefono_2 = models.CharField(max_length=10, blank=True)
+    telefono_3 = models.CharField(max_length=10, blank=True)
     email = models.EmailField(blank=True)
     contacto = models.CharField(max_length=250, blank=True)
     direccion = models.ForeignKey(
         Direccion, on_delete=models.PROTECT,
         related_name="proveedor")
+    clabe = models.CharField(max_length=18, blank=True)
+    banco = models.CharField(
+        max_length=100, default=banco_BANAMEX, choices=bancos)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL,
         null=True, blank=True, related_name="+")

@@ -23,22 +23,35 @@
         </div>
         <div class="col sm-6">
             <table style="width: 100%;">
-                <tr>
-                    <td style="width: 50%">Kilómetros</td>
-                    <td style="width: 50%">Gasolina</td>
-                </tr>
-                <tr>
-                    <td class="text-center" style="width: 50%">
-                        {% if obj.fotografia_kilometros %}
-                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_kilometros }}" class="contrato-img01 rounded ml-1 mr-1" />
-                        {% endif %}
-                    </td>
-                    <td class="text-center" style="width: 50%">
-                        {% if obj.fotografia_tanque_de_gasolina %}
-                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_tanque_de_gasolina }}" class="contrato-img01 rounded ml-1 mr-1" />
-                        {% endif %}
-                    </td>
-                </tr>
+                {% if obj.fotografia_kilometros or obj.fotografia_tanque_de_gasolina %}
+                    <tr>
+                        <td style="width: 50%">Kilómetros</td>
+                        <td style="width: 50%">Gasolina</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" style="width: 50%">
+                            {% if obj.fotografia_kilometros %}
+                                <img src="{{ MEDIA_URL }}{{ obj.fotografia_kilometros }}" class="contrato-img01 rounded ml-1 mr-1" />
+                            {% endif %}
+                        </td>
+                        <td class="text-center" style="width: 50%">
+                            {% if obj.fotografia_tanque_de_gasolina %}
+                                <img src="{{ MEDIA_URL }}{{ obj.fotografia_tanque_de_gasolina }}" class="contrato-img01 rounded ml-1 mr-1" />
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td style="width: 50%">Kilómetros: {{ obj.kilometros }}</td>
+                        <td style="width: 50%">Gasolina: 
+                            {% if obj.tanque_de_gasolina == '1_4' %}1/4
+                            {% elif obj.tanque_de_gasolina == '1_2' %}1/2
+                            {% elif obj.tanque_de_gasolina == '3_4' %}3/4
+                            {% elif obj.tanque_de_gasolina == '4_4' %}4/4
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
             </table>
             <table style="width: 100%">
                 <tr>
@@ -95,8 +108,10 @@
                     </td>
                 </tr>
             </table>
-            <h5>Dirección</h5>
-            {{ direccion | safe }}
+            {% if direccion %}
+                <h5>Dirección de recepción del vehículo</h5>
+                {{ direccion | safe }}
+            {% endif %}
         </div>
     </div>
     <div class="row inventario-contrato">
@@ -113,6 +128,18 @@
             {{ frm5 | crispy }}
             {% if titulo_frm_6 %}<h5>{{ titulo_frm_6 }}</h5>{% endif %}
             {{ frm6 | crispy }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="div_id_observaciones" class="form-group">
+                <label for="id_observaciones" class="col-form-label ">
+                    Observaciones
+                </label>
+                <div class="">
+                    <textarea name="observaciones" cols="40" rows="10" class="textarea form-control" id="id_observaciones" disabled="disabled" readonly="readonly">{{ obj.observaciones }}</textarea>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -169,6 +196,8 @@
 <script type="text/javascript">
     $( "#main_extra_data_col3" ).html( "FOLIO: <h5>{{ obj.identificador }}</h5>" );
     $( "#txt_identificador" ).html( "{{ obj.identificador }}" );
+    $( "#id_servicio_solicitado" )[0].rows = 5;
+    $( "#id_observaciones" )[0].rows = 5;
 </script>
 
 {% endblock %}

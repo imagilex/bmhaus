@@ -278,7 +278,7 @@ class Pieza(models.Model):
     marca = models.CharField(max_length=50, null=True, blank=True)
     modelo = models.CharField(max_length=50, null=True, blank=True)
     precio = models.DecimalField(
-        max_digits=13, decimal_places=6, default=0.0)
+        max_digits=13, decimal_places=2, default=0.0)
     porcentaje_de_iva = models.DecimalField(
         max_digits=4, decimal_places=2, default=16.0)
     minimo_inventario = models.PositiveSmallIntegerField(default=0)
@@ -353,7 +353,7 @@ class Proveedor_Piezas(models.Model):
         on_delete=models.CASCADE,
         related_name="pp_piezas")
     costo = models.DecimalField(
-        max_digits=13, decimal_places=6, default=0.0)
+        max_digits=13, decimal_places=2, default=0.0)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL,
         null=True, blank=True, related_name="+")
@@ -367,7 +367,8 @@ class Proveedor_Piezas(models.Model):
         ordering = ['proveedor', 'pieza']
 
     def __str__(self):
-        return "{} - {}".format(self.proveedor, self.pieza)
+        return "{} - {} (${})".format(
+            self.proveedor, self.pieza, self.costo)
 
     def __unicode__(self):
         return self.__str__()
@@ -447,7 +448,8 @@ class OrdenDeEntrada(models.Model):
         related_name='ordenes_de_entrada')
     orden_de_compra = models.ForeignKey(
         OrdenDeCompra, on_delete=models.PROTECT, null=True, blank=True,
-        related_name='orden_de_entrada')
+        related_name='orden_de_entrada',
+        limit_choices_to={'orden_de_entrada__isnull': True})
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL,
         null=True, blank=True, related_name="+")
@@ -492,9 +494,9 @@ class Piezas_OrdenDeEntrada(models.Model):
         related_name="piezas_entradas")
     cantidad = models.PositiveSmallIntegerField(default=0)
     costo = models.DecimalField(
-        max_digits=13, decimal_places=6, default=0.0)
+        max_digits=13, decimal_places=2, default=0.0)
     importe = models.DecimalField(
-        max_digits=13, decimal_places=6, default=0.0)
+        max_digits=13, decimal_places=2, default=0.0)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL,
         null=True, blank=True, related_name="+")

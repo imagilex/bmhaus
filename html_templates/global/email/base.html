@@ -4,7 +4,7 @@
     <table border="0" style="margin: auto; color: #bdc6d3; max-width: 650px; min-width: 450px;">
         <tr>
             <td>
-                <img src="//{{ request.get_host }}/{{ MEDIA_URL }}{{ '01 General.email_encabezado' | get_setting }}" style="height: 50px; margin: 25px;" />
+                <img src="cid:img_encabezado" style="height: 50px; margin: 25px;" />
             </td>
             <td>
                 <h3>¿Qué tal {{ usuario.first_name }}?</h3>
@@ -21,7 +21,7 @@
         </tr>
         <tr>
             <td colspan="2" style="text-align: left; padding: 25px; font-size: 14px">
-                <img src="//{{ request.get_host }}/{{ MEDIA_URL }}{{ '01 General.email_firma' | get_setting }}" style="margin-right: 35px; float: left; height: 150px;" />
+                <img src="cid:img_firma" style="margin-right: 35px; float: left; height: 150px;" />
                 <p><strong>El equipo <a href="//{{ request.get_host }}/" style="color: #bdc6d3;">BMhaus</a>.</strong></p>
                 <p>
                     <a href="tel:{{ '02 Pagina Inicial.contacto_telefono' | get_setting }}" style="color: #bdc6d3; text-decoration: none;">{{ '02 Pagina Inicial.contacto_telefono' | get_setting }}</a>

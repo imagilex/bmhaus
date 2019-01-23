@@ -24,7 +24,17 @@
                 <td>{{ reg.marca | ifNone }}</td>
                 <td>{{ reg.modelo | ifNone }}</td>
                 <td class="text-right">{{ reg.precio | money2display }}</td>
-                <td class="text-right">{{ reg.cantidadEnInventario | intcomma }}</td>
+                <td class="text-center">
+                    {% if reg.minimo_inventario == 0 and reg.maximo_inventario == 0 %}
+                        <span class="badge badge-secondary">&nbsp;{{ reg.cantidadEnInventario | intcomma }}&nbsp;</span>
+                    {% elif reg.minimo_inventario != 0 and reg.cantidadEnInventario <= reg.minimo_inventario %}
+                        <span class="badge badge-danger">&nbsp;{{ reg.cantidadEnInventario | intcomma }}&nbsp;</span>
+                    {% elif reg.maximo_inventario != 0 and reg.cantidadEnInventario >= reg.maximo_inventario %}
+                        <span class="badge badge-primary">&nbsp;{{ reg.cantidadEnInventario | intcomma }}&nbsp;</span>
+                    {% else %}
+                        <span class="badge badge-success">&nbsp;{{ reg.cantidadEnInventario | intcomma }}&nbsp;</span>
+                    {% endif %}
+                </td>
                 <td>
                     {% for pp in reg.pp_provedores.all %}
                         {{ pp.proveedor }}<br />

@@ -1,5 +1,7 @@
 {% extends "global/html_struct.html" %}
 {% load crispy_forms_tags %}
+{% load humanize %}
+{% load i18n %}
 {% load util_filters %}
 
 {% block content %}
@@ -42,7 +44,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td style="width: 50%">Kilómetros: {{ obj.kilometros }}</td>
+                        <td style="width: 50%">Kilómetros: {% language 'en' %}{{ obj.kilometros | intcomma }}{% endlanguage %}</td>
                         <td style="width: 50%">Gasolina: 
                             {% if obj.tanque_de_gasolina == '1_4' %}1/4
                             {% elif obj.tanque_de_gasolina == '1_2' %}1/2
@@ -170,6 +172,8 @@
         Ciudad de México a los {{ obj.fecha_de_recepcion | date:"d" }} 
         días del mes de {{ obj.fecha_de_recepcion | date:"F" }} de 
         {{ obj.fecha_de_recepcion | date:"Y" }}.
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
         <div class="row">
             <div class="col-sm-4 offset-sm-1 text-center">
                 {% if obj.firma_del_prestador_del_servicio %}

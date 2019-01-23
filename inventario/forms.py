@@ -100,9 +100,8 @@ class FrmOrdenDeEntrada(forms.ModelForm):
     class Meta:
         model = OrdenDeEntrada
         fields = [
-            'proveedor',
-            'fecha',
             'orden_de_compra',
+            'fecha',
         ]
         widgets = {
             'fecha': forms.TextInput(attrs={'type': 'date'}),
@@ -115,9 +114,9 @@ class FrmOrdenDeEntradaSee(forms.ModelForm):
         model = OrdenDeEntrada
         fields = [
             'identificador',
+            'orden_de_compra',
             'proveedor',
             'fecha',
-            'orden_de_compra',
         ]
         widgets = {
             'fecha': forms.TextInput(attrs={'type': 'date'}),

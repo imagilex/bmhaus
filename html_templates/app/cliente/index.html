@@ -13,7 +13,7 @@
             <th>Celular</th>
             <th>Teléfono</th>
             <th>Teléfono de Oficina</th>
-            <th class="text-right" colspan="4"></th>
+            <th class="text-right" colspan="5"></th>
         </tr>
     </thead>
     <tbody id="data-tbl">
@@ -36,10 +36,18 @@
                     </a>
                     {% endif %}
                 </td>
-                <td>{% if reg.telefono %}{{ reg.telefono }}{% endif %}</td>
+                <td>
+                    {% if reg.telefono %}
+                        <a href="tel:{{ reg.telefono }}">
+                            {{ reg.telefono }}
+                        </a>
+                    {% endif %}
+                </td>
                 <td>
                     {% if reg.telefono_oficina %}
-                        {{ reg.telefono_oficina }} 
+                        <a href="tel:{{ reg.telefono_oficina }}">
+                            {{ reg.telefono_oficina }} 
+                        </a>
                         {% if reg.extension %}(ext. {{ reg.extension }}){% endif %}
                     {% endif %}
                 </td>
@@ -47,6 +55,13 @@
                     {% if perms.app.ver_notas_del_cliente_nota or perms.app.agregar_notas_al_cliente_nota %}
                         <button onclick="Cte.showNotasCte( {{ reg.pk }}, '{{ reg }}' )" type="button" class="btn btn-outline-secondary" title="Ver notas">
                             <i class="far fa-comment-alt"></i>
+                        </button>
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if perms.app.agregar_alertas_al_cliente_alerta %}
+                        <button onclick="Cte.showAlertsCte( {{ reg.pk }}, '{{ reg }}' )" type="button" class="btn btn-outline-secondary" title="Agregar Alerta">
+                            <i class="far fa-bell"></i>
                         </button>
                     {% endif %}
                 </td>
@@ -91,6 +106,29 @@
         <button type="submit" class="btn btn-outline-primary">Agregar Nota</button>
         {% endif %}
         <div id="notas-cliente"></div>
+    </form>
+</script>
+
+<script type="text/x-handlebars-template" id="alerta-template">
+    <form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
+        {% csrf_token %}
+        {% if perms.app.agregar_notas_al_cliente_nota %}
+        <input type="hidden" name="action" value="add-alert" />
+        <input type="hidden" name="alert_cte" id="alert_cte" value="" />
+        <div class="row">
+            <div class="col form-group">
+                <label for="nota">Nueva alerta</label>
+                <textarea name="nota" id="nota" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-group">
+                <label for="fecha_notificacion">Fecha de notificación:</label>
+                <input class="form-control" type="date" name="fecha_notificacion" id="fecha_notificacion" required="required" />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Agregar Alerta</button>
+        {% endif %}
     </form>
 </script>
 

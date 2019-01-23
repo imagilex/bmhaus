@@ -204,7 +204,7 @@ class DoctoOrdenReparacion(models.Model):
     filtro_de_aire = models.BooleanField(default=False)
     bateria = models.BooleanField(default=False)
     costo_de_revision = models.DecimalField(
-        max_digits=13, decimal_places=6)
+        max_digits=13, decimal_places=2, default=1000.00)
     observaciones = models.TextField(blank=True)
     firma_del_prestador_del_servicio = models.ImageField(
         blank=True, upload_to=doctoordenreparacion_upload_to)

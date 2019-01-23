@@ -11,30 +11,51 @@
     </div>
     <div class="row">
         <div class="col-sm-8 offset-md-2">
-                <h5>Proveedores <small>que surten la refacción</small></h5>
+            <h5>Proveedores <small>que surten la refacción</small></h5>
+            <table class="table table-striped table-sm table-responsive-md">
+                {% for prov in proveedores %}
+                    {% if prov in proveedores_que_surten %}
+                        {% for pp in pp_provedores %}
+                            {% if prov.pk == pp.proveedor.pk %}
+                                <tr>
+                                    <td>
+                                        <label for="provs{{ prov.pk }}">
+                                            <input type="checkbox" checked="checked" name="provs" id="provs{{ prov.pk }}" value="{{ prov.pk }}" />
+                                            {{ prov }}
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="costo-{{ prov.pk }}" value="{{ pp.costo }}" />
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td>
+                                <label for="provs{{ prov.pk }}">
+                                    <input type="checkbox" name="provs" id="provs{{ prov.pk }}" value="{{ prov.pk }}" />
+                                    {{ prov }}
+                                </label>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="costo-{{ prov.pk }}" value="0.00" />
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% empty %}
+                    <tr>
+                        <td>
+                            No hay proveedores
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
         </div>
     </div>
     <div class="row">
-        {% for prov in proveedores %}
-            <div class="col-sm-4 {% if not forloop.counter|divisibleby:2 %}offset-md-2{% endif %}">
-                <label for="provs{{ prov.pk }}">
-                    {% if prov in proveedores_que_surten %}
-                        <input type="checkbox" checked="checked" name="provs" id="provs{{ prov.pk }}" value="{{ prov.pk }}" />
-                    {% else %}
-                        <input type="checkbox" name="provs" id="provs{{ prov.pk }}" value="{{ prov.pk }}" />
-                    {% endif %}
-                    {{ prov }}
-                </label>
-            </div>
-        {% empty %}
-            <div class="col-sm-8 offset-sm-2">
-                No hay proveedores
-            </div>
-        {% endfor %}
-    </div>
-    <div class="row">
         <div class="col-sm-8 offset-md-2">
-                <button type="submit" class="btn btn-outline-primary" id="btn-save" >Guardar</button>
+            <button type="submit" class="btn btn-outline-primary" id="btn-save" >Guardar</button>
         </div>
     </div>
 </form>

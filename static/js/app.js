@@ -118,6 +118,15 @@ class clsCliente {
         $( "#nota_cte" ).attr( 'value', idcte );
         App.setUIControls()
     }
+    showAlertsSglCte() {
+        App.openPanel( $( "#alerta-template" ).html(), "Alertas del Cliente" );
+        App.setUIControls();
+    }
+    showAlertsCte(idcte,nombre) {
+        App.openPanel( $( "#alerta-template" ).html(), "Alertas: " + nombre );
+        $( "#alert_cte" ).attr( 'value', idcte );
+        App.setUIControls()
+    }
 }
 
 let App = new clsApp();

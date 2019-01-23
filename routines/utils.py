@@ -1,7 +1,10 @@
 from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
 
 from os import path, mkdir
 from unicodedata import normalize
+from email.mime.image import MIMEImage
 
 
 def print_error(message, level="Warning"):
@@ -213,3 +216,21 @@ def truncate(f, n=0):
     if n == 0:
         res = res[:-1]
     return res
+
+
+def send_mail(asunto, texto_plano, email_from, email_to, texto_html, imagenes=()):
+    email = EmailMultiAlternatives(
+        asunto,
+        texto_plano,
+        email_from,
+        email_to,
+    )
+    email.attach_alternative(texto_html, "text/html")
+    for img in imagenes:
+        print(img[0], img[1])
+        with open(settings.MEDIA_ROOT + img[0], 'rb') as i:
+            data = i.read()
+        data_image = MIMEImage(data)
+        data_image.add_header('Content-ID', '<' + img[1] + '>')
+        email.attach(data_image)
+    print( email.send() )

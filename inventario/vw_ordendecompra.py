@@ -74,7 +74,7 @@ def new(request):
             obj.save()
             for pza in Pieza.objects.all():
                 cant = request.POST.get("pza-cant-{}".format(pza.pk))
-                if cant:
+                if cant and float(cant) > 0:
                     Piezas_OrdenDeCompra.objects.create(
                         pieza=pza,
                         ordendecompra=obj,
@@ -133,6 +133,7 @@ def see(request, pk):
         'toolbar': toolbar,
         'piezas': list(obj.piezas_requeridas.all()),
         'req_ui': requires_jquery_ui(request),
+        'obj': obj
         })
 
 
@@ -152,7 +153,7 @@ def update(request, pk):
             Piezas_OrdenDeCompra.objects.filter(ordendecompra=obj).delete()
             for pza in Pieza.objects.all():
                 cant = request.POST.get("pza-cant-{}".format(pza.pk))
-                if cant:
+                if cant and float(cant) > 0:
                     Piezas_OrdenDeCompra.objects.create(
                         pieza=pza,
                         ordendecompra=obj,

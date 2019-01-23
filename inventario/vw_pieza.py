@@ -57,6 +57,7 @@ def new(request):
                 Proveedor_Piezas.objects.create(
                     pieza=obj,
                     proveedor=Proveedor.objects.get(pk=p),
+                    costo=request.POST.get('costo-' + p),
                     created_by=usuario,
                     updated_by=usuario
                 )
@@ -69,6 +70,7 @@ def new(request):
         'frm': frm,
         'proveedores': list(Proveedor.objects.all()),
         'proveedores_que_surten': list(),
+        'pp_provedores': list()
     })
 
 
@@ -109,6 +111,7 @@ def see(request, pk):
         'toolbar': toolbar,
         'proveedores': list(obj.proveedores.all()),
         'proveedores_que_surten': list(obj.proveedores.all()),
+        'pp_provedores': list(obj.pp_provedores.all())
         })
 
 
@@ -130,6 +133,7 @@ def update(request, pk):
                 Proveedor_Piezas.objects.create(
                     pieza=obj,
                     proveedor=Proveedor.objects.get(pk=p),
+                    costo=request.POST.get('costo-' + p),
                     created_by=usuario,
                     updated_by=usuario
                 )
@@ -142,6 +146,7 @@ def update(request, pk):
         'frm': frm,
         'proveedores': list(Proveedor.objects.all()),
         'proveedores_que_surten': list(obj.proveedores.all()),
+        'pp_provedores': list(obj.pp_provedores.all())
     })
 
 

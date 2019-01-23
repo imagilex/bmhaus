@@ -144,9 +144,9 @@ class Comprobante(models.Model):
     Certificado = models.TextField(null=True, blank=True)
     CondicionesDePago = models.CharField(
         max_length=1000, null=True, blank=True)
-    SubTotal = models.DecimalField(max_digits=13, decimal_places=6)
+    SubTotal = models.DecimalField(max_digits=13, decimal_places=2)
     Descuento = models.DecimalField(
-        null=True, blank=True, max_digits=13, decimal_places=6)
+        null=True, blank=True, max_digits=13, decimal_places=2)
     Moneda = models.CharField(max_length=25, null=True, blank=True)
     Moneda_txt = models.CharField(max_length=250, null=True, blank=True)
     Moneda_opcion = models.ForeignKey(
@@ -155,7 +155,7 @@ class Comprobante(models.Model):
         limit_choices_to={'catalogo__idsat': 'Moneda'})
     TipoCambio = models.DecimalField(
         null=True, blank=True, max_digits=11, decimal_places=6)
-    Total = models.DecimalField(max_digits=13, decimal_places=6)
+    Total = models.DecimalField(max_digits=13, decimal_places=2)
     TipoDeComprobante = models.CharField(max_length=25)
     TipoDeComprobante_txt = models.CharField(max_length=250)
     TipoDeComprobante_opcion = models.ForeignKey(
@@ -457,7 +457,7 @@ class Concepto(models.Model):
         limit_choices_to={'catalogo__idsat': 'ClaveProdServ'})
     NoIdentificacion = models.CharField(
         max_length=100, null=True, blank=True)
-    Cantidad = models.DecimalField(max_digits=12, decimal_places=6)
+    Cantidad = models.DecimalField(max_digits=12, decimal_places=2)
     ClaveUnidad = models.CharField(max_length=25)
     ClaveUnidad_txt = models.CharField(max_length=250)
     ClaveUnidad_opcion = models.ForeignKey(
@@ -467,10 +467,10 @@ class Concepto(models.Model):
         limit_choices_to={'catalogo__idsat': 'ClaveUnidad'})
     Unidad = models.CharField(max_length=20, null=True, blank=True)
     Descripcion = models.CharField(max_length=1000)
-    ValorUnitario = models.DecimalField(max_digits=13, decimal_places=6)
-    Importe = models.DecimalField(max_digits=13, decimal_places=6)
+    ValorUnitario = models.DecimalField(max_digits=13, decimal_places=2)
+    Importe = models.DecimalField(max_digits=13, decimal_places=2)
     Descuento = models.DecimalField(
-        max_digits=13, decimal_places=6,
+        max_digits=13, decimal_places=2,
         null=True, blank=True)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,
@@ -591,7 +591,7 @@ class CTraslado(models.Model):
     ctraslados = models.ForeignKey(
         CTraslados, on_delete=models.CASCADE,
         related_name="ctraslados")
-    Base = models.DecimalField(max_digits=13, decimal_places=6)
+    Base = models.DecimalField(max_digits=13, decimal_places=2)
     Impuesto = models.CharField(max_length=25)
     Impuesto_txt = models.CharField(max_length=250)
     Impuesto_opcion = models.ForeignKey(
@@ -607,10 +607,10 @@ class CTraslado(models.Model):
         null=True, blank=True,
         limit_choices_to={'catalogo__idsat': 'TipoFactor'})
     TasaOCuota = models.DecimalField(
-        max_digits=9, decimal_places=6,
+        max_digits=9, decimal_places=2,
         null=True, blank=True)
     Importe = models.DecimalField(
-        max_digits=13, decimal_places=6,
+        max_digits=13, decimal_places=2,
         null=True, blank=True)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL,
@@ -689,7 +689,7 @@ class CRetencion(models.Model):
     cretenciones = models.ForeignKey(
         CRetenciones,
         on_delete=models.CASCADE, related_name="cretenciones")
-    Base = models.DecimalField(max_digits=13, decimal_places=6)
+    Base = models.DecimalField(max_digits=13, decimal_places=2)
     Impuesto = models.CharField(max_length=25)
     Impuesto_txt = models.CharField(max_length=250)
     Impuesto_opcion = models.ForeignKey(
@@ -704,8 +704,8 @@ class CRetencion(models.Model):
         on_delete=models.SET_NULL, related_name="cretencion_tipofactor",
         null=True, blank=True,
         limit_choices_to={'catalogo__idsat': 'TipoFactor'})
-    TasaOCuota = models.DecimalField(max_digits=9, decimal_places=6)
-    Importe = models.DecimalField(max_digits=13, decimal_places=6)
+    TasaOCuota = models.DecimalField(max_digits=9, decimal_places=2)
+    Importe = models.DecimalField(max_digits=13, decimal_places=2)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,
         related_name="+")
@@ -833,14 +833,14 @@ class Parte(models.Model):
     NoIdentificacion = models.CharField(
         max_length=100,
         null=True, blank=True)
-    Cantidad = models.DecimalField(max_digits=12, decimal_places=6)
+    Cantidad = models.DecimalField(max_digits=12, decimal_places=2)
     Unidad = models.CharField(max_length=20, null=True, blank=True)
     Descripcion = models.CharField(max_length=1000)
     ValorUnitario = models.DecimalField(
-        max_digits=13, decimal_places=6,
+        max_digits=13, decimal_places=2,
         null=True, blank=True)
     Importe = models.DecimalField(
-        max_digits=13, decimal_places=6,
+        max_digits=13, decimal_places=2,
         null=True, blank=True)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL,
@@ -929,10 +929,10 @@ class Impuestos(models.Model):
         related_name="nodo_impuestos", null=True, blank=True)
     TotalImpuestosRetenidos = models.DecimalField(
         max_digits=13,
-        decimal_places=6, null=True, blank=True)
+        decimal_places=2, null=True, blank=True)
     TotalImpuestosTrasladados = models.DecimalField(
         max_digits=13,
-        decimal_places=6, null=True, blank=True)
+        decimal_places=2, null=True, blank=True)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL,
         null=True, blank=True, related_name="+")
@@ -1024,8 +1024,8 @@ class Traslado(models.Model):
         on_delete=models.SET_NULL, related_name="traslado_tipofactor",
         null=True, blank=True,
         limit_choices_to={'catalogo__idsat': 'TipoFactor'})
-    TasaOCuota = models.DecimalField(max_digits=9, decimal_places=6)
-    Importe = models.DecimalField(max_digits=13, decimal_places=6)
+    TasaOCuota = models.DecimalField(max_digits=9, decimal_places=2)
+    Importe = models.DecimalField(max_digits=13, decimal_places=2)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,
         related_name="+")
@@ -1110,7 +1110,7 @@ class Retencion(models.Model):
         on_delete=models.SET_NULL, related_name="retencion_impuesto",
         null=True, blank=True,
         limit_choices_to={'catalogo__idsat': 'Impuesto'})
-    Importe = models.DecimalField(max_digits=13, decimal_places=6)
+    Importe = models.DecimalField(max_digits=13, decimal_places=2)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,
         related_name="+")

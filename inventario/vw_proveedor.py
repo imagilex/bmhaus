@@ -65,6 +65,7 @@ def new(request):
                 Proveedor_Piezas.objects.create(
                     pieza=Pieza.objects.get(pk=p),
                     proveedor=obj,
+                    costo=request.POST.get('costo-' + p),
                     created_by=usuario,
                     updated_by=usuario
                 )
@@ -80,6 +81,7 @@ def new(request):
         'frm2': frmDir,
         'piezas': list(Pieza.objects.all()),
         'piezas_que_surte': list(),
+        'pp_piezas': list()
     })
 
 
@@ -124,6 +126,7 @@ def see(request, pk):
         'toolbar': toolbar,
         'piezas': list(obj.piezas.all()),
         'piezas_que_surte': list(obj.piezas.all()),
+        'pp_piezas': list(obj.pp_piezas.all())
         })
 
 
@@ -146,6 +149,7 @@ def update(request, pk):
                 Proveedor_Piezas.objects.create(
                     pieza=Pieza.objects.get(pk=p),
                     proveedor=obj,
+                    costo=request.POST.get('costo-' + p),
                     created_by=usuario,
                     updated_by=usuario
                 )
@@ -161,6 +165,7 @@ def update(request, pk):
         'frm2': frmDir,
         'piezas': list(Pieza.objects.all()),
         'piezas_que_surte': list(obj.piezas.all()),
+        'pp_piezas': list(obj.pp_piezas.all())
     })
 
 

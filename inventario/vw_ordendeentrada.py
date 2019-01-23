@@ -8,7 +8,8 @@ from .models import (
     newIdentificadorForOrdenDeEntrada,
     Pieza,
     Proveedor,
-    Piezas_OrdenDeEntrada)
+    Piezas_OrdenDeEntrada,
+    OrdenDeCompra)
 from .forms import FrmOrdenDeEntrada, FrmOrdenDeEntradaSee
 from initsys.models import Usr
 from routines.mkitsafe import valida_acceso
@@ -70,6 +71,7 @@ def new(request):
             obj.identificador = newIdentificadorForOrdenDeEntrada()
             obj.created_by = usuario
             obj.updated_by = usuario
+            obj.proveedor = obj.orden_de_compra.proveedor
             obj.save()
             for pza in Pieza.objects.all():
                 cant = request.POST.get("pza-cant-{}".format(pza.pk))
@@ -95,6 +97,7 @@ def new(request):
         'piezas': list(Pieza.objects.all()),
         'proveedores': list(Proveedor.objects.all()),
         'req_ui': requires_jquery_ui(request),
+        'ordenesdecompra': list(OrdenDeCompra.objects.filter(orden_de_entrada__isnull = True) )
     })
 
 

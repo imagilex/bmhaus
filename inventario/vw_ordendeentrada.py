@@ -10,7 +10,10 @@ from .models import (
     Proveedor,
     Piezas_OrdenDeEntrada,
     OrdenDeCompra)
-from .forms import FrmOrdenDeEntrada, FrmOrdenDeEntradaSee
+from .forms import (
+    FrmOrdenDeEntrada,
+    FrmOrdenDeEntradaSee,
+    FrmOrdenDeEntradaUpd)
 from initsys.models import Usr
 from routines.mkitsafe import valida_acceso
 from routines.utils import hipernormalize, truncate, requires_jquery_ui
@@ -77,7 +80,7 @@ def new(request):
                 cant = request.POST.get("pza-cant-{}".format(pza.pk))
                 costo = request.POST.get("pza-costo-{}".format(pza.pk))
                 importe = request.POST.get("pza-importe-{}".format(pza.pk))
-                if cant and costo and importe:
+                if cant and float(cant) > 0 and costo and importe:
                     Piezas_OrdenDeEntrada.objects.create(
                         pieza=pza,
                         ordendeentrada=obj,
@@ -150,7 +153,7 @@ def update(request, pk):
         return HttpResponseRedirect(reverse(
             'item_no_encontrado'))
     obj = OrdenDeEntrada.objects.get(pk=pk)
-    frm = FrmOrdenDeEntrada(instance=obj, data=request.POST or None)
+    frm = FrmOrdenDeEntradaUpd(instance=obj, data=request.POST or None)
     if 'POST' == request.method:
         if frm.is_valid():
             obj = frm.save(commit=False)
@@ -161,7 +164,7 @@ def update(request, pk):
                 cant = request.POST.get("pza-cant-{}".format(pza.pk))
                 costo = request.POST.get("pza-costo-{}".format(pza.pk))
                 importe = request.POST.get("pza-importe-{}".format(pza.pk))
-                if cant and costo and importe:
+                if cant and float(cant) > 0 and costo and importe:
                     Piezas_OrdenDeEntrada.objects.create(
                         pieza=pza,
                         ordendeentrada=obj,
@@ -173,15 +176,13 @@ def update(request, pk):
                     )
             return HttpResponseRedirect(reverse(
                 'ordendeentrada_see', kwargs={'pk': obj.pk}))
-    return render(request, 'inventario/ordendeentrada/form.html', {
+    return render(request, 'inventario/ordendeentrada/form_upd.html', {
         'menu_main': usuario.main_menu_struct(),
         'titulo': 'Órden de Entrada',
         'titulo_descripcion': obj,
         'frm': frm,
-        'piezas': list(Pieza.objects.all()),
-        'proveedores': list(Proveedor.objects.all()),
-        'piezas_entradas': list(obj.piezas_entradas.all()),
         'req_ui': requires_jquery_ui(request),
+        'obj': obj
     })
 
 

@@ -108,6 +108,18 @@ class FrmOrdenDeEntrada(forms.ModelForm):
         }
 
 
+class FrmOrdenDeEntradaUpd(forms.ModelForm):
+
+    class Meta:
+        model = OrdenDeEntrada
+        fields = [
+            'fecha',
+        ]
+        widgets = {
+            'fecha': forms.TextInput(attrs={'type': 'date'}),
+        }
+
+
 class FrmOrdenDeEntradaSee(forms.ModelForm):
 
     class Meta:

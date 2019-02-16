@@ -26,13 +26,13 @@
                                 {{ pza }}
                             </td>
                             <td>
-                                <input type="number" class="form-control text-right cant" name="pza-cant-{{ pza.pk }}" id="pza-cant-{{ pza.pk }}" value="{% for pza_req in piezas_requeridas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.cantidad}}{% endif %}{% endfor %}" />
+                                <input type="number" class="form-control text-right cant" step=".01" name="pza-cant-{{ pza.pk }}" id="pza-cant-{{ pza.pk }}" value="{% for pza_req in piezas_requeridas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.cantidad}}{% endif %}{% endfor %}" />
                             </td>
                             <td>
-                                <input type="number" class="form-control text-right precio" value="0" readonly="readonly" />
+                                <input type="number" class="form-control text-right precio" step=".01" value="0" readonly="readonly" />
                             </td>
                             <td>
-                                <input type="number" class="form-control text-right importe" value="0" readonly="readonly" />
+                                <input type="number" class="form-control text-right importe" step=".01" value="0" readonly="readonly" />
                             </td>
                         </tr>
                     {% endfor %}

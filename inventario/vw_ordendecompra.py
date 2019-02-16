@@ -123,7 +123,6 @@ def see(request, pk):
             'view': 'ordendecompra_delete',
             'label': '<i class="far fa-trash-alt"></i> Eliminar',
             'pk': pk})
-    print(obj.piezas.all())
     return render(request, 'inventario/ordendecompra/see.html', {
         'menu_main': usuario.main_menu_struct(),
         'titulo': 'Órden de Compra',

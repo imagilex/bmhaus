@@ -1,0 +1,95 @@
+{% extends "global/html_struct.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-8 offset-md-2">
+        <form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
+            {% csrf_token %}
+            {{ frm | crispy }}
+            <h5>Refacciones</h5>
+
+            <table class="table table-striped table-sm table-responsive-md">
+                <thead>
+                    <tr>
+                        <th>Refacción</th>
+                        <th>Cantidad</th>
+                        <th>Costo</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody id="data-tbl">
+                    {% for pza in obj.proveedor.pp_piezas.all %}
+                        <tr>
+                            <td>{{ pza.pieza }}</td>
+                            <td>
+                                <input type="number" class="form-control text-right cant" step=".01"
+                                       name="pza-cant-{{ pza.pieza.pk }}" id="pza-cant-{{ pza.pieza.pk }}" 
+                                       value="{% for pza_req in obj.piezas_entradas.all %}{% if pza_req.pieza.pk == pza.pieza.pk %}{{pza_req.cantidad}}{% endif %}{% endfor %}" 
+                                       onchange="calculaImporte({{ pza.pieza.pk }})" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control text-right costo" step=".01"
+                                       name="pza-costo-{{ pza.pieza.pk }}" id="pza-costo-{{ pza.pieza.pk }}" 
+                                       value="{% for pza_req in obj.piezas_entradas.all %}{% if pza_req.pieza.pk == pza.pieza.pk %}{{pza_req.costo}}{% endif %}{% endfor %}" 
+                                       onchange="calculaImporte({{ pza.pieza.pk }})" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control text-right importe" step=".01"
+                                       name="pza-importe-{{ pza.pieza.pk }}" id="pza-importe-{{ pza.pieza.pk }}" 
+                                       value="{% for pza_req in obj.piezas_entradas.all %}{% if pza_req.pieza.pk == pza.pieza.pk %}{{pza_req.importe}}{% endif %}{% endfor %}" />
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <th colspan="2"></th>
+                        <th>
+                            <input type="number" class="form-control text-right" name="total" id="total" value="" required="required" />
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <button type="submit" class="btn btn-outline-primary" id="btn-save" >Guardar</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    let calculaImporte = (idpza) => {
+        let cantidad = parseFloat( $( "#pza-cant-" + idpza ).val() );
+        let costo = parseFloat( $( "#pza-costo-" + idpza ).val() );
+        let importe = costo * cantidad;
+        if( !isNaN( cantidad ) ) {
+            $( "#pza-cant-" + idpza )[0].value = cantidad.asMoney();
+        } else {
+            $( "#pza-importe-" + idpza )[0].value = '';
+        }
+        if( !isNaN( costo ) ) {
+            $( "#pza-costo-" + idpza )[0].value = costo.asMoney();
+        } else {
+            $( "#pza-importe-" + idpza )[0].value = '';
+        }
+        if( !isNaN( importe ) ) {
+            $( "#pza-importe-" + idpza )[0].value = importe.asMoney();
+        }
+        let total = 0;
+        $( "input.importe" ).each( function(){
+            let importe = parseFloat( "0" + this.value );
+            total += importe;
+        } );
+        $( "#total" )[ 0 ].value = total.asMoney();
+    }
+    {% for pza in obj.proveedor.pp_piezas.all %}
+        if( "" == $( "#pza-costo-{{ pza.pieza.pk }}" ).val() ) {
+            $( "#pza-costo-{{ pza.pieza.pk }}" )[ 0 ].value = "{{ pza.costo }}";
+        }
+        calculaImporte( {{ pza.pieza.pk }} );
+    {% endfor %}
+</script>
+
+{% endblock %}

@@ -57,4 +57,10 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    let contenedor = $( "#id_orden_de_compra" ).parent();
+    contenedor.html('');
+    $( '<input type="text" value="{{ obj.orden_de_compra }}" class="form-control" id="id_orden_de_compra" name="orden_de_compra" />' ).appendTo( contenedor );
+</script>
+
 {% endblock %}

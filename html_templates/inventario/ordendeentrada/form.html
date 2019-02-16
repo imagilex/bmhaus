@@ -26,13 +26,13 @@
                                 {{ pza }}
                             </td>
                             <td>
-                                <input type="number" class="form-control text-right cant" name="pza-cant-{{ pza.pk }}" id="pza-cant-{{ pza.pk }}" value="{% for pza_req in piezas_entradas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.cantidad}}{% endif %}{% endfor %}" onchange="calculaImporte({{ pza.pk }})" />
+                                <input type="number" class="form-control text-right cant" step=".01" name="pza-cant-{{ pza.pk }}" id="pza-cant-{{ pza.pk }}" value="{% for pza_req in piezas_entradas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.cantidad}}{% endif %}{% endfor %}" onchange="calculaImporte({{ pza.pk }})" />
                             </td>
                             <td>
-                                <input type="number" class="form-control text-right costo" name="pza-costo-{{ pza.pk }}" id="pza-costo-{{ pza.pk }}" value="{% for pza_req in piezas_entradas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.costo}}{% endif %}{% endfor %}" onchange="calculaImporte({{ pza.pk }})" />
+                                <input type="number" class="form-control text-right costo" step=".01" name="pza-costo-{{ pza.pk }}" id="pza-costo-{{ pza.pk }}" value="{% for pza_req in piezas_entradas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.costo}}{% endif %}{% endfor %}" onchange="calculaImporte({{ pza.pk }})" />
                             </td>
                             <td>
-                                <input type="number" class="form-control text-right importe" name="pza-importe-{{ pza.pk }}" id="pza-importe-{{ pza.pk }}" value="{% for pza_req in piezas_entradas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.importe}}{% endif %}{% endfor %}" />
+                                <input type="number" class="form-control text-right importe" step=".01" name="pza-importe-{{ pza.pk }}" id="pza-importe-{{ pza.pk }}" value="{% for pza_req in piezas_entradas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.importe}}{% endif %}{% endfor %}" />
                             </td>
                         </tr>
                     {% endfor %}

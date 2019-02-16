@@ -1,0 +1,76 @@
+{% extends "global/html_struct.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-8 offset-md-2">
+        <form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
+            {% csrf_token %}
+            {{ frm | crispy }}
+            <h5>Refacciones</h5>
+
+            <table class="table table-striped table-sm table-responsive-md">
+                <thead>
+                    <tr>
+                        <th>Refacción</th>
+                        <th>Cantidad</th>
+                        <th>Costo</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody id="data-tbl">
+                    {% for pza in piezas %}
+                        <tr>
+                            <td>
+                                {{ pza.pieza }}
+                            </td>
+                            <td>
+                                <input type="number" value="{{ pza.cantidad }}" class="form-control text-right cant" name="pza-cant-{{ pza.pk }}" id="pza-cant-{{ pza.pk }}" />
+                            </td>
+                            <td>
+                                {% for pp in obj.proveedor.pp_piezas.all %}
+                                    {% if pza.pieza.pk == pp.pieza.pk %}
+                                        <input type="number" class="form-control text-right precio" value="{{ pp.costo }}" />
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <input type="number" class="form-control text-right importe" value="0" />
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>
+                            Total
+                        </th>
+                        <th colspan="2"></th>
+                        <th>
+                            <input id="total" type="number" class="form-control text-right" value="0" />
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+            <button type="submit" class="btn btn-outline-primary" id="btn-save" >Guardar</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $( document ).ready( function() {
+        let total = 0;
+        $( "#data-tbl tr" ).each( function() {
+            let tr = $( this );
+            let cant = parseFloat( tr.find( "input.cant" ).val() );
+            let precio = parseFloat( tr.find( "input.precio" ).val() );
+            let importe = cant * precio;
+            tr.find( "input.importe" )[ 0 ].value = importe;
+            total += importe;
+        } );
+        $( "#total" )[ 0 ].value = total;
+    } );
+</script>
+
+{% endblock %}

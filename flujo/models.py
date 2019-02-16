@@ -10,6 +10,7 @@ class Flujo(models.Model):
     name = models.CharField(max_length=250, default="")
     nombre = models.CharField(max_length=250)
     descripcion = models.TextField(null=True, blank=True)
+    extra_data = models.TextField(blank=True)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,
         related_name="+")
@@ -42,6 +43,7 @@ class Estado(models.Model):
     es_cancelacion = models.BooleanField(default=False)
     porcentaje = models.DecimalField(
         max_digits=5, decimal_places=2, default=0.0)
+    extra_data = models.TextField(blank=True)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,
         related_name="+")
@@ -74,6 +76,7 @@ class Accion(models.Model):
     estado_final = models.ForeignKey(
         Estado, on_delete=models.PROTECT,
         related_name="acciones_ejecutadas")
+    extra_data = models.TextField(blank=True)
     created_by = models.ForeignKey(
         Usr, on_delete=models.SET_NULL, null=True, blank=True,
         related_name="+")

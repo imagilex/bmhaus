@@ -38,9 +38,10 @@ def see(request, pk):
             and 'Taller' in instanciahistoria.accion.nombre):
         direccion = as_paragraph_fn(get_setting_fn(
             "03 Legal.direccion_taller", Setting))
+        direccion=""
     else:
         direccion_oficina = vehiculo.propietario.direccion_oficina
-        direccion = direccion_oficina.asDireccion
+        direccion = direccion_oficina.asDireccion()
     if usuario.has_perm_or_has_perm_child(
             'doctoordenreparacion.'
             'actualizar_orden_de_reparacion_docto orden reparacion'):
@@ -63,8 +64,8 @@ def see(request, pk):
         {
             'menu_main': usuario.main_menu_struct(),
             'titulo': 'Orden de Reparación',
-            'titulo_descripcion': "{}/{}".format(
-                vehiculo.propietario, vehiculo),
+            'titulo_descripcion': \
+                '<span id="txt_identificador" class="no-print"></span>',
             'toolbar': toolbar,
             'titulo_frm_1': '',
             'frm1': FrmDoctoOrdenReparacionGenerales01(instance=obj),

@@ -22,10 +22,8 @@
         <h5 class="card-title">{{ servicio.vehiculo }}</h5>
         <p class="card-text service-data">
             Fecha: {{ servicio.instancia.created_at | date:"d/m/Y H:i" }}<br />
-            Terminado: {% if servicio.instancia.terminado %}Sí{% else %}No{% endif %}<br />
-            Cancelado: {% if servicio.instancia.estado_actual.es_cancelacion %}Sí{% else %}No{% endif %}<br />
-            Estado: {{ servicio.instancia.estado_actual }}<br />
-            ¿Tiene Pagos? {% if servicio.pagado %}Sí{% else %}No{% endif %}<br />
+            Terminado: {% if servicio.instancia.estado_actual.es_cancelacion %}Sí{% else %}{% if servicio.instancia.terminado %}Sí{% else %}No{% endif %}{% endif %}<br />
+            Estado: {{ servicio.instancia.estado_actual }}
         </p>
     </div>
 </div>

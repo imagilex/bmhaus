@@ -22,6 +22,14 @@ Date.prototype.theTime = function() {
     res += this.getMinutes();
     return res;
 }
+Number.prototype.asMoney = function() {
+    let asString = `${this}`;
+    if( asString.indexOf( "." ) == -1 ){
+        asString += ".";
+    }
+    asString += "00";
+    return asString.substr( 0, asString.indexOf( "." ) + 3 );
+}
 
 class clsApp {
     checkInputIn( idcontainer ) {
@@ -108,6 +116,15 @@ class clsCliente {
         App.openPanel( $( "#notas-template" ).html(), "Notas: " + nombre );
         $( "#notas-cliente" ).html( $( "#notas-cte-" + idcte + "-template" ).html() );
         $( "#nota_cte" ).attr( 'value', idcte );
+        App.setUIControls()
+    }
+    showAlertsSglCte() {
+        App.openPanel( $( "#alerta-template" ).html(), "Alertas del Cliente" );
+        App.setUIControls();
+    }
+    showAlertsCte(idcte,nombre) {
+        App.openPanel( $( "#alerta-template" ).html(), "Alertas: " + nombre );
+        $( "#alert_cte" ).attr( 'value', idcte );
         App.setUIControls()
     }
 }

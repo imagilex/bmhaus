@@ -197,4 +197,26 @@
     </form>
 </script>
 
+<script type="text/x-handlebars-template" id="alerta-template">
+    <form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
+        {% csrf_token %}
+        {% if can_add_alert %}
+        <input type="hidden" name="action" value="add-alert" />
+        <div class="row">
+            <div class="col form-group">
+                <label for="nota">Nueva Alerta</label>
+                <textarea name="nota" id="nota" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-group">
+                <label for="fecha_notificacion">Fecha de Notificación</label>
+                <input class="form-control" type="date" name="fecha_notificacion" id="fecha_notificacion" required="required" />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Agregar Alerta</button>
+        {% endif %}
+    </form>
+</script>
+
 {% endblock%}

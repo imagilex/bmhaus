@@ -48,4 +48,14 @@ def get_setting(sectionvalue):
 
 @register.filter
 def keyvalue(dict, key):
-    return dict[key]
+    data = ''
+    try:
+        data = dict[key]
+    except:
+        print("No se encontro la llave {} en {}".format(key,dict))
+    return data
+
+
+@register.filter
+def ifNone(value, default=""):
+    return value or default

@@ -166,8 +166,8 @@ class FrmDoctoOrdenReparacion(forms.ModelForm):
             'fecha_de_recepcion',
             'hora_de_recepcion',
             'servicio_solicitado',
-            'fotografia_kilometros',
-            'fotografia_tanque_de_gasolina',
+            'kilometros',
+            'tanque_de_gasolina',
             'fotografia_superior',
             'fotografia_frente',
             'fotografia_trasera',
@@ -218,6 +218,7 @@ class FrmDoctoOrdenReparacion(forms.ModelForm):
 
             'costo_de_revision',
 
+            'observaciones',
             'firma_del_prestador_del_servicio',
             'firma_del_consumidor',
         ]
@@ -226,12 +227,33 @@ class FrmDoctoOrdenReparacion(forms.ModelForm):
             'hora_de_recepcion': forms.TextInput(attrs={'type': 'time'}),
         }
         help_texts = {
-            'costo_de_revision': "En caso de que el presupuesto no sea"
-            "aceptado, el consumidor pagará exclusivamente el costo por"
-            "la revisión y diagnóstico y el prestador del servicio se"
-            "obliga a devolver el vehículo en las condiciones en las que"
-            "le fue entregado, exceptuando las consecuencias inevitables"
+            'costo_de_revision': "En caso de que el presupuesto no sea "
+            "aceptado, el consumidor pagará exclusivamente el costo por "
+            "la revisión y diagnóstico y el prestador del servicio se "
+            "obliga a devolver el vehículo en las condiciones en las que "
+            "le fue entregado, exceptuando las consecuencias inevitables "
             "del diagnóstico.",
+        }
+        labels = {
+            'fecha_de_recepcion': 'Fecha de recepción',
+            'hora_de_recepcion': 'Hora de recepción',
+            'kilometros': 'Kilómetros',
+            'tanque_de_gasolina': 'Tanque de gasolina',
+            'fotografia_superior': 'Fotografía superior',
+            'fotografia_frente': 'Fotografía frente',
+            'fotografia_trasera': 'Fotografía trasera',
+            'fotografia_lateral_izquierdo': 'Fotografía lateral izquierdo',
+            'fotografia_lateral_derecho': 'Fotografía lateral derecho',
+            'tapon_de_ruedas': 'Tapón de ruedas',
+            'tapon_de_gasolina': 'Tapón de gasolina',
+            'carroceria_sin_golpes': 'Carrocería sin golpes',
+            'calefaccion': 'Calefacción',
+            'llanta_de_refaccion': 'Llanta de refacción',
+            'extingidor': 'Extinguidor',
+            'tapon_de_aceite': 'Tapón de aceite',
+            'tapon_de_radiador': 'Tapón de radiador',
+            'bateria': 'Batería',
+            'costo_de_revision': 'Costo de revisión',
         }
 
 
@@ -251,12 +273,18 @@ class FrmDoctoOrdenReparacionGenerales01(forms.ModelForm):
                 attrs={'type': 'time', 'value': theTime}),
         }
         help_texts = {
-            'costo_de_revision': "En caso de que el presupuesto no sea"
-            "aceptado, el consumidor pagará exclusivamente el costo por"
-            "la revisión y diagnóstico y el prestador del servicio se"
-            "obliga a devolver el vehículo en las condiciones en las que"
-            "le fue entregado, exceptuando las consecuencias inevitables"
+            'costo_de_revision': "En caso de que el presupuesto no sea "
+            "aceptado, el consumidor pagará exclusivamente el costo por "
+            "la revisión y diagnóstico y el prestador del servicio se "
+            "obliga a devolver el vehículo en las condiciones en las que "
+            "le fue entregado, exceptuando las consecuencias inevitables "
             "del diagnóstico.",
+        }
+        
+        labels = {
+            'fecha_de_recepcion': 'Fecha de recepción',
+            'hora_de_recepcion': 'Hora de recepción',
+            'costo_de_revision': 'Costo de revisión',
         }
 
 
@@ -265,14 +293,23 @@ class FrmDoctoOrdenReparacionGenerales02(forms.ModelForm):
     class Meta:
         model = DoctoOrdenReparacion
         fields = [
-            'fotografia_kilometros',
-            'fotografia_tanque_de_gasolina',
+            'kilometros',
+            'tanque_de_gasolina',
             'fotografia_superior',
             'fotografia_frente',
             'fotografia_trasera',
             'fotografia_lateral_izquierdo',
             'fotografia_lateral_derecho',
         ]
+        labels = {
+            'kilometros': 'Kilómetros',
+            'tanque_de_gasolina': 'Tanque de gasolina',
+            'fotografia_superior': 'Fotografía superior',
+            'fotografia_frente': 'Fotografía frente',
+            'fotografia_trasera': 'Fotografía trasera',
+            'fotografia_lateral_izquierdo': 'Fotografía lateral izquierdo',
+            'fotografia_lateral_derecho': 'Fotografía lateral derecho',
+        }
 
 
 class FrmDoctoOrdenReparacionExteriores(forms.ModelForm):
@@ -294,6 +331,11 @@ class FrmDoctoOrdenReparacionExteriores(forms.ModelForm):
             'bocinas_de_claxon',
             'limpiadores',
         ]
+        labels = {
+            'tapon_de_ruedas': 'Tapón de ruedas',
+            'tapon_de_gasolina': 'Tapón de gasolina',
+            'carroceria_sin_golpes': 'Carrocería sin golpes',
+        }
 
 
 class FrmDoctoOrdenReparacionInteriores(forms.ModelForm):
@@ -314,6 +356,9 @@ class FrmDoctoOrdenReparacionInteriores(forms.ModelForm):
             'tapetes',
             'vestiduras',
         ]
+        labels = {
+            'calefaccion': 'Calefacción',
+        }
 
 
 class FrmDoctoOrdenReparacionAccesorios(forms.ModelForm):
@@ -329,6 +374,10 @@ class FrmDoctoOrdenReparacionAccesorios(forms.ModelForm):
             'llanta_de_refaccion',
             'extingidor',
         ]
+        labels = {
+            'llanta_de_refaccion': 'Llanta de refacción',
+            'extingidor': 'Extinguidor',
+        }
 
 
 class FrmDoctoOrdenReparacionComponentesMecanicos(forms.ModelForm):
@@ -343,6 +392,11 @@ class FrmDoctoOrdenReparacionComponentesMecanicos(forms.ModelForm):
             'filtro_de_aire',
             'bateria',
         ]
+        labels = {
+            'tapon_de_aceite': 'Tapón de aceite',
+            'tapon_de_radiador': 'Tapón de radiador',
+            'bateria': 'Batería',
+        }
 
 
 class FrmDoctoOrdenReparacionFirmas(forms.ModelForm):
@@ -350,6 +404,7 @@ class FrmDoctoOrdenReparacionFirmas(forms.ModelForm):
     class Meta:
         model = DoctoOrdenReparacion
         fields = [
+            'observaciones',
             'firma_del_prestador_del_servicio',
             'firma_del_consumidor',
         ]
@@ -362,4 +417,8 @@ class FrmAvanceEnFlujo(forms.ModelForm):
         fields = [
             'nota',
             'fotografia',
+            'fotografia_2',
+            'fotografia_3',
+            'fotografia_4',
+            'fotografia_5',
         ]

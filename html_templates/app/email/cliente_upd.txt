@@ -1,0 +1,16 @@
+{% extends "global/email/base.txt" %}
+{% load static %}
+{% load util_filters %}
+
+{% block content %}
+
+Estas recibiendo este mensaje ya que tus datos de acceso a BMhaus (https://{{ request.get_host }}/) han cambiado.
+
+Tus nuevos datos de acceso son:
+
+Usuario: {{ usuario.usuario }}
+Contraseña: {{ usuario.contraseña }}
+
+Para accesar debes dirigirte a https://{{ request.get_host }}/.
+
+{% endblock %}

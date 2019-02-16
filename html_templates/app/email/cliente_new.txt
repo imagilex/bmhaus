@@ -1,0 +1,16 @@
+{% extends "global/email/base.txt" %}
+{% load static %}
+{% load util_filters %}
+
+{% block content %}
+
+Estas recibiendo este mensaje ya que has sido de alta como un nuevo usuario en el sitio https://{{ request.get_host }}/ (BMhaus) y nos complace mucho darte la bienvenida al sitio.
+
+Aprovechamos también para indicarte tus datos de acceso al sistema:
+
+Tu usuario es: {{ usuario.usuario }}
+Y tu contraseña: {{ usuario.contraseña }}
+
+Para accesar debes dirigirte a https://{{ request.get_host }}/.
+
+{% endblock %}

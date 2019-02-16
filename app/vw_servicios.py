@@ -10,7 +10,8 @@ from .models import (
     DoctoOrdenReparacion,
     AvanceEnFlujo,
     doctoordenreparacion_upload_to,
-    avanceenflujo_upload_to)
+    avanceenflujo_upload_to,
+    newIdentificadorForDoctoOrdenReparacion)
 from .forms import (
     FrmDoctoOrdenReparacion,
     FrmDoctoOrdenReparacionGenerales01,
@@ -21,6 +22,7 @@ from .forms import (
     FrmDoctoOrdenReparacionComponentesMecanicos,
     FrmDoctoOrdenReparacionFirmas,
     FrmAvanceEnFlujo)
+from .functions import merge_flujo_acciones
 from flujo.models import (
     Flujo, Estado, Accion, InstanciaFlujo, InstanciaHistoriaDetalle)
 from routines.mkitsafe import valida_acceso
@@ -161,6 +163,7 @@ def executeaccion(request):
                     obj.vehiculo = vehiculo
                     obj.created_by = usuario
                     obj.updated_by = usuario
+                    obj.identificador = newIdentificadorForDoctoOrdenReparacion()
                     if request.FILES.get('fotografia_kilometros'):
                         obj.fotografia_kilometros = move_uploaded_file(
                             request.FILES.get('fotografia_kilometros'),
@@ -263,6 +266,22 @@ def executeaccion(request):
                         obj.fotografia = move_uploaded_file(
                             request.FILES.get('fotografia'),
                             avanceenflujo_upload_to)
+                    if request.FILES.get('fotografia_2'):
+                        obj.fotografia_2 = move_uploaded_file(
+                            request.FILES.get('fotografia_2'),
+                            avanceenflujo_upload_to)
+                    if request.FILES.get('fotografia_3'):
+                        obj.fotografia_3 = move_uploaded_file(
+                            request.FILES.get('fotografia_3'),
+                            avanceenflujo_upload_to)
+                    if request.FILES.get('fotografia_4'):
+                        obj.fotografia_4 = move_uploaded_file(
+                            request.FILES.get('fotografia_4'),
+                            avanceenflujo_upload_to)
+                    if request.FILES.get('fotografia_5'):
+                        obj.fotografia_5 = move_uploaded_file(
+                            request.FILES.get('fotografia_5'),
+                            avanceenflujo_upload_to)
                     obj.save()
                     historia = instanciaflujo.historia.create(
                         accion=accion,
@@ -315,11 +334,15 @@ def index(request):
     if "POST" == request.method:
         if "search" == request.POST.get('action'):
             search_value = hipernormalize(request.POST.get('valor'))
-            data = [reg for reg in data if
-                search_value in hipernormalize(reg['vehiculo']) \
-                or search_value in hipernormalize(reg['vehiculo'].propietario) \
-                or search_value in hipernormalize(reg['instancia'].estado_actual)
-            ]
+            data = [reg
+                    for reg in data if (
+                        search_value in hipernormalize(reg['vehiculo'])
+                        or search_value
+                        in hipernormalize(reg['vehiculo'].propietario)
+                        or search_value
+                        in hipernormalize(reg['instancia'].estado_actual)
+                    )
+                    ]
     toolbar = []
     toolbar.append({'type': 'search'})
     return render(
@@ -354,20 +377,32 @@ def see(request, pk):
                     'pk': aef.pk,
                     'nota': aef.nota,
                     'fotografia': "{}".format(aef.fotografia).replace(
-                        '\\', '/')}
+                        '\\', '/'),
+                    'fotografia_2': "{}".format(aef.fotografia_2).replace(
+                        '\\', '/'),
+                    'fotografia_3': "{}".format(aef.fotografia_3).replace(
+                        '\\', '/'),
+                    'fotografia_4': "{}".format(aef.fotografia_4).replace(
+                        '\\', '/'),
+                    'fotografia_5': "{}".format(aef.fotografia_5).replace(
+                        '\\', '/'),
+                    }
     ver_doctoordenreparacion = usuario.has_perm_or_has_perm_child(
         'doctoordenreparacion.'
         'doctoordenreparacion_docto orden reparacion') or \
-        usuario.has_perm_or_has_perm_child('doctoordenreparacion.'
-        'ver_orden_de_reparacion_docto orden reparacion')
+        usuario.has_perm_or_has_perm_child(
+            'doctoordenreparacion.'
+            'ver_orden_de_reparacion_docto orden reparacion')
     ver_avancereparacion = usuario.has_perm_or_has_perm_child(
         'avanceenflujo.avanceenflujo_avance en flujo') or \
-        usuario.has_perm_or_has_perm_child('avanceenflujo.'
-        'ver_avance_en_flujo_avance en flujo')
+        usuario.has_perm_or_has_perm_child(
+            'avanceenflujo.'
+            'ver_avance_en_flujo_avance en flujo')
     actualizar_avancereparacion = usuario.has_perm_or_has_perm_child(
         'avanceenflujo.actualizar_avance_en_flujo_avance en flujo')
     eliminar_avancereparacion = usuario.has_perm_or_has_perm_child(
         'avanceenflujo.eliminar_avance_en_flujo_avance en flujo')
+    print(merge_flujo_acciones(instanciaflujo))
     return render(
         request,
         'app/servicios/see.html', {
@@ -378,6 +413,7 @@ def see(request, pk):
             'vehiculo': vehiculo,
             'cliente': cliente,
             'instanciaflujo': instanciaflujo,
+            'flujo_servicio': merge_flujo_acciones(instanciaflujo),
             'avanceenflujo': avanceenflujo,
             'ver_doctoordenreparacion': ver_doctoordenreparacion,
             'ver_avancereparacion': ver_avancereparacion,

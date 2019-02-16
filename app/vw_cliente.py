@@ -3,20 +3,23 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import Group
 from django.db.models import ProtectedError
+from django.conf import settings
 
 import json
 
 from .models import Cliente
 from .forms import (
     FrmCliente, FrmClienteUsr, FrmClienteContacto, FrmClienteFacturacion)
-from initsys.models import Usr, Nota, Alerta, usr_upload_to
+from initsys.models import Usr, Nota, Alerta, Setting, usr_upload_to
 from initsys.forms import FrmDireccion
 from flujo.models import InstanciaFlujo
 from routines.mkitsafe import valida_acceso
 from routines.utils import (
     move_uploaded_file,
     requires_jquery_ui,
-    hipernormalize)
+    hipernormalize,
+    send_mail,
+    get_setting_fn)
 
 
 def add_nota(cte, nota, fecha_notificacion, usr):
@@ -28,15 +31,22 @@ def add_nota(cte, nota, fecha_notificacion, usr):
             updated_by=usr,
         )
         if "" != fecha_notificacion:
-            Alerta.objects.create(
-                usuario=usr,
-                nota="En referencia al cliente {}:\n\n{}".format(
-                    cte, nota
-                ),
-                fecha_alerta=fecha_notificacion,
-                created_by=usr,
-                updated_by=usr
-            )
+            add_alert(
+                "En referencia al cliente {}:\n\n{}".format(cte, nota),
+                fecha_notificacion,
+                usr,
+                usr)
+
+
+def add_alert(nota, fecha_notificacion, usr_to, usr_creator):
+    if "" != nota.strip() and "" != fecha_notificacion:
+        Alerta.objects.create(
+            usuario=usr_to,
+            nota=nota,
+            fecha_alerta=fecha_notificacion,
+            created_by=usr_creator,
+            updated_by=usr_creator
+        )
 
 
 @valida_acceso(['cliente.clientes_user'])
@@ -52,20 +62,30 @@ def index(request):
                 request.POST.get('nota').strip(),
                 request.POST.get('fecha_notificacion'),
                 usuario)
+        elif "add-alert" == request.POST.get('action'):
+            cte = Cliente.objects.get(pk=request.POST.get('alert_cte'))
+            add_alert(
+                request.POST.get('nota').strip(),
+                request.POST.get('fecha_notificacion'),
+                cte,
+                usuario
+            )
         elif "search" == request.POST.get('action'):
             search_value = hipernormalize(request.POST.get('valor'))
-            data = [reg for reg in data if 
-                search_value in hipernormalize(reg.usuario) \
-                or search_value in hipernormalize(reg.email) \
-                or search_value in hipernormalize(reg.telefono) \
-                or search_value in hipernormalize(reg.celular) \
-                or search_value in hipernormalize(reg.telefono_oficina) \
-                or search_value in hipernormalize(reg.first_name) \
-                or search_value in hipernormalize(reg.last_name) \
-                or search_value in hipernormalize(reg.apellido_materno) \
-                or search_value in hipernormalize(reg.razon_social) \
-                or search_value in hipernormalize(reg.rfc)
-            ]
+            data = [reg
+                    for reg in data if (
+                        search_value in hipernormalize(reg.usuario)
+                        or search_value in hipernormalize(reg.email)
+                        or search_value in hipernormalize(reg.telefono)
+                        or search_value in hipernormalize(reg.celular)
+                        or search_value in hipernormalize(reg.telefono_oficina)
+                        or search_value in hipernormalize(reg.first_name)
+                        or search_value in hipernormalize(reg.last_name)
+                        or search_value in hipernormalize(reg.apellido_materno)
+                        or search_value in hipernormalize(reg.razon_social)
+                        or search_value in hipernormalize(reg.rfc)
+                    )
+                    ]
     toolbar = []
     if usuario.has_perm_or_has_perm_child('cliente.agregar_clientes_user'):
         toolbar.append({
@@ -102,6 +122,35 @@ def new(request):
             obj.save()
             obj.groups.add(Group.objects.get(name='Cliente'))
             obj.save()
+            if obj.email is not None and obj.email.strip() != "":
+                plain_mail = render(
+                    request,
+                    'app/email/cliente_new.txt',
+                    {'usuario': obj}).content.decode('utf-8')
+                html_mail = render(
+                    request,
+                    'app/email/cliente_new.html',
+                    {'usuario': obj}).content.decode('utf-8')
+                send_mail(
+                    "Actualización en Datos de Acceso a BMhaus",
+                    plain_mail,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [obj.email],
+                    html_mail,
+                    (
+                        (
+                            get_setting_fn(
+                                '01 General.email_encabezado',
+                                Setting),
+                            'img_encabezado'
+                        ),
+                        (
+                            get_setting_fn(
+                                '01 General.email_firma',
+                                Setting),
+                            'img_firma'
+                        )
+                    ))
             return HttpResponseRedirect(reverse(
                 'cliente_see', kwargs={'pk': obj.pk}
             ))
@@ -159,6 +208,13 @@ def see(request, pk):
                 request.POST.get('nota').strip(),
                 request.POST.get('fecha_notificacion'),
                 usuario)
+        elif "add-alert" == request.POST.get("action"):
+            add_alert(
+                request.POST.get('nota').strip(),
+                request.POST.get('fecha_notificacion'),
+                obj,
+                usuario
+            )
     frmUsr = FrmClienteUsr(instance=obj)
     frmContacto = FrmClienteContacto(instance=obj)
     frmFacturacion = FrmClienteFacturacion(instance=obj)
@@ -174,6 +230,13 @@ def see(request, pk):
             'type': 'button',
             'label': '<i class="far fa-comment-alt"></i> Notas',
             'onclick': 'Cte.showNotasSglCte()',
+        })
+    if usuario.has_perm_or_has_perm_child(
+            'nota.ver_notas_del_cliente_nota'):
+        toolbar.append({
+            'type': 'button',
+            'label': '<i class="far fa-bell"></i> Alerta',
+            'onclick': 'Cte.showAlertsSglCte()',
         })
     if usuario.has_perm_or_has_perm_child(
             'cliente.actualizar_clientes_user'):
@@ -211,6 +274,8 @@ def see(request, pk):
         'cte': obj,
         'can_add_note': usuario.has_perm_or_has_perm_child(
             'nota.ver_notas_del_cliente_nota'),
+        'can_add_alert': usuario.has_perm_or_has_perm_child(
+            'alerta.agregar_alertas_al_cliente_alerta'),
         'req_ui': requires_jquery_ui(request),
         })
 
@@ -222,13 +287,17 @@ def update(request, pk):
         return HttpResponseRedirect(reverse(
             'item_no_encontrado'))
     obj = Cliente.objects.get(pk=pk)
+    data_original = {
+        'email': obj.email,
+        'user': obj.usuario,
+        'password': obj.contraseña,
+    }
     if 'POST' == request.method:
         frm = FrmCliente(instance=obj, data=request.POST)
         if frm.is_valid():
             obj = frm.save(commit=False)
             obj.username = obj.usuario
             obj.set_password(obj.contraseña)
-            obj.created_by = usuario
             obj.updated_by = usuario
             if request.FILES.get('fotografia'):
                 obj.fotografia = move_uploaded_file(
@@ -236,6 +305,38 @@ def update(request, pk):
             obj.save()
             obj.groups.add(Group.objects.get(name='Cliente'))
             obj.save()
+            if (data_original['email'] != obj.email
+                    or data_original['user'] != obj.usuario
+                    or data_original['password'] != obj.contraseña):
+                if obj.email is not None and obj.email.strip() != "":
+                    plain_mail = render(
+                        request,
+                        'app/email/cliente_upd.txt',
+                        {'usuario': obj}).content.decode('utf-8')
+                    html_mail = render(
+                        request,
+                        'app/email/cliente_upd.html',
+                        {'usuario': obj}).content.decode('utf-8')
+                    send_mail(
+                        "Actualización en Datos de Acceso a BMhaus",
+                        plain_mail,
+                        settings.DEFAULT_FROM_EMAIL,
+                        [obj.email],
+                        html_mail,
+                        (
+                            (
+                                get_setting_fn(
+                                    '01 General.email_encabezado',
+                                    Setting),
+                                'img_encabezado'
+                            ),
+                            (
+                                get_setting_fn(
+                                    '01 General.email_firma',
+                                    Setting),
+                                'img_firma'
+                            )
+                        ))
             return HttpResponseRedirect(reverse(
                 'cliente_see', kwargs={'pk': obj.pk}
             ))

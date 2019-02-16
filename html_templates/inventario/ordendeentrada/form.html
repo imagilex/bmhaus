@@ -1,0 +1,108 @@
+{% extends "global/html_struct.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-8 offset-md-2">
+        <form method="post" autocomplete="off" enctype="multipart/form-data" id="main-form" action="">
+            {% csrf_token %}
+            {{ frm | crispy }}
+            <h5>Refacciones</h5>
+
+            <table class="table table-striped table-sm table-responsive-md">
+                <thead>
+                    <tr>
+                        <th>Refacción</th>
+                        <th>Cantidad</th>
+                        <th>Costo</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody id="data-tbl">
+                    {% for pza in piezas %}
+                        <tr class="tr-pza-{{ pza.pk }}">
+                            <td>
+                                {{ pza }}
+                            </td>
+                            <td>
+                                <input type="number" class="form-control text-right cant" step=".01" name="pza-cant-{{ pza.pk }}" id="pza-cant-{{ pza.pk }}" value="{% for pza_req in piezas_entradas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.cantidad}}{% endif %}{% endfor %}" onchange="calculaImporte({{ pza.pk }})" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control text-right costo" step=".01" name="pza-costo-{{ pza.pk }}" id="pza-costo-{{ pza.pk }}" value="{% for pza_req in piezas_entradas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.costo}}{% endif %}{% endfor %}" onchange="calculaImporte({{ pza.pk }})" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control text-right importe" step=".01" name="pza-importe-{{ pza.pk }}" id="pza-importe-{{ pza.pk }}" value="{% for pza_req in piezas_entradas %}{% if pza_req.pieza.pk == pza.pk %}{{pza_req.importe}}{% endif %}{% endfor %}" />
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <th colspan="2"></th>
+                        <th>
+                            <input type="number" class="form-control text-right" name="total" id="total" value="" required="required" />
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <button type="submit" class="btn btn-outline-primary" id="btn-save" >Guardar</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    let orden_compra_proveedor = { {% for oe in ordenesdecompra %}'{{ oe.pk }}': {{ oe.proveedor.pk }}, {% endfor %} };
+    let orden_compra_piezas = { {% for oe in ordenesdecompra %}'{{ oe.pk }}': { {% for pp in oe.piezas_requeridas.all %}'{{ pp.pieza.pk }}': {{ pp.cantidad }}, {% endfor %} }, {% endfor %} };
+    let proveedor_pieza_costo = { {% for prov in proveedores %}'{{ prov.pk }}' : { {% for pp in prov.pp_piezas.all %}'{{ pp.pieza.pk }}': {{ pp.costo }}, {% endfor %} }, {% endfor %} }
+    let setPzasOE = () => {
+        let idoc = $( "#id_orden_de_compra" ).val();
+        $( "input.cant, input.costo, input.importe" ).each( function() {
+            this.value = "";
+        } );
+        if( "" == idoc ) {
+            $( "#data-tbl tr").removeClass( 'd-none' );
+        } else {
+            $( "#data-tbl tr").addClass( 'd-none' );
+            let prov = orden_compra_proveedor[ idoc ];
+            for( let pza in orden_compra_piezas[ idoc ] ) {
+                $( "#data-tbl tr.tr-pza-" + pza ).removeClass( 'd-none' );
+                $( "#data-tbl tr.tr-pza-" + pza + " input.cant" )[ 0 ].value = orden_compra_piezas[ idoc ][ pza ];
+                $( "#data-tbl tr.tr-pza-" + pza + " input.costo" )[ 0 ].value = proveedor_pieza_costo[ prov ][ pza ];
+                calculaImporte( pza );
+            }
+        }
+    }
+    $( "#id_orden_de_compra" ).change( setPzasOE );
+    if( "" != $( "#id_orden_de_compra" ).val() ) {
+        setPzasOE();
+    }
+    let calculaImporte = (idpza) => {
+        let cantidad = parseFloat( $( "#pza-cant-" + idpza ).val() );
+        let costo = parseFloat( $( "#pza-costo-" + idpza ).val() );
+        let importe = costo * cantidad;
+        if( !isNaN( cantidad ) ) {
+            $( "#pza-cant-" + idpza )[0].value = cantidad.asMoney();
+        } else {
+            $( "#pza-importe-" + idpza )[0].value = '';
+        }
+        if( !isNaN( costo ) ) {
+            $( "#pza-costo-" + idpza )[0].value = costo.asMoney();
+        } else {
+            $( "#pza-importe-" + idpza )[0].value = '';
+        }
+        if( !isNaN( importe ) ) {
+            $( "#pza-importe-" + idpza )[0].value = importe.asMoney();
+        }
+        let total = 0;
+        $( "input.importe" ).each( function(){
+            let importe = parseFloat( "0" + this.value );
+            total += importe;
+        } );
+        $( "#total" )[ 0 ].value = total.asMoney();
+    }
+</script>
+
+{% endblock %}

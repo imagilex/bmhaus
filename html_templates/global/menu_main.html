@@ -41,9 +41,26 @@
 </header>
 -->
 
-<a href="{% url 'panel' %}">
-    <img src="{{ MEDIA_URL }}{{ '01 General.main_menu_icon' | get_setting }}" class="float-left main_menu_icon no-print" />
-    <img src="{{ MEDIA_URL }}{{ '01 General.logo_impresion' | get_setting }}" class="float-left main_menu_icon print" />
+<a href="{% url 'panel' %}" class="no-print">
+    <img src="{{ MEDIA_URL }}{{ '01 General.main_menu_icon' | get_setting }}" class="float-left main_menu_icon" />
 </a>
+<div class="container print">
+    <div class="row">
+        <div class="col-sm-3">
+            <img src="{{ MEDIA_URL }}{{ '01 General.logo_impresion' | get_setting }}" class="float-left main_menu_icon" />  
+        </div>
+        <div class="col-sm-6">
+            <small>
+                Estilo y Tecnología Automotriz S.A. de C.V. RFC: ETA180910-MX8<br/>
+                {{ '02 Pagina Inicial.direccion' | get_setting }}<br />
+                Teléfono: {{ '02 Pagina Inicial.contacto_telefono' | get_setting }}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                Correo: {{ '02 Pagina Inicial.contacto_email' | get_setting }}<br />
+            </small>
+        </div>
+        <div class="col-sm-3" id="main_extra_data_col3">
+        </div>
+    </div>
+</div>
 
 <!-- menu_main (Close) -->

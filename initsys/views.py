@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.staticfiles import finders
 from django.conf import settings
+from django.db import connection
 
 from random import shuffle
 from datetime import date
@@ -13,6 +14,7 @@ import json
 from .forms import AccUsr
 from .models import Usr
 from app.models import Cliente, AvanceEnFlujo
+from app.functions import merge_flujo_acciones
 from flujo.models import InstanciaFlujo
 from routines.mkitsafe import valida_acceso
 from routines.utils import is_mobile
@@ -127,19 +129,24 @@ def panel(request):
             data = {
                 'vehiculo': cte.vehiculos.get(pk=extra_data['idobjeto']),
                 'instanciaflujo': iserv,
+                'flujo_servicio': merge_flujo_acciones(iserv),
                 'pagado': pagado,
                 'avanceenflujo': avanceenflujo,
             }
     ver_doctoordenreparacion = usuario.has_perm_or_has_perm_child(
         'doctoordenreparacion.'
         'doctoordenreparacion_docto orden reparacion') \
-        or usuario.has_perm_or_has_perm_child('doctoordenreparacion.'
-        'ver_orden_de_reparacion_docto orden reparacion')
+        or usuario.has_perm_or_has_perm_child(
+            'doctoordenreparacion.'
+            'ver_orden_de_reparacion_docto orden reparacion')
     ver_avancereparacion = usuario.has_perm_or_has_perm_child(
         'avanceenflujo.avanceenflujo_avance en flujo') \
         or usuario.has_perm_or_has_perm_child(
             'avanceenflujo.ver_avance_en_flujo_avance en flujo')
-    for alerta in usuario.alertas.filter(mostrar_alerta=True, fecha_alerta__lte=date.today(), alertado=False):
+    for alerta in usuario.alertas.filter(
+            mostrar_alerta=True,
+            fecha_alerta__lte=date.today(),
+            alertado=False):
         alerta.alertado = True
         alerta.fecha_alertado = date.today()
         alerta.updated_by = usuario
@@ -153,5 +160,37 @@ def panel(request):
             'data': data,
             'ver_doctoordenreparacion': ver_doctoordenreparacion,
             'ver_avancereparacion': ver_avancereparacion,
-            'alertas': usuario.alertas.filter(mostrar_alerta=True, fecha_alerta__lte=date.today())
+            'alertas': usuario.alertas.filter(
+                mostrar_alerta=True, fecha_alerta__lte=date.today()),
         })
+
+
+@valida_acceso()
+def sql(request):
+    'https://docs.djangoproject.com/en/2.1/topics/db/sql/'
+    usuario = Usr.objects.filter(id=request.user.pk)[0]
+    sql = ""
+    getrows = True
+    rows = False
+    header = False
+    error = False
+    if "POST" == request.method:
+        sql = request.POST.get('sql')
+        getrows = request.POST.get('getrows') == 'yes'
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute(sql)
+                if getrows:
+                    rows = cursor.fetchall()
+                    header = [c[0] for c in cursor.description]
+            except Exception as e:
+                error = "{}".format(e)
+    return render(request, 'sql.html', {
+        'menu_main': usuario.main_menu_struct(),
+        'titulo': 'SQL',
+        'sql': sql,
+        'getrows': getrows,
+        'rows': rows,
+        'header': header,
+        'error': error,
+    })

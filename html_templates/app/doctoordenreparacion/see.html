@@ -1,5 +1,7 @@
 {% extends "global/html_struct.html" %}
 {% load crispy_forms_tags %}
+{% load humanize %}
+{% load i18n %}
 {% load util_filters %}
 
 {% block content %}
@@ -12,7 +14,7 @@
             {{ propietario }}
         </div>
         <div class="col-sm-6">
-            <h5>Vehiculo</h5>
+            <h5>Vehículo</h5>
             {{ vehiculo }}
         </div>
     </div>
@@ -23,22 +25,35 @@
         </div>
         <div class="col sm-6">
             <table style="width: 100%;">
-                <tr>
-                    <td style="width: 50%">Kilometros</td>
-                    <td style="width: 50%">Gasolina</td>
-                </tr>
-                <tr>
-                    <td class="text-center" style="width: 50%">
-                        {% if obj.fotografia_kilometros %}
-                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_kilometros }}" class="contrato-img01 rounded ml-1 mr-1" />
-                        {% endif %}
-                    </td>
-                    <td class="text-center" style="width: 50%">
-                        {% if obj.fotografia_tanque_de_gasolina %}
-                            <img src="{{ MEDIA_URL }}{{ obj.fotografia_tanque_de_gasolina }}" class="contrato-img01 rounded ml-1 mr-1" />
-                        {% endif %}
-                    </td>
-                </tr>
+                {% if obj.fotografia_kilometros or obj.fotografia_tanque_de_gasolina %}
+                    <tr>
+                        <td style="width: 50%">Kilómetros</td>
+                        <td style="width: 50%">Gasolina</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" style="width: 50%">
+                            {% if obj.fotografia_kilometros %}
+                                <img src="{{ MEDIA_URL }}{{ obj.fotografia_kilometros }}" class="contrato-img01 rounded ml-1 mr-1" />
+                            {% endif %}
+                        </td>
+                        <td class="text-center" style="width: 50%">
+                            {% if obj.fotografia_tanque_de_gasolina %}
+                                <img src="{{ MEDIA_URL }}{{ obj.fotografia_tanque_de_gasolina }}" class="contrato-img01 rounded ml-1 mr-1" />
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td style="width: 50%">Kilómetros: {% language 'en' %}{{ obj.kilometros | intcomma }}{% endlanguage %}</td>
+                        <td style="width: 50%">Gasolina: 
+                            {% if obj.tanque_de_gasolina == '1_4' %}1/4
+                            {% elif obj.tanque_de_gasolina == '1_2' %}1/2
+                            {% elif obj.tanque_de_gasolina == '3_4' %}3/4
+                            {% elif obj.tanque_de_gasolina == '4_4' %}4/4
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
             </table>
             <table style="width: 100%">
                 <tr>
@@ -49,7 +64,7 @@
                         {% if obj.fotografia_lateral_izquierdo %}
                             <img src="{{ MEDIA_URL }}{{ obj.fotografia_lateral_izquierdo }}" class="contrato-img02" />
                         {% else %}
-                            Fotografia Lateral Izquierdo
+                            Fotografía Lateral Izquierdo
                         {% endif %}
                     </td>
                     <td style="width: 30%">
@@ -61,21 +76,21 @@
                         {% if obj.fotografia_frente %}
                             <img src="{{ MEDIA_URL }}{{ obj.fotografia_frente }}" class="contrato-img02" />
                         {% else %}
-                            Fotografia Frente
+                            Fotografía Frente
                         {% endif %}
                     </td>
                     <td style="width: 30%" class="text-center">
                         {% if obj.fotografia_superior %}
                             <img src="{{ MEDIA_URL }}{{ obj.fotografia_superior }}" class="contrato-img02" />
                         {% else %}
-                            Fotografia Superior
+                            Fotografía Superior
                         {% endif %}
                     </td>
                     <td style="width: 30%" class="text-left">
                         {% if obj.fotografia_trasera %}
                             <img src="{{ MEDIA_URL }}{{ obj.fotografia_trasera }}" class="contrato-img02" />
                         {% else %}
-                            Fotografia Trasera
+                            Fotografía Trasera
                         {% endif %}
                     </td>
                 </tr>
@@ -87,7 +102,7 @@
                         {% if obj.fotografia_lateral_derecho %}
                             <img src="{{ MEDIA_URL }}{{ obj.fotografia_lateral_derecho }}" class="contrato-img02" />
                         {% else %}
-                            Fotografia Lateral Derecho
+                            Fotografía Lateral Derecho
                         {% endif %}
                     </td>
                     <td style="width: 30%">
@@ -95,8 +110,10 @@
                     </td>
                 </tr>
             </table>
-            <h5>Dirección</h5>
-            {{ direccion | safe }}
+            {% if direccion %}
+                <h5>Dirección de recepción del vehículo</h5>
+                {{ direccion | safe }}
+            {% endif %}
         </div>
     </div>
     <div class="row inventario-contrato">
@@ -116,23 +133,75 @@
         </div>
     </div>
     <div class="row">
+        <div class="col">
+            <div id="div_id_observaciones" class="form-group">
+                <label for="id_observaciones" class="col-form-label ">
+                    Observaciones
+                </label>
+                <div class="">
+                    <textarea name="observaciones" cols="40" rows="10" class="textarea form-control" id="id_observaciones" disabled="disabled" readonly="readonly">{{ obj.observaciones }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-4 offset-sm-1 text-center">
-            Firma del Prestador del Servicio
             {% if obj.firma_del_prestador_del_servicio %}
-                <br /><img src="{{ MEDIA_URL }}{{ obj.firma_del_prestador_del_servicio }}" class="contrato-firma rounded" />
+                <img src="{{ MEDIA_URL }}{{ obj.firma_del_prestador_del_servicio }}" class="contrato-firma rounded" />
+            {% else %}
+                <br /><br />
+                _____________________________________
             {% endif %}
+            <br />Firma del Prestador del Servicio
         </div>
         <div class="col-sm-4 offset-sm-1 text-center">
-            Firma del Consumidor
             {% if obj.firma_del_consumidor %}
-                <br /><img src="{{ MEDIA_URL }}{{ obj.firma_del_consumidor }}" class="contrato-firma rounded" />
+                <img src="{{ MEDIA_URL }}{{ obj.firma_del_consumidor }}" class="contrato-firma rounded" />
+            {% else %}
+                <br /><br />
+                _____________________________________
             {% endif %}
+            <br />Firma del Consumidor
         </div>
     </div>
     <div class="clausulas-contrato">
         <h5>Contrato de Prestación de Servicios</h5>
         {{ '03 Legal.contrato_prestacion_servicios' | get_setting | as_paragraph | safe }}
+        Leído que fue por las partes el contenido del presente contrato y 
+        sabedoras de su alcance legal, lo firman por duplicado en la 
+        Ciudad de México a los {{ obj.fecha_de_recepcion | date:"d" }} 
+        días del mes de {{ obj.fecha_de_recepcion | date:"F" }} de 
+        {{ obj.fecha_de_recepcion | date:"Y" }}.
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <div class="row">
+            <div class="col-sm-4 offset-sm-1 text-center">
+                {% if obj.firma_del_prestador_del_servicio %}
+                    <img src="{{ MEDIA_URL }}{{ obj.firma_del_prestador_del_servicio }}" class="contrato-firma rounded" />
+                {% else %}
+                    <br /><br />
+                    _____________________________________
+                {% endif %}
+                <br />Firma del Prestador del Servicio
+            </div>
+            <div class="col-sm-4 offset-sm-1 text-center">
+                {% if obj.firma_del_consumidor %}
+                    <img src="{{ MEDIA_URL }}{{ obj.firma_del_consumidor }}" class="contrato-firma rounded" />
+                {% else %}
+                    <br /><br />
+                    _____________________________________
+                {% endif %}
+                <br />Firma del Consumidor
+            </div>
+        </div>
     </div>
 </form>
+
+<script type="text/javascript">
+    $( "#main_extra_data_col3" ).html( "FOLIO: <h5>{{ obj.identificador }}</h5>" );
+    $( "#txt_identificador" ).html( "{{ obj.identificador }}" );
+    $( "#id_servicio_solicitado" )[0].rows = 5;
+    $( "#id_observaciones" )[0].rows = 5;
+</script>
 
 {% endblock %}

@@ -43,7 +43,7 @@
         <p class="line-height-1-15">
             Inicio: {{ data.instanciaflujo.created_at | date:"d/m/Y H:i" }}<br />
             Actualización: {{ data.instanciaflujo.updated_at | date:"d/m/Y H:i" }}<br />
-            Actual: {{ data.instanciaflujo.estado_actual }}
+            Etapa: {{ data.instanciaflujo.estado_actual }}
         </p>
     </div>
 </div>
@@ -65,7 +65,7 @@
 <p></p>
 
 <div id="historia-servicio">
-    {% for h in data.instanciaflujo.historia.all %}
+    {% for h in data.flujo_servicio %}
         <div class="card">
             <div class="card-header" id="header-{{ h.pk }}">
                 <h5 class="mb-0">
@@ -77,7 +77,11 @@
             <div id="body-{{ h.pk }}" class="collapse {% if data.instanciaflujo.estado_actual == h.accion.estado_final %}show{% endif %}" aria-labelledby="header-{{ h.pk }}" data-parent="#historia-servicio">
                 <div class="card-body">
                     Fecha: {{ h.updated_at | date:"d/m/Y H:i" }}
-                    {% for d in h.historia_detalle.all %}
+                    {% for d in h.historia_detalle %}    
+                        {% ifchanged h.pk %}
+                        {% else %}
+                            <hr />
+                        {% endifchanged %}
                         {% if "DoctoOrdenReparacion" == d.tipo_documento_generado %}
                             <br />
                             {% if ver_doctoordenreparacion %}
@@ -136,25 +140,33 @@
 
                 {% if 0 == mp.items_qty %}
 
+                    {% if mp.permiso.vista %}
+
                     <div class="col-md-4 col-lg-3" {% if mp.permiso.vista %}onclick="location.href=BASE_URL + '{% url mp.permiso.vista %}'"{% endif %}>
-                        <article class="opt-menu service" style="background-image: url( '{% static mp.permiso.codename %}.png' );">
+                        <article class="opt-menu service" style="background-image: url( '{% static 'panel_options' %}/{{ mp.permiso.codename }}.png' );">
                             <h5 class="degradado-rojo">
                                 {{ mp.permiso.mostrar_como }}
                             </h5>
                         </article>
                     </div>
 
+                    {% endif %}
+
                 {% else %}
 
                     {% for it in mp.items %}
 
+                        {% if it.vista %}
+
                         <div class="col-md-4 col-lg-3" {% if it.vista %}onclick="location.href=BASE_URL + '{% url it.vista %}'"{% endif %}>
-                            <article class="opt-menu service" style="background-image: url( '{% static it.codename %}.png' );">
+                            <article class="opt-menu service" style="background-image: url( '{% static 'panel_options' %}/{{ it.codename }}.png' );">
                                 <h5 class="degradado-rojo">
                                     {{ it.mostrar_como }}
                                 </h5>
                             </article>
                         </div>
+                        
+                        {% endif %}
 
                     {% endfor %}
                 

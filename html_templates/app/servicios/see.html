@@ -45,7 +45,7 @@
 <p></p>
 
 <div id="historia-servicio">
-    {% for h in instanciaflujo.historia.all %}
+    {% for h in flujo_servicio %}
         <div class="card">
             <div class="card-header" id="header-{{ h.pk }}">
                 <h5 class="mb-0">
@@ -62,7 +62,11 @@
             <div id="body-{{ h.pk }}" class="collapse {% if instanciaflujo.estado_actual == h.accion.estado_final %}show{% endif %}" aria-labelledby="header-{{ h.pk }}" data-parent="#historia-servicio">
                 <div class="card-body">
                     Fecha: {{ h.updated_at | date:"d/m/Y H:i" }}
-                    {% for d in h.historia_detalle.all %}
+                    {% for d in h.historia_detalle %}
+                        {% ifchanged h.pk %}
+                        {% else %}
+                            <hr />
+                        {% endifchanged %}
                         {% if "DoctoOrdenReparacion" == d.tipo_documento_generado %}
                             <br />
                             {% if ver_doctoordenreparacion %}
@@ -89,8 +93,11 @@
                                     {{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'nota' | as_paragraph | safe }}
                                 </div>
                                 <div class="col-sm-6">
-
-                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia' }}" class="rounded" style="max-width: 100%;" />
+                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia' }}" class="rounded" style="max-width: 100%; margin-bottom: 5px;" />
+                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia_2' }}" class="rounded" style="max-width: 100%; margin-bottom: 5px;" />
+                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia_3' }}" class="rounded" style="max-width: 100%; margin-bottom: 5px;" />
+                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia_4' }}" class="rounded" style="max-width: 100%; margin-bottom: 5px;" />
+                                    <img src="{{ MEDIA_URL }}{{ avanceenflujo | keyvalue:d.iddocumento_generado | keyvalue:'fotografia_5' }}" class="rounded" style="max-width: 100%; margin-bottom: 5px;" />
                                 </div>
                                 {% endif %}
                             </div>

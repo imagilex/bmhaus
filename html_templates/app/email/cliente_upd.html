@@ -1,0 +1,13 @@
+{% extends "global/email/base.html" %}
+{% load static %}
+{% load util_filters %}
+
+{% block content %}
+<p>Estas recibiendo este mensaje ya que tus datos de acceso a <strong><a href="//{{ request.get_host }}/" style="color: #bdc6d3;">BMhaus</a></strong> han cambiado.</p>
+<p>Tus nuevos datos de acceso son:</p>
+<p>
+    Usuario: <i>{{ usuario.usuario }}</i><br />
+    Contraseña: <i>{{ usuario.contraseña }}</i>
+</p>
+<p>Para accesar debes dirigirte a <a href="//{{ request.get_host }}/" style="color: #bdc6d3;">{{ request.get_host }}</a>.</p>
+{% endblock %}
